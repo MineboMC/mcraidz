@@ -1,0 +1,292 @@
+package net.minebo.mcraidz.team.command;
+
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
+import net.minebo.mcraidz.team.TeamManager;
+import net.minebo.mcraidz.team.construct.Team;
+import net.minebo.mcraidz.team.construct.TeamRole;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+@CommandAlias("team|t")
+public class TeamCommands extends BaseCommand {
+
+    @Default
+    @CatchUnknown
+    public void onHelpCommand(CommandSender sender, CommandHelp help) {
+        sender.sendMessage(ChatColor.GOLD + "===" + ChatColor.YELLOW + " Showing help for: " + ChatColor.AQUA + "/" + help.getCommandName() + ChatColor.GOLD + " ===");
+
+        help.getHelpEntries().forEach(entry -> {
+            sender.sendMessage(ChatColor.YELLOW + "/" + entry.getCommand() + " " + ChatColor.AQUA + entry.getParameterSyntax());
+        });
+    }
+
+    @Subcommand("create")
+    @Syntax("<name>")
+    public void createTeamCommand(Player sender, String name){
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam != null) {
+            sender.sendMessage(ChatColor.RED + "You are already in a team.");
+            return;
+        }
+
+        if(name == null) {
+            sender.sendMessage(ChatColor.RED + "You must specify a team name.");
+            return;
+        }
+
+        if (name.matches(".*[^a-zA-Z0-9].*")) {
+            sender.sendMessage(ChatColor.RED + "You cannot create a team with a non-alphanumeric name!");
+            return;
+        }
+
+        if(name.length() > 14) {
+            sender.sendMessage(ChatColor.RED + "Your team name can't be longer than 14 characters.");
+            return;
+        }
+
+        TeamManager.registerTeam(new Team(name, sender));
+        sender.sendMessage(ChatColor.GREEN + "You have created a team!");
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendMessage(ChatColor.YELLOW + "Team " + ChatColor.GOLD + name + ChatColor.YELLOW + " has been created by " + ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + '.');
+        });
+    }
+
+    @Subcommand("disband")
+    public void deleteTeamCommand(Player sender){
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam == null){
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(playerTeam.getRole(sender.getUniqueId()) != TeamRole.LEADER) {
+            sender.sendMessage(ChatColor.RED + "You are not the leader of " + playerTeam.name + ".");
+            return;
+        }
+
+        TeamManager.unRegisterTeam(playerTeam);
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendMessage(ChatColor.YELLOW + "Team " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + " has been disbanded by " + ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + '.');
+        });
+
+    }
+
+    @Subcommand("chat|c")
+    @CommandAlias("tc")
+    @Syntax("<msg>")
+    public void onChatCommand(Player sender, String message){
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(message == null || message.isEmpty()) {
+            sender.sendMessage(ChatColor.RED + "You must send a message.");
+            return;
+        }
+
+        playerTeam.sendMessageToMembers(sender, message);
+    }
+
+    @Subcommand("show|i|who")
+    @Syntax("<team>")
+    @CommandCompletion("@teams")
+    public void onShowCommand(Player sender, @Optional String team){
+        if(team == null) {
+            Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+            if(playerTeam == null) {
+                sender.sendMessage(ChatColor.RED + "You are not in a team.");
+                return;
+            }
+
+            sender.sendMessage(playerTeam.generateInfoMessage());
+        } else {
+            Team queriedTeam = TeamManager.getTeamByName(team);
+
+            if(queriedTeam == null) {
+                sender.sendMessage(ChatColor.RED + team + " is not a team.");
+                return;
+            }
+
+            sender.sendMessage(queriedTeam.generateInfoMessage());
+        }
+    }
+
+    @Subcommand("invite")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onInviteCommand(Player sender, OfflinePlayer player){
+        Team playerTeam = TeamManager.getTeamByUUID(sender.getUniqueId());
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(TeamManager.getTeamByUUID(player.getUniqueId()) == playerTeam){
+            sender.sendMessage(ChatColor.RED + player.getName() + " is already in your team.");
+            return;
+        }
+
+        if(playerTeam.invited.contains(player.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + player.getName() + "is already invited to your team.");
+            return;
+        }
+
+        TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
+
+        if(senderRole != TeamRole.LEADER && senderRole != TeamRole.CAPTAIN) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to invite players to your team.");
+            return;
+        }
+
+        sender.sendMessage(ChatColor.YELLOW + "You have invited " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " to your team.");
+
+        Player target = Bukkit.getPlayer(player.getUniqueId());
+
+        if(target != null && target.isOnline()) {
+            player.getPlayer().sendMessage(ChatColor.GOLD + "You have been invited to " + ChatColor.YELLOW + playerTeam.name + ChatColor.GOLD + ", type " + ChatColor.YELLOW + "/t join " + playerTeam.name + ChatColor.GOLD + " to join!");
+        }
+
+        playerTeam.invited.add(player.getUniqueId());
+    }
+
+    @Subcommand("uninvite")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onUnInviteCommand(Player sender, OfflinePlayer player){
+        Team playerTeam = TeamManager.getTeamByUUID(sender.getUniqueId());
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(!playerTeam.invited.contains(player.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + player.getName() + "isn't invited to your team.");
+            return;
+        }
+
+        TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
+
+        if(senderRole != TeamRole.LEADER && senderRole != TeamRole.CAPTAIN) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to uninvite players to your team.");
+            return;
+        }
+
+        sender.sendMessage(ChatColor.YELLOW + "You have uninvited " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " to your team.");
+
+        playerTeam.invited.remove(player.getUniqueId());
+    }
+
+    @Subcommand("join")
+    @Syntax("<team>")
+    @CommandCompletion("@teams")
+    public void onJoinCommand(Player sender, String team){
+
+        Team queriedTeam = TeamManager.getTeamByName(team);
+
+        if(queriedTeam == null) {
+            sender.sendMessage(ChatColor.RED + team + " is not a team.");
+            return;
+        }
+
+        if(!queriedTeam.invited.contains(sender.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "You haven't been invited to this team.");
+            return;
+        }
+
+        queriedTeam.invited.remove(sender.getUniqueId());
+        queriedTeam.members.put(sender.getUniqueId(), TeamRole.MEMBER);
+
+        queriedTeam.sendMessageToMembers(ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + " has joined the team.");
+
+    }
+
+    @Subcommand("sethq")
+    @CommandAlias("sethq")
+    public void setHQCommand(Player sender){
+
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
+
+        if(senderRole != TeamRole.LEADER && senderRole != TeamRole.CAPTAIN) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to uninvite players to your team.");
+            return;
+        }
+
+        Location loc = sender.getLocation();
+
+        playerTeam.headquarters = loc;
+
+        playerTeam.sendMessageToMembers(sender.getDisplayName() + ChatColor.YELLOW + " has set the HQ location to " + ChatColor.GOLD + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ChatColor.YELLOW + ".");
+    }
+
+    @Subcommand("setrally")
+    @CommandAlias("setrally")
+    public void setRallyCommand(Player sender){
+
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        Location loc = sender.getLocation();
+
+        playerTeam.rally = loc;
+
+        playerTeam.sendMessageToMembers(sender.getDisplayName() + ChatColor.YELLOW + " has set the Rally location to " + ChatColor.GOLD + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ChatColor.YELLOW + ".");
+    }
+
+    @Subcommand("hq")
+    @CommandAlias("hq")
+    public void gotoHQCommand(Player sender){
+
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        sender.teleport(playerTeam.headquarters);
+        sender.sendMessage(ChatColor.YELLOW + "You have been sent to " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + "'s headquarters.");
+    }
+
+    @Subcommand("rally")
+    public void gotoRallyommand(Player sender){
+
+        Team playerTeam = TeamManager.getTeamByPlayer(sender);
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        sender.teleport(playerTeam.rally);
+        sender.sendMessage(ChatColor.YELLOW + "You have been sent to " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + "'s rally location.");
+    }
+}
+
