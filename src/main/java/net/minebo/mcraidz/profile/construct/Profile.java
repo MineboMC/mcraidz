@@ -21,6 +21,9 @@ public class Profile {
     public UUID uuid;
     public Double gold;
 
+    public Integer kills = 0;
+    public Integer deaths = 0;
+
     public HashMap<String, Location> warps;
 
     public Profile(UUID uuid) {

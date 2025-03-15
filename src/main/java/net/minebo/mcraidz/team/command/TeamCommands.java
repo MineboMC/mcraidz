@@ -113,7 +113,7 @@ public class TeamCommands extends BaseCommand {
                 return;
             }
 
-            sender.sendMessage(playerTeam.generateInfoMessage());
+            sender.sendMessage(playerTeam.generateInfoMessage(sender));
         } else {
             Team queriedTeam = TeamManager.getTeamByName(team);
 
@@ -122,7 +122,7 @@ public class TeamCommands extends BaseCommand {
                 return;
             }
 
-            sender.sendMessage(queriedTeam.generateInfoMessage());
+            sender.sendMessage(queriedTeam.generateInfoMessage(sender));
         }
     }
 

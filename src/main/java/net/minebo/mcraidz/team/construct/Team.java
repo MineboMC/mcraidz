@@ -1,11 +1,18 @@
 package net.minebo.mcraidz.team.construct;
 
 import lombok.AllArgsConstructor;
+import net.minebo.mcraidz.profile.ProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.sql.Time;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +23,7 @@ public class Team {
     public String name;
     public String announcement;
     public String password;
+    public Instant creationTime;
 
     // Locations
     public Location headquarters;
@@ -33,6 +41,7 @@ public class Team {
         this.members = new HashMap<>();
         this.invited = new ArrayList<>();
         members.put(player.getUniqueId(), TeamRole.LEADER);
+        creationTime = Instant.now();
     }
 
     public Team(String name, Player player){
@@ -40,6 +49,7 @@ public class Team {
         this.members = new HashMap<>();
         this.invited = new ArrayList<>();
         members.put(player.getUniqueId(), TeamRole.LEADER);
+        creationTime = Instant.now();
     }
 
     public TeamRole getRole(UUID uuid){
@@ -70,13 +80,27 @@ public class Team {
         });
     }
 
-    public String generateInfoMessage(){
+    public String generateInfoMessage(Player player){
         StringBuilder builder = new StringBuilder();
 
-        builder.append(ChatColor.DARK_AQUA + "*** " + ChatColor.AQUA + name + ChatColor.DARK_AQUA + " ***" + "\n");
-        builder.append(ChatColor.GRAY + "Members: " + getPlayersWithRole());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm a z");
+        String formattedTime = ZonedDateTime.ofInstant(creationTime, ZoneId.of("America/Chicago")).format(formatter);
+
+        builder.append("\n");
+        builder.append(getRelationColor(player) + name + ChatColor.GRAY + " (" + getOnlineMembers().size() + "/" + members.size() + ")\n");
+        builder.append(ChatColor.YELLOW + "Members: " + getPlayersWithRole() + "\n");
+        builder.append(ChatColor.YELLOW + "Creation Time: " + ChatColor.WHITE + formattedTime + "\n");
+        builder.append(ChatColor.RESET);
 
         return builder.toString();
+    }
+
+    public ChatColor getRelationColor(Player player){
+        if(members.containsKey(player.getUniqueId())){
+            return ChatColor.GREEN;
+        }
+
+        return ChatColor.RED;
     }
 
     // a "chatgpt ass solution" -- Kab
@@ -104,6 +128,9 @@ public class Team {
 
             // Append player name or "Unknown" if null
             builder.append(dummy != null ? dummy.getName() : Bukkit.getOfflinePlayer(uuid).getName());
+
+            // Add stats -- implement how they are tracked later...
+            builder.append(ChatColor.GRAY + "[" + ChatColor.WHITE + ProfileManager.getProfileByUUID(uuid).kills + ChatColor.GRAY + "]");
 
             // Add a separator (comma and space) for all except the last entry
             builder.append(ChatColor.GRAY).append(", ");

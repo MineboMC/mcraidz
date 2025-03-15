@@ -26,21 +26,12 @@ public class ScoreboardImpl extends ScoreboardProvider {
         Team playerTeam = TeamManager.getTeamByPlayer(player);
 
         lines.add("");
-        lines.add(ChatColor.GREEN + ChatColor.BOLD.toString() + "Team");
 
-        if(playerTeam != null) {
-            lines.add("&fName: " + ((playerTeam != null) ? ChatColor.YELLOW + playerTeam.name : ChatColor.RED + "None"));
-            lines.add("&fOnline: " + ChatColor.GREEN + playerTeam.getOnlineMembers().size() + "/" + playerTeam.members.size());
-        } else {
-            lines.add("&7Create a team");
-            lines.add("&7with &f/t create&7!");
-        }
+        lines.add("&fTeam: " + ((playerTeam != null) ? ChatColor.YELLOW + playerTeam.name : ChatColor.RED + "None"));
 
         Profile profile = ProfileManager.getProfileByPlayer(player);
 
         if(profile != null) {
-            lines.add("");
-            lines.add(ChatColor.AQUA + ChatColor.BOLD.toString() + "Profile");
             lines.add("&fGold: " + ChatColor.GOLD + profile.getFormattedBalance() + "⛃");
         }
 
