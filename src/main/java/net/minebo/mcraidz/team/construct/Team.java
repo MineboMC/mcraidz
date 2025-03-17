@@ -25,6 +25,9 @@ public class Team {
     public String password;
     public Instant creationTime;
 
+    // Data
+    public UUID uuid;
+
     // Locations
     public Location headquarters;
     public Location rally;
@@ -42,6 +45,7 @@ public class Team {
         this.invited = new ArrayList<>();
         members.put(player.getUniqueId(), TeamRole.LEADER);
         creationTime = Instant.now();
+        uuid = UUID.randomUUID();
     }
 
     public Team(String name, Player player){
@@ -50,6 +54,7 @@ public class Team {
         this.invited = new ArrayList<>();
         members.put(player.getUniqueId(), TeamRole.LEADER);
         creationTime = Instant.now();
+        uuid = UUID.randomUUID();
     }
 
     public TeamRole getRole(UUID uuid){

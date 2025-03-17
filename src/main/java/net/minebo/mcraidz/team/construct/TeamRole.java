@@ -5,7 +5,7 @@ public enum TeamRole {
     CAPTAIN("*"),
     MEMBER("");
 
-    String prefix;
+    public String prefix;
 
     TeamRole(String prefix){
         this.prefix = prefix;

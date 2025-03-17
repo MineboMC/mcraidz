@@ -20,11 +20,7 @@ public class TeamCommands extends BaseCommand {
     @Default
     @CatchUnknown
     public void onHelpCommand(CommandSender sender, CommandHelp help) {
-        sender.sendMessage(ChatColor.GOLD + "===" + ChatColor.YELLOW + " Showing help for: " + ChatColor.AQUA + "/" + help.getCommandName() + ChatColor.GOLD + " ===");
-
-        help.getHelpEntries().forEach(entry -> {
-            sender.sendMessage(ChatColor.YELLOW + "/" + entry.getCommand() + " " + ChatColor.AQUA + entry.getParameterSyntax());
-        });
+        help.showHelp();
     }
 
     @Subcommand("create")
