@@ -83,12 +83,16 @@ public class PermTracker implements Tracker {
 
                for(String str : players) {
                   if (i == players.size() - 1) {
-                     message.then(str).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(str).getName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str));
+                     message.then(str).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(ChatColor.stripColor(str)).getName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str));
                   } else {
-                     message.then(str).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(str).getName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str)).then(", ");
+                     message.then(str).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(ChatColor.stripColor(str)).getName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str)).then(", ");
                   }
 
                   ++i;
+               }
+
+               if(players.isEmpty()) {
+                  message.then("None");
                }
 
                message.send(this.player);

@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GeneralListener implements Listener {
 
@@ -29,7 +30,22 @@ public class GeneralListener implements Listener {
             Team team = TeamManager.getTeamByPlayer(player);
             TeamRole teamRole = team.getRole(player.getUniqueId());
 
-            team.sendMessageToMembers(ChatColor.GREEN + "Member Online: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getDisplayName());
+            team.sendMessageToMembers(ChatColor.GREEN + "Member Online: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getName());
+        }
+
+    }
+
+    // Leave Message Listener
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        event.setQuitMessage(null);
+
+        if(TeamManager.getTeamByPlayer(player) != null){
+            Team team = TeamManager.getTeamByPlayer(player);
+            TeamRole teamRole = team.getRole(player.getUniqueId());
+
+            team.sendMessageToMembers(ChatColor.RED + "Member Offline: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getName());
         }
 
     }

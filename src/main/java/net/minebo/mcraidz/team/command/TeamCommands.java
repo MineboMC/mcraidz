@@ -284,5 +284,34 @@ public class TeamCommands extends BaseCommand {
         sender.teleport(playerTeam.rally);
         sender.sendMessage(ChatColor.YELLOW + "You have been sent to " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + "'s rally location.");
     }
+
+    @Subcommand("promote")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onPromoteCommand(Player sender, OfflinePlayer player){
+        Team playerTeam = TeamManager.getTeamByUUID(sender.getUniqueId());
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(!playerTeam.invited.contains(player.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + player.getName() + "isn't invited to your team.");
+            return;
+        }
+
+        TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
+
+        if(senderRole != TeamRole.LEADER && senderRole != TeamRole.CAPTAIN) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to promote players to your team.");
+            return;
+        }
+
+        sender.sendMessage(ChatColor.YELLOW + "You have uninvited " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " to your team.");
+
+        playerTeam.invited.remove(player.getUniqueId());
+    }
+
 }
 

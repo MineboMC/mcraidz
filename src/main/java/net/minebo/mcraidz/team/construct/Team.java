@@ -68,9 +68,9 @@ public class Team {
     public void sendMessageToMembers(Player sender, String string){
         getOnlineMembers().forEach((player) -> {
 
-            String msg = "&3[&bTeam&3] &b";
+            String msg = "&3(Team) &b";
 
-            msg += sender.getDisplayName() + "&3: ";
+            msg += sender.getName() + "&3: ";
             msg += "&f" + string;
 
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));

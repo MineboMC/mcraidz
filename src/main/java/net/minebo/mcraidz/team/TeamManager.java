@@ -24,7 +24,7 @@ public class TeamManager {
 
     public static List<Team> teams;
 
-    public static File teamsFolder = new File(MCRaidz.instance.getDataFolder(), "internal/profiles");
+    public static File teamsFolder = new File(MCRaidz.instance.getDataFolder(), "internal/teams");
 
     public static void init() {
 
