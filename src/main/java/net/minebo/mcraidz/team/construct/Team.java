@@ -126,7 +126,7 @@ public class Team {
             Player dummy = Bukkit.getPlayer(uuid);
 
             // Append role prefix
-            builder.append(ChatColor.DARK_GREEN + role.prefix);
+            builder.append(((dummy != null && dummy.isOnline()) ? ChatColor.DARK_GREEN : ChatColor.DARK_RED) + role.prefix);
 
             // Append online/offline status
             builder.append((dummy != null && dummy.isOnline()) ? ChatColor.GREEN : ChatColor.RED);
