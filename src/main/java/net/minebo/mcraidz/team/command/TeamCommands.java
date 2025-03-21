@@ -317,7 +317,7 @@ public class TeamCommands extends BaseCommand {
 
         sender.sendMessage(ChatColor.YELLOW + "You have promoted " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " to " + ChatColor.AQUA + "Captain" + ChatColor.YELLOW + ".");
 
-        if(player.isOnline()) ((OnlinePlayer) player).getPlayer().sendMessage(ChatColor.YELLOW + "You have been promoted to " + ChatColor.AQUA + "Captain" + ChatColor.YELLOW + ".");
+        if(player.isOnline()) player.getPlayer().sendMessage(ChatColor.YELLOW + "You have been promoted to " + ChatColor.AQUA + "Captain" + ChatColor.YELLOW + ".");
 
         playerTeam.members.put(player.getUniqueId(), TeamRole.CAPTAIN);
     }
@@ -349,9 +349,106 @@ public class TeamCommands extends BaseCommand {
 
         sender.sendMessage(ChatColor.YELLOW + "You have demoted " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " to " + ChatColor.GREEN + "Member" + ChatColor.YELLOW + ".");
 
-        if(player.isOnline()) ((OnlinePlayer) player).getPlayer().sendMessage(ChatColor.YELLOW + "You have been demoted to " + ChatColor.GREEN + "Member" + ChatColor.YELLOW + ".");
+        if(player.isOnline()) player.getPlayer().sendMessage(ChatColor.YELLOW + "You have been demoted to " + ChatColor.GREEN + "Member" + ChatColor.YELLOW + ".");
 
         playerTeam.members.put(player.getUniqueId(), TeamRole.MEMBER);
+    }
+
+    @Subcommand("kick")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onKickCommand(Player sender, OfflinePlayer player){
+        Team playerTeam = TeamManager.getTeamByUUID(sender.getUniqueId());
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
+
+        if(senderRole != TeamRole.CAPTAIN && senderRole != TeamRole.LEADER) {
+            sender.sendMessage(ChatColor.RED + "You do not have permission to remove players from your team.");
+            return;
+        }
+
+        TeamRole receiverRole = playerTeam.getRole(player.getUniqueId());
+
+        if(!playerTeam.members.containsKey(player.getUniqueId())) {
+            sender.sendMessage( ChatColor.RED + player.getName() + " is not a member of your team.");
+            return;
+        }
+
+        if(receiverRole == TeamRole.CAPTAIN && senderRole != TeamRole.LEADER) {
+            sender.sendMessage(ChatColor.RED + "You cannot kick that player.");
+            return;
+        }
+
+        if(receiverRole == TeamRole.LEADER) {
+            sender.sendMessage(ChatColor.RED + "You cannot kick the leader of the team.");
+            return;
+        }
+
+        sender.sendMessage(ChatColor.YELLOW + "You have kicked " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " from your faction!");
+
+        if(player.isOnline()) player.getPlayer().sendMessage(ChatColor.RED + "You have been kicked from " + playerTeam.name + ".");
+
+        playerTeam.members.remove(player.getUniqueId());
+    }
+
+    @Subcommand("leave")
+    public void onLeaveCommand(Player sender){
+        Team playerTeam = TeamManager.getTeamByUUID(sender.getUniqueId());
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(playerTeam.getRole(sender.getUniqueId()) == TeamRole.LEADER) {
+            sender.sendMessage(ChatColor.RED + "You cannot leave the team as you are a leader.");
+            return;
+        }
+
+        playerTeam.sendMessageToMembers(ChatColor.GOLD + sender.getName() + ChatColor.YELLOW + " has left the team.");
+
+        playerTeam.members.remove(sender.getUniqueId());
+    }
+
+    @Subcommand("leader")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onLeaderCommand(Player sender, OfflinePlayer player){
+        Team playerTeam = TeamManager.getTeamByUUID(sender.getUniqueId());
+
+        if(playerTeam == null) {
+            sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(!playerTeam.members.containsKey(player.getUniqueId())) {
+            sender.sendMessage( ChatColor.RED + player.getName() + " is not a member of your team.");
+            return;
+        }
+
+        if(sender == player.getPlayer()){
+            sender.sendMessage(ChatColor.RED + "You cannot promote yourself to leader.");
+            return;
+        }
+
+        TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
+
+        if(senderRole != TeamRole.LEADER) {
+            sender.sendMessage(ChatColor.RED + "You don't have permission to promote players to leader.");
+            return;
+        }
+
+        playerTeam.sendMessageToMembers(ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " has been promoted to " + ChatColor.LIGHT_PURPLE + "Leader" + ChatColor.YELLOW + ".");
+
+        if(player.isOnline()) player.getPlayer().sendMessage(ChatColor.YELLOW + "You have been promoted to " + ChatColor.LIGHT_PURPLE + "Leader" + ChatColor.YELLOW + ".");
+
+        playerTeam.members.put(sender.getUniqueId(), TeamRole.MEMBER);
+        playerTeam.members.put(player.getUniqueId(), TeamRole.LEADER);
     }
 
 }

@@ -8,6 +8,7 @@ import net.minebo.mcraidz.profile.construct.Profile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -115,5 +116,36 @@ public class GoldCommands extends BaseCommand {
         }
 
         player.sendMessage(ChatColor.YELLOW + "You withdrew " + ChatColor.GOLD + amount + "⛃" + ChatColor.YELLOW + "!");
+    }
+
+    @CommandAlias("pay|p2p")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onPayCommand(Player player, OnlinePlayer onlinePlayer, Double gold) {
+        Profile playerProfile = ProfileManager.getProfileByPlayer(player);
+
+        if(playerProfile == null) {
+            player.sendMessage(ChatColor.RED + "Your profile hasn't loaded correctly, please try relogging or asking an admin if this continues.");
+            return;
+        }
+
+        Profile recipientProfile = ProfileManager.getProfileByPlayer(onlinePlayer.getPlayer());
+
+        if(recipientProfile == null) {
+            player.sendMessage(ChatColor.RED + onlinePlayer.getPlayer().getName() + " is not a valid player.");
+            return;
+        }
+
+        if(gold <= 0 || playerProfile.getBalance() < gold) {
+            player.sendMessage(ChatColor.RED + "You cannot send that amount of gold.");
+            return;
+        }
+
+        playerProfile.subtractBalance(gold);
+        recipientProfile.addBalance(gold);
+
+        player.sendMessage(ChatColor.YELLOW + "You have sent " + ChatColor.GOLD + gold + "⛃" + ChatColor.YELLOW + " to " + onlinePlayer.getPlayer().getDisplayName() + ChatColor.YELLOW + ".");
+        onlinePlayer.getPlayer().sendMessage(ChatColor.YELLOW + "You have gotten " + ChatColor.GOLD + gold + "⛃" + ChatColor.YELLOW + " from " + player.getDisplayName() + ChatColor.YELLOW + ".");
+
     }
 }
