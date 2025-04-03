@@ -25,18 +25,21 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
         Team playerTeam = TeamManager.getTeamByPlayer(player);
 
-        lines.add("");
+        lines.add("&7&m------------------");
 
-        lines.add("&fTeam: " + ((playerTeam != null) ? ChatColor.YELLOW + playerTeam.name : ChatColor.RED + "None"));
+        if(playerTeam != null) {
+            lines.add("&fTeam: " + ChatColor.GREEN + playerTeam.name);
+        }
 
         Profile profile = ProfileManager.getProfileByPlayer(player);
 
         if(profile != null) {
-            lines.add("&fGold: " + ChatColor.GOLD + profile.getFormattedBalance() + "⛃");
+            lines.add("&fGold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getFormattedBalance());
         }
 
         lines.add("");
         lines.add(MCRaidz.instance.getConfig().getString("scoreboard.url"));
+        lines.add("&7&m------------------");
 
         return lines;
     }

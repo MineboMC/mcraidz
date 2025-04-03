@@ -48,6 +48,11 @@ public class TeamCommands extends BaseCommand {
             return;
         }
 
+        if(TeamManager.getTeamByName(name) != null) {
+            sender.sendMessage(ChatColor.RED + "A team with this name already exists.");
+            return;
+        }
+
         TeamManager.registerTeam(new Team(name, sender));
         sender.sendMessage(ChatColor.GREEN + "You have created a team!");
 

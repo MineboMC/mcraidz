@@ -54,7 +54,7 @@ public class ProfileManager {
 
     public static void unRegisterProfile(Profile profile){
         Logger.log("Unregistered profile for: \"" + profile.uuid + "\"");
-        profiles.add(profile);
+        profiles.remove(profile);
     }
 
     public static Profile getProfileByUUID(UUID uuid) {

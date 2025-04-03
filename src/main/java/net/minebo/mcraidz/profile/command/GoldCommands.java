@@ -62,13 +62,15 @@ public class GoldCommands extends BaseCommand {
                     case GOLD_BLOCK -> totalGold += blockValue * item.getAmount();
                     default -> {}
                 }
-                inventory.remove(item);
+                if(item.getType() == Material.GOLD_NUGGET || item.getType() == Material.GOLD_INGOT || item.getType() == Material.GOLD_BLOCK) {
+                    inventory.remove(item);
+                }
             }
         }
 
         if (totalGold > 0) {
             playerProfile.addBalance(totalGold);
-            player.sendMessage(ChatColor.YELLOW + "Deposited " + ChatColor.GOLD + totalGold + "⛃" + ChatColor.YELLOW + "!");
+            player.sendMessage(ChatColor.YELLOW + "Deposited " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + totalGold + "!");
         } else {
             player.sendMessage(ChatColor.RED + "You have no gold to deposit!");
         }
@@ -115,7 +117,7 @@ public class GoldCommands extends BaseCommand {
             remaining -= 0.11;
         }
 
-        player.sendMessage(ChatColor.YELLOW + "You withdrew " + ChatColor.GOLD + amount + "⛃" + ChatColor.YELLOW + "!");
+        player.sendMessage(ChatColor.YELLOW + "You withdrew " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + amount + "!");
     }
 
     @CommandAlias("pay|p2p")
@@ -144,8 +146,8 @@ public class GoldCommands extends BaseCommand {
         playerProfile.subtractBalance(gold);
         recipientProfile.addBalance(gold);
 
-        player.sendMessage(ChatColor.YELLOW + "You have sent " + ChatColor.GOLD + gold + "⛃" + ChatColor.YELLOW + " to " + onlinePlayer.getPlayer().getDisplayName() + ChatColor.YELLOW + ".");
-        onlinePlayer.getPlayer().sendMessage(ChatColor.YELLOW + "You have gotten " + ChatColor.GOLD + gold + "⛃" + ChatColor.YELLOW + " from " + player.getDisplayName() + ChatColor.YELLOW + ".");
+        player.sendMessage(ChatColor.YELLOW + "You have sent " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + gold + " to " + onlinePlayer.getPlayer().getDisplayName() + ChatColor.YELLOW + ".");
+        onlinePlayer.getPlayer().sendMessage(ChatColor.YELLOW + "You have gotten " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + gold + " from " + player.getDisplayName() + ChatColor.YELLOW + ".");
 
     }
 }

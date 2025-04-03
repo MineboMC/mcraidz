@@ -11,7 +11,9 @@ public class DataSyncThread extends BukkitRunnable {
 
     @Override
     public void run() {
-        ProfileManager.profiles.forEach(ProfileManager::saveProfile);
+
+        // Only save online profiles.
+        Bukkit.getOnlinePlayers().forEach(p -> {ProfileManager.saveProfile(ProfileManager.getProfileByPlayer(p));});
         TeamManager.teams.forEach(TeamManager::saveTeam);
 
         Bukkit.getOnlinePlayers().forEach(player -> {
