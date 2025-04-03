@@ -26,7 +26,7 @@ public class GoldCommands extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + player.getPlayer().getName() + ChatColor.RED + " does not have a profile!");
             }
 
-            sender.sendMessage(player.getPlayer().getDisplayName() + ChatColor.YELLOW + "'s Gold: " + ChatColor.GOLD + targetProfile.getBalance() + "⛃");
+            sender.sendMessage(player.getPlayer().getDisplayName() + ChatColor.YELLOW + "'s Gold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + targetProfile.getBalance());
         } else {
             Profile profile = ProfileManager.getProfileByUUID(sender.getUniqueId());
 
@@ -34,13 +34,12 @@ public class GoldCommands extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + "Your profile hasn't loaded correctly, please try relogging or asking an admin if this continues.");
             }
 
-            sender.sendMessage(ChatColor.YELLOW + "Your Gold: " + ChatColor.GOLD + profile.getBalance() + "⛃");
+            sender.sendMessage(ChatColor.YELLOW + "Your Gold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getBalance());
         }
     }
 
     @CommandAlias("deposit")
     public void onDepositCommand(Player player) {
-
         Profile playerProfile = ProfileManager.getProfileByPlayer(player);
 
         if(playerProfile == null) {
