@@ -1,5 +1,6 @@
 package net.minebo.mcraidz.cobalt;
 
+import net.minebo.cobalt.cooldown.construct.Cooldown;
 import net.minebo.cobalt.scoreboard.provider.ScoreboardProvider;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
@@ -35,6 +36,11 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
         if(profile != null) {
             lines.add("&fGold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getFormattedBalance());
+        }
+
+        Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
+        if(pearlCooldown.onCooldown(player)) {
+            lines.add(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Enderpearl: " + ChatColor.WHITE + pearlCooldown.getRemaining(player) + "s");
         }
 
         lines.add("");

@@ -2,10 +2,12 @@ package net.minebo.mcraidz;
 
 import net.minebo.cobalt.acf.ACFCommandController;
 import net.minebo.cobalt.acf.ACFManager;
+import net.minebo.cobalt.cooldown.CooldownHandler;
 import net.minebo.cobalt.gson.Gson;
 import net.minebo.cobalt.scoreboard.ScoreboardHandler;
 import net.minebo.mcraidz.cobalt.ScoreboardImpl;
 import net.minebo.mcraidz.cobalt.completion.TeamCompletionHandler;
+import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
 import net.minebo.mcraidz.listener.GeneralListener;
 import net.minebo.mcraidz.listener.OldRegenListener;
 import net.minebo.mcraidz.listener.SoupListener;
@@ -21,11 +23,15 @@ public final class MCRaidz extends JavaPlugin {
     public static MCRaidz instance;
 
     public static ACFManager acfManager;
+    public static CooldownHandler cooldownHandler;
 
     @Override
     public void onEnable() {
         instance = this;
         this.saveDefaultConfig();
+
+        cooldownHandler = new CooldownHandler(this);
+        cooldownHandler.registerCooldown("enderpearl", new EnderPearlCooldown());
 
         acfManager = new ACFManager(this);
         ACFCommandController.registerCompletion("teams", new TeamCompletionHandler());
