@@ -8,9 +8,8 @@ import net.minebo.cobalt.scoreboard.ScoreboardHandler;
 import net.minebo.mcraidz.cobalt.ScoreboardImpl;
 import net.minebo.mcraidz.cobalt.completion.TeamCompletionHandler;
 import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
-import net.minebo.mcraidz.listener.GeneralListener;
-import net.minebo.mcraidz.listener.OldRegenListener;
-import net.minebo.mcraidz.listener.SoupListener;
+import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
+import net.minebo.mcraidz.listener.*;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.thread.DataSyncThread;
@@ -30,6 +29,10 @@ public final class MCRaidz extends JavaPlugin {
         instance = this;
         this.saveDefaultConfig();
 
+        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+            new MCRaidzPlaceholderExpansion().register(); // We will find a solution when the time comes... - Ian
+        }
+
         cooldownHandler = new CooldownHandler(this);
         cooldownHandler.registerCooldown("enderpearl", new EnderPearlCooldown());
 
@@ -44,7 +47,7 @@ public final class MCRaidz extends JavaPlugin {
 
         new ScoreboardHandler(new ScoreboardImpl(), this);
 
-        new TabThread().runTaskTimer(this, 20L, 20L);
+//        new TabThread().runTaskTimer(this, 20L, 20L);
         new DataSyncThread().runTaskTimer(this, 20L,  10L * 60L * 20L);
 
     }
@@ -59,6 +62,8 @@ public final class MCRaidz extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
         Bukkit.getPluginManager().registerEvents(new SoupListener(), this);
         Bukkit.getPluginManager().registerEvents(new OldRegenListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ChatFormatListener(), this);
+        Bukkit.getPluginManager().registerEvents(new StatTrackListener(), this);
     }
 
     public void registerManagers(){

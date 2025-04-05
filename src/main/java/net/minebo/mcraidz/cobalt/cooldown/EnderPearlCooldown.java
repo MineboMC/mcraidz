@@ -13,7 +13,7 @@ public class EnderPearlCooldown extends Cooldown {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (event.getItem().getType() == Material.AIR) {
+            if (event.getItem().getType() == null) {
                 return;
             }
 
