@@ -45,7 +45,7 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         Team targetFaction = TeamManager.getTeamByPlayer(target);
 
         if (targetFaction == null) {
-            return "&c";
+            return "&e";
         }
 
         if (viewerFaction == null) {

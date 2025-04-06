@@ -38,9 +38,18 @@ public class ScoreboardImpl extends ScoreboardProvider {
             lines.add("&fGold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getFormattedBalance());
         }
 
-        Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
-        if(pearlCooldown.onCooldown(player)) {
-            lines.add(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Enderpearl: " + ChatColor.WHITE + pearlCooldown.getRemaining(player) + "s");
+        if(MCRaidz.cooldownHandler.getCooldown("enderpearl") != null) {
+            Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
+            if (pearlCooldown.onCooldown(player)) {
+                lines.add(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Enderpearl" + ChatColor.DARK_AQUA + ": " + ChatColor.WHITE + pearlCooldown.getRemaining(player) + "s");
+            }
+        }
+
+        if(MCRaidz.cooldownHandler.getCooldown("pvptag") != null) {
+            Cooldown pvpTagCooldown = MCRaidz.cooldownHandler.getCooldown("pvptag");
+            if (pvpTagCooldown.onCooldown(player)) {
+                lines.add(ChatColor.RED + ChatColor.BOLD.toString() + "PvP Tag" + ChatColor.RED + ": " + ChatColor.WHITE + pvpTagCooldown.getRemaining(player) + "s");
+            }
         }
 
         lines.add("");
