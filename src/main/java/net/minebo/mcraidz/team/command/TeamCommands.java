@@ -106,6 +106,20 @@ public class TeamCommands extends BaseCommand {
     @Syntax("<team>")
     @CommandCompletion("@teams")
     public void onShowCommand(Player sender, @Optional String team){
+
+        if(team != null && Bukkit.getPlayer(team) != null) {
+            Team playerTeam = TeamManager.getTeamByPlayer(Bukkit.getPlayer(team));
+
+            if(playerTeam == null) {
+                sender.sendMessage(ChatColor.RED + Bukkit.getPlayer(team).getName() + " is not in a team.");
+                return;
+            }
+
+            sender.sendMessage(playerTeam.generateInfoMessage(sender));
+
+            return;
+        }
+
         if(team == null) {
             Team playerTeam = TeamManager.getTeamByPlayer(sender);
 
