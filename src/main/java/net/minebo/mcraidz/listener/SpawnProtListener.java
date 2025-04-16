@@ -72,7 +72,7 @@ public class SpawnProtListener implements Listener {
             Player attacker = (Player) e.getDamager();
             Profile attackerProfile = ProfileManager.getProfileByPlayer(attacker);
 
-            if(attackerProfile.hasSpawnProtection()) {
+            if(attackerProfile.hasSpawnProtection() && e.getEntity().getType() == EntityType.PLAYER) {
                 e.setCancelled(true);
                 attacker.sendMessage(ChatColor.RED + "You can't attack while you have spawn protection!");
                 return;
@@ -87,18 +87,6 @@ public class SpawnProtListener implements Listener {
                     attacker.sendMessage(ChatColor.RED + "This player currently has spawn protection!");
                 }
             }
-        }
-    }
-
-    @EventHandler
-    public void onRespawn(PlayerRespawnEvent e) {
-        if(ProfileManager.getProfileByPlayer(e.getPlayer()) != null) {
-            Profile profile = ProfileManager.getProfileByPlayer(e.getPlayer());
-            Player player = e.getPlayer();
-
-            e.setRespawnLocation(Bukkit.getWorld("world").getSpawnLocation());
-            profile.spawnProtection = true;
-
         }
     }
 }

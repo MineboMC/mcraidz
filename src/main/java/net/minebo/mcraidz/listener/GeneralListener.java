@@ -18,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class GeneralListener implements Listener {
 
@@ -52,6 +53,18 @@ public class GeneralListener implements Listener {
             team.sendMessageToMembers(ChatColor.RED + "Member Offline: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getName());
         }
 
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent e) {
+        if(ProfileManager.getProfileByPlayer(e.getPlayer()) != null) {
+            Profile profile = ProfileManager.getProfileByPlayer(e.getPlayer());
+            Player player = e.getPlayer();
+
+            e.setRespawnLocation(Bukkit.getWorld("world").getSpawnLocation());
+            profile.spawnProtection = true;
+
+        }
     }
 
 }
