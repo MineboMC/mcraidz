@@ -55,11 +55,11 @@ public class SpawnProtListener implements Listener {
                         Region rg = RegionManager.getRegionByLocation(player.getLocation());
                         if (!rg.containsFlag(FlagManager.getFlagByName("SafeZone"))) {
                             profile.spawnProtection = false;
-                            player.sendMessage(ChatColor.RED + "Your spawn protection is broken!");
+                            player.sendMessage(ChatColor.RED + "Your spawn protection has been broken!");
                         }
                     } else {
                         profile.spawnProtection = false;
-                        player.sendMessage(ChatColor.RED + "Your spawn protection is broken!");
+                        player.sendMessage(ChatColor.RED + "Your spawn protection has been broken!");
                     }
                 }
             }
