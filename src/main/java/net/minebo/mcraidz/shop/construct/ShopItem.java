@@ -15,13 +15,13 @@ public class ShopItem {
     public ItemStack item;
 
     public ShopItem(UUID owner, Double price, ItemStack item) {
-        this.name = item.getItemMeta().getDisplayName();
+        this.name = item.getType().name();
         this.price = price;
         this.item = item;
         this.owner = owner;
-
-        this.id = getUnusedUUID(); // Make sure we dont accidentally generate the same twice (should never happen!)
+        this.id = getUnusedUUID(); // Ensure unique UUID generation
     }
+
 
     public UUID getUnusedUUID(){
         UUID testFor = UUID.randomUUID();

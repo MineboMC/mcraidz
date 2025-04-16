@@ -7,13 +7,13 @@ import net.minebo.cobalt.gson.Gson;
 import net.minebo.cobalt.scoreboard.ScoreboardHandler;
 import net.minebo.mcraidz.cobalt.ScoreboardImpl;
 import net.minebo.mcraidz.cobalt.completion.TeamCompletionHandler;
+import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
 import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
 import net.minebo.mcraidz.listener.*;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.thread.DataSyncThread;
-import net.minebo.mcraidz.thread.TabThread;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +35,7 @@ public final class MCRaidz extends JavaPlugin {
 
         cooldownHandler = new CooldownHandler(this);
         cooldownHandler.registerCooldown("enderpearl", new EnderPearlCooldown());
+        cooldownHandler.registerCooldown("pvptag", new CombatTagTimer());
 
         acfManager = new ACFManager(this);
         ACFCommandController.registerCompletion("teams", new TeamCompletionHandler());
@@ -64,6 +65,8 @@ public final class MCRaidz extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new OldRegenListener(), this);
         Bukkit.getPluginManager().registerEvents(new ChatFormatListener(), this);
         Bukkit.getPluginManager().registerEvents(new StatTrackListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SpawnProtListener(), this);
+        Bukkit.getPluginManager().registerEvents(new TeamProtListener(), this);
     }
 
     public void registerManagers(){

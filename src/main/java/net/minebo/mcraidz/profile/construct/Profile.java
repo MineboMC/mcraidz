@@ -26,6 +26,8 @@ public class Profile {
 
     public HashMap<String, Location> warps;
 
+    public Boolean spawnProtection = false;
+
     public Profile(UUID uuid) {
         this.uuid = uuid;
         this.gold = 0.00;
@@ -59,6 +61,10 @@ public class Profile {
     public double getFormattedBalance() {
         DecimalFormat df = new DecimalFormat("#.00");
         return Double.parseDouble(df.format(gold));
+    }
+
+    public Boolean hasSpawnProtection() {
+        return spawnProtection;
     }
 
 }

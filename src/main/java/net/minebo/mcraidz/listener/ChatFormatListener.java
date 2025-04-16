@@ -40,13 +40,13 @@ public class ChatFormatListener implements Listener {
         }
 
         if(viewerFaction == null) {
-            return "&6[&c" + senderFaction.name + "&6]";
+            return "&6[&e" + senderFaction.name + "&6]";
         }
 
         if (sender.getUniqueId().equals(viewer.getUniqueId()) || senderFaction.name.equalsIgnoreCase(viewerFaction.name)) {
             return "&6[&a" + senderFaction.name + "&6]";
         } else {
-            return "&6[&c" + senderFaction.name + "&6]";
+            return "&6[&e" + senderFaction.name + "&6]";
         }
     }
 }

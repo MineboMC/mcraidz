@@ -36,6 +36,7 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
         if(profile != null) {
             lines.add("&fGold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getFormattedBalance());
+            if(profile.hasSpawnProtection()) lines.add("&aProtected by Spawn");
         }
 
         if(MCRaidz.cooldownHandler.getCooldown("enderpearl") != null) {

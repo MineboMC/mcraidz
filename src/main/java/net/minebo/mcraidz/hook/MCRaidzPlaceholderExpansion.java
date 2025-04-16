@@ -2,6 +2,8 @@ package net.minebo.mcraidz.hook;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
+import net.minebo.mcraidz.profile.ProfileManager;
+import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import org.bukkit.entity.Player;
@@ -44,8 +46,16 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         Team viewerFaction = TeamManager.getTeamByPlayer(viewer);
         Team targetFaction = TeamManager.getTeamByPlayer(target);
 
+        if(ProfileManager.getProfileByPlayer(target) != null) {
+            Profile profile = ProfileManager.getProfileByPlayer(target);
+
+            if(profile.hasSpawnProtection()){
+                return "&e";
+            }
+        }
+
         if (targetFaction == null) {
-            return "&e";
+            return "&c";
         }
 
         if (viewerFaction == null) {
