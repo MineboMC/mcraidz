@@ -39,6 +39,8 @@ public final class MCRaidz extends JavaPlugin {
         cooldownHandler.registerCooldown("pvptag", new CombatTagTimer());
 
         acfManager = new ACFManager(this);
+
+        ACFCommandController.registerAll(this);
         ACFCommandController.registerCompletion("teams", new TeamCompletionHandler());
 
         Gson.init();
