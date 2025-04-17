@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -86,6 +88,30 @@ public class SpawnProtListener implements Listener {
                     e.setCancelled(true);
                     attacker.sendMessage(ChatColor.RED + "This player currently has spawn protection!");
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTakeDamage(EntityDamageEvent e){
+        if(e.getEntity().getType() == EntityType.PLAYER) {
+            Player player = (Player) e.getEntity();
+            Profile profile = ProfileManager.getProfileByPlayer(player);
+            if(profile.hasSpawnProtection()) {
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onSaturation(FoodLevelChangeEvent e){
+        if(e.getEntity().getType() == EntityType.PLAYER) {
+            Player player = (Player) e.getEntity();
+            Profile profile = ProfileManager.getProfileByPlayer(player);
+            if(profile.hasSpawnProtection()) {
+                e.setCancelled(true);
+                player.setFoodLevel(20);
+                player.setSaturation(20f);
             }
         }
     }

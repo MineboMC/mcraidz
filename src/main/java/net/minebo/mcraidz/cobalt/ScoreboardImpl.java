@@ -2,9 +2,12 @@ package net.minebo.mcraidz.cobalt;
 
 import net.minebo.cobalt.cooldown.construct.Cooldown;
 import net.minebo.cobalt.scoreboard.provider.ScoreboardProvider;
+import net.minebo.cobalt.util.format.TimeFormatting;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
+import net.minebo.mcraidz.server.ServerHandler;
+import net.minebo.mcraidz.server.task.SpawnTask;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import org.bukkit.ChatColor;
@@ -39,6 +42,10 @@ public class ScoreboardImpl extends ScoreboardProvider {
             if(profile.hasSpawnProtection()) lines.add("&aProtected by Spawn");
         }
 
+        if(getSpawnTeleportScore(player) != null) {
+            lines.add(ChatColor.BLUE + ChatColor.BOLD.toString() + "Spawn: " + ChatColor.WHITE + getSpawnTeleportScore(player) + "s");
+        }
+
         if(MCRaidz.cooldownHandler.getCooldown("enderpearl") != null) {
             Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
             if (pearlCooldown.onCooldown(player)) {
@@ -59,4 +66,19 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
         return lines;
     }
+
+    public String getSpawnTeleportScore(Player player) {
+        SpawnTask spawnTask = ServerHandler.getSpawnTasks().get(player.getName());
+
+        if (spawnTask != null) {
+            long diffMillis = spawnTask.getSpawnTime() - System.currentTimeMillis();
+
+            if (diffMillis >= 0) {
+                return TimeFormatting.getRemaining(diffMillis); // Pass ms
+            }
+        }
+
+        return null;
+    }
+
 }

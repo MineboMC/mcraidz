@@ -46,15 +46,16 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         Team viewerFaction = TeamManager.getTeamByPlayer(viewer);
         Team targetFaction = TeamManager.getTeamByPlayer(target);
 
-        if(ProfileManager.getProfileByPlayer(target) != null) {
-            Profile profile = ProfileManager.getProfileByPlayer(target);
-
-            if(profile.hasSpawnProtection()){
-                return "&e";
-            }
-        }
-
         if (targetFaction == null) {
+
+            if(ProfileManager.getProfileByPlayer(target) != null) {
+                Profile profile = ProfileManager.getProfileByPlayer(target);
+
+                if(profile.hasSpawnProtection()){
+                    return "&e";
+                }
+            }
+
             return "&c";
         }
 
@@ -64,9 +65,10 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
 
         if (viewer.getUniqueId().equals(target.getUniqueId()) || viewerFaction.name.equalsIgnoreCase(targetFaction.name)) {
             return "&2";
-        } else {
-            return "&c";
         }
+
+        return "&c";
+
     }
 
 }
