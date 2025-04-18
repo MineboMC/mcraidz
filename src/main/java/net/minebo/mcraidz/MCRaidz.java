@@ -13,6 +13,7 @@ import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
 import net.minebo.mcraidz.listener.*;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.server.ServerHandler;
+import net.minebo.mcraidz.shop.ShopManager;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.thread.DataSyncThread;
 import org.bukkit.Bukkit;
@@ -76,6 +77,7 @@ public final class MCRaidz extends JavaPlugin {
         TeamManager.init();
         ProfileManager.init();
         ServerHandler.init();
+        ShopManager.init();
     }
 
 }

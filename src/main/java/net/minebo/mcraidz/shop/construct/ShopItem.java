@@ -1,6 +1,7 @@
 package net.minebo.mcraidz.shop.construct;
 
 import net.minebo.mcraidz.shop.ShopManager;
+import net.minebo.mcraidz.util.ItemUtil;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class ShopItem {
     public ItemStack item;
 
     public ShopItem(UUID owner, Double price, ItemStack item) {
-        this.name = item.getType().name();
+        this.name = ItemUtil.getItemId(item);
         this.price = price;
         this.item = item;
         this.owner = owner;

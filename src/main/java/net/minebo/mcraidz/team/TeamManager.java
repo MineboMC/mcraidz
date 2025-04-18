@@ -52,11 +52,13 @@ public class TeamManager {
     public static void registerTeam(Team team){
         Logger.log("Registered new team: \"" + team.name + "\"");
         teams.add(team);
+        saveTeam(team);
     }
 
     public static void unRegisterTeam(Team team){
         Logger.log("Unregistered team: \"" + team.name + "\"");
         teams.remove(team);
+        deleteTeam(team);
     }
 
     public static Team getTeamByUUID(UUID uuid){
@@ -98,6 +100,18 @@ public class TeamManager {
             for (File file : files) {
                 // Load each profile by its file name (UUID)
                 loadTeam(file);
+            }
+        }
+    }
+
+    public static void deleteTeam(Team team) {
+        // Get all files in the profiles folder
+        File[] files = teamsFolder.listFiles((dir, name) -> name.endsWith(".json"));
+
+        assert files != null;
+        for (File file : files) {
+            if (file.getName().equals(team.uuid + ".json")) {  // Use .equals() for string comparison
+                file.delete();
             }
         }
     }
