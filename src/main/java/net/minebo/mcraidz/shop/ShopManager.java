@@ -25,7 +25,7 @@ public class ShopManager {
     public static List<ShopItem> shopItems;
     public static Map<String, ShopItem> itemCache;
 
-    private static final File shopItemsFolder = new File(MCRaidz.instance.getDataFolder(),"internal/teams");
+    private static final File shopItemsFolder = new File(MCRaidz.instance.getDataFolder(),"internal/shopItems");
 
     public static void init(){
         shopItems = new ArrayList<ShopItem>(); // Update later
