@@ -27,9 +27,12 @@ public class TestingCommand extends BaseCommand {
 
         if(!(sender instanceof Player)) return;
 
-        if(!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Testing"))) return;
-
         Player player = (Player) sender;
+
+        if(!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Testing"))) {
+            player.sendMessage(ChatColor.RED + "You can only use this kit on our testing server.");
+            return;
+        }
 
         player.getInventory().setItem(0, getSword());
 
@@ -42,10 +45,10 @@ public class TestingCommand extends BaseCommand {
 
         player.getInventory().setItem(1, getPearl());
 
-        player.getInventory().setItem(7, getPotionItem(PotionType.STRONG_STRENGTH));
-        player.getInventory().setItem(16, getPotionItem(PotionType.STRONG_STRENGTH));
-        player.getInventory().setItem(25, getPotionItem(PotionType.STRONG_STRENGTH));
-        player.getInventory().setItem(34, getPotionItem(PotionType.STRONG_STRENGTH));
+        player.getInventory().setItem(7, getPotionItem(PotionType.STRENGTH));
+        player.getInventory().setItem(16, getPotionItem(PotionType.STRENGTH));
+        player.getInventory().setItem(25, getPotionItem(PotionType.STRENGTH));
+        player.getInventory().setItem(34, getPotionItem(PotionType.STRENGTH));
 
         player.getInventory().setItem(8, getPotionItem(PotionType.STRONG_SWIFTNESS));
         player.getInventory().setItem(17, getPotionItem(PotionType.STRONG_SWIFTNESS));
