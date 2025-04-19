@@ -127,10 +127,7 @@ public class ItemUtil {
         String baseId = splash ? id.substring(0, id.length() - 1) : id;
 
         switch (baseId) {
-            case "waterp": return PotionType.WATER;
-            case "mundanep": return PotionType.MUNDANE;
-            case "thickp": return PotionType.THICK;
-            case "awkwardp": return PotionType.AWKWARD;
+            case "wb": return PotionType.WATER;
 
             case "nvp": return PotionType.NIGHT_VISION;
             case "nvpe": return PotionType.LONG_NIGHT_VISION;
@@ -177,7 +174,7 @@ public class ItemUtil {
             case "wp1": return PotionType.WEAKNESS;
             case "wp1e": return PotionType.LONG_WEAKNESS;
 
-            case "luckp": return PotionType.LUCK;
+            case "lp": return PotionType.LUCK;
 
             case "tmp1": return PotionType.TURTLE_MASTER;
             case "tmp1e": return PotionType.LONG_TURTLE_MASTER;
@@ -186,10 +183,10 @@ public class ItemUtil {
             case "sfp1": return PotionType.SLOW_FALLING;
             case "sfp1e": return PotionType.LONG_SLOW_FALLING;
 
-            case "windp": return PotionType.WIND_CHARGED;
-            case "weavingp": return PotionType.WEAVING;
-            case "oozingp": return PotionType.OOZING;
-            case "infestedp": return PotionType.INFESTED;
+            case "wcp": return PotionType.WIND_CHARGED;
+            case "wvp": return PotionType.WEAVING;
+            case "ozp": return PotionType.OOZING;
+            case "ifp": return PotionType.INFESTED;
 
             default: return null;
         }
