@@ -4,7 +4,10 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.profile.ProfileManager;
+import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.server.ServerHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,6 +23,29 @@ public class SpawnCommand extends BaseCommand {
         if(sender instanceof Player) {
 
             Player player = (Player) sender;
+
+            if(ProfileManager.getProfileByPlayer(player) == null) {
+                player.sendMessage(ChatColor.RED + "You do not have a profile, try reconnecting or contact an administrator.");
+                return;
+            }
+
+            if(player.hasPermission("basic.staff")){
+                player.sendMessage(ChatColor.YELLOW + "You bypassed the spawn timer since you are a staff member.");
+                player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+
+                Profile profile = ProfileManager.getProfileByPlayer(player);
+
+                player.setHealth(20);
+                player.setFoodLevel(20);
+                player.setSaturation(20);
+
+                if(!profile.hasSpawnProtection()) {
+                    profile.spawnProtection = true;
+                    player.sendMessage(ChatColor.GREEN + "Your spawn protection has been enabled.");
+                }
+
+                return;
+            }
 
             if (player.hasMetadata("frozen")) {
                 sender.sendMessage(ChatColor.RED + "You can't teleport while you're frozen!");

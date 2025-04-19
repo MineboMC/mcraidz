@@ -27,11 +27,6 @@ public class ServerHandler {
     }
 
     public static void startSpawnCommandTask(final Player player) {
-        if(ProfileManager.getProfileByPlayer(player) == null) {
-            player.sendMessage(ChatColor.RED + "You do not have a profile, try reconnecting or contact an administrator.");
-            return;
-        }
-
         Profile profile = ProfileManager.getProfileByPlayer(player);
 
         player.sendMessage(ChatColor.YELLOW.toString() + "Teleporting you to spawn in 10 seconds.");
