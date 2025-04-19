@@ -1,10 +1,12 @@
 package net.minebo.mcraidz.listener;
 
+import net.minebo.cobalt.cooldown.construct.Cooldown;
 import net.minebo.cobalt.util.format.NumberFormatting;
 import net.minebo.kregions.KRegions;
 import net.minebo.kregions.manager.FlagManager;
 import net.minebo.kregions.manager.RegionManager;
 import net.minebo.kregions.model.Region;
+import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.team.TeamManager;
@@ -73,6 +75,21 @@ public class GeneralListener implements Listener {
             profile.spawnProtection = true;
 
         }
+
+        if(MCRaidz.cooldownHandler.getCooldown("enderpearl") != null) {
+            Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
+            if (pearlCooldown.onCooldown(e.getPlayer())) {
+                pearlCooldown.removeCooldown(e.getPlayer());
+            }
+        }
+
+        if(MCRaidz.cooldownHandler.getCooldown("pvptag") != null) {
+            Cooldown pvpTagCooldown = MCRaidz.cooldownHandler.getCooldown("pvptag");
+            if (pvpTagCooldown.onCooldown(e.getPlayer())) {
+                pvpTagCooldown.removeCooldown(e.getPlayer());
+            }
+        }
+
     }
 
 }

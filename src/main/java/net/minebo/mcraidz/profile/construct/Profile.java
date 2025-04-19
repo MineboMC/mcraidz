@@ -75,4 +75,14 @@ public class Profile {
         ProfileManager.saveProfile(this);
     }
 
+    public void addKill() {
+        kills++;
+        ProfileManager.saveProfile(this);
+    }
+
+    public void addDeath() {
+        deaths++;
+        ProfileManager.saveProfile(this);
+    }
+
 }

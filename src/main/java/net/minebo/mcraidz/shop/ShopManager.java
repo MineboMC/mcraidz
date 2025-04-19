@@ -231,6 +231,7 @@ public class ShopManager {
 
         ItemStack single = held.clone();
         single.setAmount(1);
+        single.removeEnchantments();
 
         for (int i = 0; i < amount; i++) {
             ShopItem item = new ShopItem(player.getUniqueId(), price, single.clone());

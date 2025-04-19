@@ -27,25 +27,20 @@ public class StatTrackListener implements Listener {
 
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent e) {
-
         e.setDeathMessage(null);
 
-        if(!(e.getDamageSource() instanceof Player)) {
-            return;
-        }
+        Player slainPlayer = e.getEntity();
+        Player killerPlayer = slainPlayer.getKiller();
 
-        Profile killer = ProfileManager.getProfileByPlayer(e.getEntity());
-        Profile slain = ProfileManager.getProfileByPlayer(e.getPlayer());
+        if (killerPlayer == null || killerPlayer == slainPlayer) return;
 
-        if(slain.uuid == killer.uuid) {
-            return;
-        }
+        Profile killer = ProfileManager.getProfileByPlayer(killerPlayer);
+        Profile slain = ProfileManager.getProfileByPlayer(slainPlayer);
 
-        // I can't wait for this to become a lot more confusing! -- Ian
+        if (killer == null || slain == null) return;
 
-        killer.kills += 1;
-        slain.deaths += 1;
-
+        killer.addKill();
+        slain.addDeath();
     }
 
 }

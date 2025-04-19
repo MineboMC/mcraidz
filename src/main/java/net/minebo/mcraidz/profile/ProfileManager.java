@@ -88,6 +88,9 @@ public class ProfileManager {
         json.addProperty("uuid", profile.uuid.toString());
         json.addProperty("gold", profile.gold);
 
+        json.addProperty("kills", profile.kills);
+        json.addProperty("deaths", profile.deaths);
+
         JsonObject warpsJson = new JsonObject();
         for (String warpName : profile.warps.keySet()) {
             warpsJson.add(warpName, Gson.GSON.toJsonTree(profile.warps.get(warpName)));  // Manually serialize warps
@@ -126,6 +129,12 @@ public class ProfileManager {
             Profile profile = new Profile(profileUuid);
             profile.setBalance(gold);
             profile.warps = warps;
+
+            profile.kills = 0;
+            profile.deaths = 0;
+
+            if(json.has("kills")) profile.kills = json.get("kills").getAsInt();
+            if(json.has("deaths")) profile.deaths = json.get("deaths").getAsInt();
 
             profile.dieOnLogin = false;
 

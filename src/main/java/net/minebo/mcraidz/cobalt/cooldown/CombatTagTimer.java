@@ -129,6 +129,9 @@ public class CombatTagTimer extends Cooldown {
             profile.toggleDieOnLogin();
         }
 
+        ProfileManager.getProfileByPlayer(chicken.getKiller()).addKill();
+        profile.addDeath();
+
         Bukkit.broadcastMessage(ChatColor.RED + "[CombatTag] " + offlinePlayer.getName() + " has died while logged out!");
     }
 }
