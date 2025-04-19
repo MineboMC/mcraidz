@@ -34,6 +34,10 @@ public class TestingCommand extends BaseCommand {
             return;
         }
 
+        for (int i = 0; i <= 35; i++) {
+            player.getInventory().setItem(i, new ItemStack(Material.MUSHROOM_STEW));
+        }
+
         player.getInventory().setItem(0, getSword());
 
         player.getInventory().setHelmet(getHelmet());
@@ -54,14 +58,6 @@ public class TestingCommand extends BaseCommand {
         player.getInventory().setItem(17, getPotionItem(PotionType.STRONG_SWIFTNESS));
         player.getInventory().setItem(26, getPotionItem(PotionType.STRONG_SWIFTNESS));
         player.getInventory().setItem(35, getPotionItem(PotionType.STRONG_SWIFTNESS));
-
-        for (int i = 0; i <= 35; i++) {
-            if(player.getInventory().getItem(i) == null) {
-                player.getInventory().setItem(i, new ItemStack(Material.MUSHROOM_STEW));
-            } else if(player.getInventory().getItem(i).getType().equals(Material.AIR)){
-                player.getInventory().setItem(i, new ItemStack(Material.MUSHROOM_STEW));
-            }
-        }
 
         sender.sendMessage(ChatColor.GREEN + "You find yourself mysteriously flush with items.");
     }
