@@ -132,12 +132,18 @@ public class ShopManager {
         }
     }
 
-
     public static boolean buyItemByName(Player sender, String name, int amount) {
         List<ShopItem> itemsToBuy = new ArrayList<>();
         int found = 0;
 
-        // Collect items from the shop that match the given name (case-insensitive)
+        ShopItem sampleItem = getItemByName(name);
+        if (sampleItem == null) {
+            sender.sendMessage(ChatColor.RED + "That item was not found in the market.");
+            return false;
+        }
+
+        double price = sampleItem.getPrice();
+
         for (ShopItem item : new ArrayList<>(shopItems)) {
             if (item.name.equalsIgnoreCase(name)) {
                 itemsToBuy.add(item);
@@ -156,7 +162,7 @@ public class ShopManager {
             return false;
         }
 
-        double totalCost = itemsToBuy.stream().mapToDouble(i -> i.price).sum();
+        double totalCost = price * amount;
 
         Profile buyerProfile = ProfileManager.getProfileByPlayer(sender);
         if (buyerProfile == null || buyerProfile.getBalance() < totalCost) {
@@ -164,18 +170,15 @@ public class ShopManager {
             return false;
         }
 
-        // Deduct balance and add items
         buyerProfile.subtractBalance(totalCost);
 
-        Map<UUID, Double> sellerEarnings = new HashMap<>();
+        Map<UUID, Integer> itemsSoldBySeller = new HashMap<>();
         ItemStack base = null;
         int totalAmount = 0;
 
         for (ShopItem item : itemsToBuy) {
-            Profile sellerProfile = ProfileManager.getProfileByUUID(item.owner);
-            if (sellerProfile != null) {
-                sellerEarnings.put(item.owner, sellerEarnings.getOrDefault(item.owner, 0.0) + item.price);
-            }
+            // Track how many items each seller sold
+            itemsSoldBySeller.put(item.owner, itemsSoldBySeller.getOrDefault(item.owner, 0) + 1);
 
             if (base == null) {
                 base = item.item.clone();
@@ -195,14 +198,27 @@ public class ShopManager {
             sender.getInventory().addItem(base);
         }
 
-        // Pay sellers
-        for (Map.Entry<UUID, Double> entry : sellerEarnings.entrySet()) {
-            Profile seller = ProfileManager.getProfileByUUID(entry.getKey());
-            if (seller != null) seller.addBalance(entry.getValue());
-            if (Bukkit.getPlayer(seller.uuid) != null) Bukkit.getPlayer(seller.uuid).sendMessage(sender.getDisplayName() + ChatColor.GRAY + " has bought a " + ChatColor.GOLD + name.toUpperCase() + ChatColor.GRAY + " from you for " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + entry.getValue() + ChatColor.GRAY + ".");
+        // Pay and notify each seller
+        for (Map.Entry<UUID, Integer> entry : itemsSoldBySeller.entrySet()) {
+            UUID sellerUUID = entry.getKey();
+            int soldAmount = entry.getValue();
+            double sellerEarnings = soldAmount * price;
+
+            Profile seller = ProfileManager.getProfileByUUID(sellerUUID);
+            if (seller != null) seller.addBalance(sellerEarnings);
+
+            Player sellerPlayer = Bukkit.getPlayer(sellerUUID);
+            if (sellerPlayer != null) {
+                sellerPlayer.sendMessage(sender.getDisplayName() + ChatColor.GRAY + " bought " +
+                        (soldAmount == 1 ? "a " : ChatColor.YELLOW + Integer.toString(soldAmount) + ChatColor.GRAY + "x ") +
+                        ChatColor.GOLD + name.toUpperCase() + ChatColor.GRAY + " from you for " +
+                        ChatColor.GOLD + "⛃" + ChatColor.YELLOW + sellerEarnings + ChatColor.GRAY + ".");
+            }
         }
 
-        sender.sendMessage(ChatColor.GRAY + "Purchased " + ChatColor.YELLOW + amount + ChatColor.GRAY + "x " + ChatColor.GOLD + name.toUpperCase() + ChatColor.GRAY + " for " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + totalCost + ChatColor.GRAY + ".");
+        sender.sendMessage(ChatColor.GRAY + "Purchased " + ChatColor.YELLOW + amount + ChatColor.GRAY + "x " +
+                ChatColor.GOLD + name.toUpperCase() + ChatColor.GRAY + " for " +
+                ChatColor.GOLD + "⛃" + ChatColor.YELLOW + totalCost + ChatColor.GRAY + ".");
         return true;
     }
 
