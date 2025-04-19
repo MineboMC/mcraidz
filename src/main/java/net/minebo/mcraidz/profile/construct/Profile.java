@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import net.minebo.cobalt.gson.Gson;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.profile.ProfileManager;
 import org.bson.json.JsonParseException;
 import org.bukkit.Location;
 
@@ -67,6 +68,11 @@ public class Profile {
 
     public Boolean hasSpawnProtection() {
         return spawnProtection;
+    }
+
+    public void toggleDieOnLogin() {
+        dieOnLogin = !dieOnLogin;
+        ProfileManager.saveProfile(this);
     }
 
 }

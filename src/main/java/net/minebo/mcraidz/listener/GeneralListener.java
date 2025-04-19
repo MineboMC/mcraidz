@@ -39,6 +39,7 @@ public class GeneralListener implements Listener {
         }
 
         if(ProfileManager.getProfileByPlayer(player).dieOnLogin) {
+            ProfileManager.getProfileByPlayer(player).toggleDieOnLogin();
             player.getInventory().clear();
             player.getInventory().setArmorContents(null);
             player.setHealth(0.0);
