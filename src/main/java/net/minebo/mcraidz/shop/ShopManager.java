@@ -7,6 +7,7 @@ import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.shop.construct.ShopItem;
 import net.minebo.mcraidz.team.construct.Team;
+import net.minebo.mcraidz.util.ItemStackUtil;
 import net.minebo.mcraidz.util.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -90,10 +91,9 @@ public class ShopManager {
             UUID id = UUID.fromString(json.get("id").getAsString());
 
             // Deserialize ItemStack
-            Map<String, Object> itemMap = Gson.GSON.fromJson(json.get("item"), Map.class);
-            ItemStack item = ItemStack.deserialize(itemMap);
+            ItemStack item = ItemStackUtil.itemStackFromBase64(json.get("item").getAsString());
 
-            ShopItem shopItem = new ShopItem(owner, price, item);
+            ShopItem shopItem = new ShopItem(name, owner, price, id, item);
             shopItem.id = id;
             shopItem.name = name;
 
@@ -110,12 +110,18 @@ public class ShopManager {
 
 
     public static void saveShopItem(ShopItem item) {
+
+        if (item.item == null) {
+            Bukkit.getLogger().severe("ShopItem " + item.name + " has a null ItemStack.");
+            return; // Prevent saving this item
+        }
+
         JsonObject json = new JsonObject();
         json.addProperty("name", item.name);
         json.addProperty("price", item.price);
         json.addProperty("owner", item.owner.toString());
         json.addProperty("id", item.id.toString());
-        json.add("item", Gson.GSON.toJsonTree(item.item.serialize())); // ItemStack -> Map -> JSON
+        json.addProperty("item", ItemStackUtil.itemStackToBase64(item.item)); // ItemStack -> Map -> JSON
 
         File file = new File(shopItemsFolder, item.id.toString() + ".json");
 
@@ -141,12 +147,12 @@ public class ShopManager {
         }
 
         if (itemsToBuy.isEmpty()) {
-            sender.sendMessage(ChatColor.RED + "Item not found in the shop.");
+            sender.sendMessage(ChatColor.RED + "That item was not found in the market.");
             return false;
         }
 
         if (itemsToBuy.size() < amount) {
-            sender.sendMessage(ChatColor.RED + "Only " + itemsToBuy.size() + " available in the shop.");
+            sender.sendMessage(ChatColor.RED + "Only " + itemsToBuy.size() + " is available in the market.");
             return false;
         }
 

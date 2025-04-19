@@ -16,10 +16,6 @@ public class BuyCommand extends BaseCommand {
     @Default
     @Syntax("<item>")
     public void onBuyCommand(Player player, String id, @Optional Integer amount) {
-        boolean success = ShopManager.buyItemByName(player, id, (amount != null) ? amount : 1);
-
-        if (!success) {
-            player.sendMessage(ChatColor.RED + "Couldn't find an item named '" + id + "' or you can't afford it.");
-        }
+        ShopManager.buyItemByName(player, id, (amount != null) ? amount : 1);
     }
 }
