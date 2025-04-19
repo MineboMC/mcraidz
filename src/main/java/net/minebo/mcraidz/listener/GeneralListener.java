@@ -38,6 +38,13 @@ public class GeneralListener implements Listener {
             team.sendMessageToMembers(ChatColor.GREEN + "Member Online: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getName());
         }
 
+        if(ProfileManager.getProfileByPlayer(player).dieOnLogin) {
+            player.getInventory().clear();
+            player.getInventory().setArmorContents(null);
+            player.setHealth(0.0);
+            player.sendMessage(ChatColor.RED + "You died because your logger was killed while you were offline.");
+        }
+
     }
 
     // Leave Message Listener

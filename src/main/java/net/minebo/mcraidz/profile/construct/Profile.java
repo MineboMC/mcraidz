@@ -26,6 +26,8 @@ public class Profile {
 
     public HashMap<String, Location> warps;
 
+    public Boolean dieOnLogin = false;
+
     public Boolean spawnProtection = false;
 
     public Profile(UUID uuid) {

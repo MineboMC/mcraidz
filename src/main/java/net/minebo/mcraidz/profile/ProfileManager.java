@@ -94,6 +94,8 @@ public class ProfileManager {
         }
         json.add("warps", warpsJson);
 
+        json.addProperty("dieOnLogin", profile.dieOnLogin);
+
         // Saving the JSON to a file
         File profileFile = new File(profilesFolder, profile.uuid.toString() + ".json");
         try (FileWriter writer = new FileWriter(profileFile)) {
@@ -124,6 +126,7 @@ public class ProfileManager {
             Profile profile = new Profile(profileUuid);
             profile.setBalance(gold);
             profile.warps = warps;
+            profile.dieOnLogin = json.get("dieOnLogin").getAsBoolean();
             profiles.add(profile);
 
             // You can store the loaded profile in a list or a map

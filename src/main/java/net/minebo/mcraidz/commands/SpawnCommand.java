@@ -29,7 +29,7 @@ public class SpawnCommand extends BaseCommand {
                 return;
             }
 
-            if(player.hasPermission("basic.staff")){
+            if(player.hasPermission("basic.staff")) {
                 player.sendMessage(ChatColor.YELLOW + "You bypassed the spawn timer since you are a staff member.");
                 player.teleport(Bukkit.getWorld("world").getSpawnLocation());
 
