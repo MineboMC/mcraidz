@@ -60,9 +60,9 @@ public class StatisticsCommands extends BaseCommand {
 
     @CommandAlias("statstop")
     @Syntax("<kills|deaths> [page]")
-    @CommandCompletion("kills|deaths @nothing")
+    @CommandCompletion("kills|deaths|gold @nothing")
     public void onStatsTopCommand(Player player, @Optional String type, @Optional String pageStr) {
-        if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths"))) type = "kills";
+        if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths") && !type.equalsIgnoreCase("gold"))) type = "kills";
 
         int page = 1;
         try {
@@ -84,6 +84,8 @@ public class StatisticsCommands extends BaseCommand {
                 return Integer.compare(b.kills, a.kills);
             } else if (finalType.equalsIgnoreCase("deaths")) {
                 return Integer.compare(b.deaths, a.deaths);
+            } else if (finalType.equalsIgnoreCase("gold")) {
+                return Double.compare(b.gold, a.gold);
             }
             return 0;
         });
@@ -100,8 +102,14 @@ public class StatisticsCommands extends BaseCommand {
             Profile p = profiles.get(i);
             String name = Bukkit.getOfflinePlayer(p.uuid).getName(); // You may need to cache or store player names in the Profile class
             int stat = finalType.equalsIgnoreCase("kills") ? p.kills : p.deaths;
+            double statGold = -1;
 
-            player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.WHITE + stat);
+            if(finalType.equalsIgnoreCase("gold")) {
+                statGold = p.gold;
+            }
+
+            if(statGold == -1) player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + stat);
+            else player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + statGold);
         }
 
         player.sendMessage(ChatColor.YELLOW + "Use /statstop " + finalType + " [page] to view more.");
