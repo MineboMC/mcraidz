@@ -12,6 +12,7 @@ import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
 import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
 import net.minebo.mcraidz.listener.*;
 import net.minebo.mcraidz.profile.ProfileManager;
+import net.minebo.mcraidz.recipe.RecipeManager;
 import net.minebo.mcraidz.server.ServerHandler;
 import net.minebo.mcraidz.shop.ShopManager;
 import net.minebo.mcraidz.team.TeamManager;
@@ -78,6 +79,7 @@ public final class MCRaidz extends JavaPlugin {
         ProfileManager.init();
         ServerHandler.init();
         ShopManager.init();
+        RecipeManager.init();
     }
 
 }
