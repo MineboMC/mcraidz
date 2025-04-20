@@ -44,7 +44,7 @@ public class MyShopCommand extends BaseCommand {
 
         for (int i = start; i < end; i++) {
             ShopItem item = myItems.get(i);
-            player.sendMessage(ChatColor.YELLOW + "- " + ChatColor.YELLOW + item.getName().toUpperCase() +
+            player.sendMessage(ChatColor.DARK_GRAY + "* " + ChatColor.YELLOW + item.getName().toUpperCase() +
                     ChatColor.GRAY + " | Price: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + item.getPrice());
         }
 
