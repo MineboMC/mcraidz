@@ -10,6 +10,7 @@ import net.minebo.mcraidz.server.ServerHandler;
 import net.minebo.mcraidz.server.task.SpawnTask;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
+import net.minebo.mcraidz.util.BedrockUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
         Team playerTeam = TeamManager.getTeamByPlayer(player);
 
-        lines.add("&7&m------------------");
+        lines.add((BedrockUtil.isOnBedrock(player) ? "" : "&7&m------------------"));
 
         if(playerTeam != null) {
             lines.add("&fTeam: " + ChatColor.GREEN + playerTeam.name);
@@ -38,7 +39,7 @@ public class ScoreboardImpl extends ScoreboardProvider {
         Profile profile = ProfileManager.getProfileByPlayer(player);
 
         if(profile != null) {
-            lines.add("&fGold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getFormattedBalance());
+            lines.add("&fGold: " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + profile.getFormattedBalance());
             if(profile.hasSpawnProtection()) lines.add("&aProtected by Spawn");
         }
 
@@ -62,7 +63,10 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
         lines.add("");
         lines.add(MCRaidz.instance.getConfig().getString("scoreboard.url"));
-        lines.add("&7&m------------------");
+
+        if(!BedrockUtil.isOnBedrock(player)) {
+            lines.add("&7&m------------------");
+        }
 
         return lines;
     }

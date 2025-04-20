@@ -7,6 +7,7 @@ import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.shop.construct.ShopItem;
 import net.minebo.mcraidz.team.construct.Team;
+import net.minebo.mcraidz.util.BedrockUtil;
 import net.minebo.mcraidz.util.ItemStackUtil;
 import net.minebo.mcraidz.util.ItemUtil;
 import org.bukkit.Bukkit;
@@ -166,7 +167,7 @@ public class ShopManager {
 
         Profile buyerProfile = ProfileManager.getProfileByPlayer(sender);
         if (buyerProfile == null || buyerProfile.getBalance() < totalCost) {
-            sender.sendMessage(ChatColor.RED + "You don't have enough balance. Total cost: ⛃" + totalCost);
+            sender.sendMessage(ChatColor.RED + "You don't have enough balance. Total cost: " + (BedrockUtil.isOnBedrock(sender) ? "" : "⛃") + totalCost);
             return false;
         }
 
@@ -212,13 +213,13 @@ public class ShopManager {
                 sellerPlayer.sendMessage(sender.getDisplayName() + ChatColor.GRAY + " bought " +
                         (soldAmount == 1 ? "a " : ChatColor.YELLOW + Integer.toString(soldAmount) + ChatColor.GRAY + "x ") +
                         ChatColor.GOLD + name.toUpperCase() + ChatColor.GRAY + " from you for " +
-                        ChatColor.GOLD + "⛃" + ChatColor.YELLOW + sellerEarnings + ChatColor.GRAY + ".");
+                        (BedrockUtil.isOnBedrock(sender) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + sellerEarnings + ChatColor.GRAY + ".");
             }
         }
 
         sender.sendMessage(ChatColor.GRAY + "Purchased " + ChatColor.YELLOW + amount + ChatColor.GRAY + "x " +
                 ChatColor.GOLD + name.toUpperCase() + ChatColor.GRAY + " for " +
-                ChatColor.GOLD + "⛃" + ChatColor.YELLOW + totalCost + ChatColor.GRAY + ".");
+                (BedrockUtil.isOnBedrock(sender) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + totalCost + ChatColor.GRAY + ".");
         return true;
     }
 
@@ -239,7 +240,7 @@ public class ShopManager {
         }
 
         player.getInventory().setItemInMainHand(null);
-        player.sendMessage(ChatColor.GRAY + "You sold " + ChatColor.YELLOW + amount + ChatColor.GRAY + "x " + ChatColor.GOLD + ItemUtil.getItemId(held).toUpperCase() + ChatColor.GRAY + " at " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + price + ChatColor.GRAY + " each.");
+        player.sendMessage(ChatColor.GRAY + "You sold " + ChatColor.YELLOW + amount + ChatColor.GRAY + "x " + ChatColor.GOLD + ItemUtil.getItemId(held).toUpperCase() + ChatColor.GRAY + " at " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + price + ChatColor.GRAY + " each.");
 
         return true;
     }

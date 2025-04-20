@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.annotation.Optional;
 import net.minebo.mcraidz.shop.ShopManager;
 import net.minebo.mcraidz.shop.construct.ShopItem;
+import net.minebo.mcraidz.util.BedrockUtil;
 import net.minebo.mcraidz.util.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +46,7 @@ public class MyShopCommand extends BaseCommand {
         for (int i = start; i < end; i++) {
             ShopItem item = myItems.get(i);
             player.sendMessage(ChatColor.DARK_GRAY + "* " + ChatColor.YELLOW + item.getName().toUpperCase() +
-                    ChatColor.GRAY + " | Price: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + item.getPrice());
+                    ChatColor.GRAY + " | Price: " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + item.getPrice());
         }
 
         player.sendMessage("");

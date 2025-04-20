@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Syntax;
 import net.minebo.mcraidz.shop.ShopManager;
 import net.minebo.mcraidz.shop.construct.ShopItem;
+import net.minebo.mcraidz.util.BedrockUtil;
 import net.minebo.mcraidz.util.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -38,7 +39,7 @@ public class PriceCommand extends BaseCommand {
 
         // If the item is found, display the lowest price
         if (foundItem != null) {
-            player.sendMessage(ChatColor.GRAY + "Lowest price for " + ChatColor.GOLD + id.toUpperCase() + ChatColor.GRAY + " is " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + lowestPrice + ChatColor.GRAY + ".");
+            player.sendMessage(ChatColor.GRAY + "Lowest price for " + ChatColor.GOLD + id.toUpperCase() + ChatColor.GRAY + " is " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + lowestPrice + ChatColor.GRAY + ".");
         } else {
             player.sendMessage(ChatColor.RED + "Item '" + itemId + "' not found in the shop.");
         }

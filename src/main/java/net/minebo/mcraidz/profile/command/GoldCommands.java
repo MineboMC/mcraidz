@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
+import net.minebo.mcraidz.util.BedrockUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,7 +27,7 @@ public class GoldCommands extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + player.getPlayer().getName() + ChatColor.RED + " does not have a profile!");
             }
 
-            sender.sendMessage(player.getPlayer().getDisplayName() + ChatColor.YELLOW + "'s Gold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + targetProfile.getBalance());
+            sender.sendMessage(player.getPlayer().getDisplayName() + ChatColor.YELLOW + "'s Gold: " + (BedrockUtil.isOnBedrock(sender) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + targetProfile.getBalance());
         } else {
             Profile profile = ProfileManager.getProfileByUUID(sender.getUniqueId());
 
@@ -34,7 +35,7 @@ public class GoldCommands extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + "Your profile hasn't loaded correctly, please try relogging or asking an admin if this continues.");
             }
 
-            sender.sendMessage(ChatColor.YELLOW + "Your Gold: " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + profile.getBalance());
+            sender.sendMessage(ChatColor.YELLOW + "Your Gold: " + (BedrockUtil.isOnBedrock(sender) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + profile.getBalance());
         }
     }
 
@@ -69,7 +70,7 @@ public class GoldCommands extends BaseCommand {
 
         if (totalGold > 0) {
             playerProfile.addBalance(totalGold);
-            player.sendMessage(ChatColor.YELLOW + "Deposited " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + totalGold + "!");
+            player.sendMessage(ChatColor.YELLOW + "Deposited " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + totalGold + "!");
         } else {
             player.sendMessage(ChatColor.RED + "You have no gold to deposit!");
         }
@@ -116,7 +117,7 @@ public class GoldCommands extends BaseCommand {
             remaining -= 0.11;
         }
 
-        player.sendMessage(ChatColor.YELLOW + "You withdrew " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + amount + "!");
+        player.sendMessage(ChatColor.YELLOW + "You withdrew " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + amount + "!");
     }
 
     @CommandAlias("pay|p2p")
@@ -145,8 +146,8 @@ public class GoldCommands extends BaseCommand {
         playerProfile.subtractBalance(gold);
         recipientProfile.addBalance(gold);
 
-        player.sendMessage(ChatColor.YELLOW + "You have sent " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + gold + " to " + onlinePlayer.getPlayer().getDisplayName() + ChatColor.YELLOW + ".");
-        onlinePlayer.getPlayer().sendMessage(ChatColor.YELLOW + "You have gotten " + ChatColor.GOLD + "⛃" + ChatColor.YELLOW + gold + " from " + player.getDisplayName() + ChatColor.YELLOW + ".");
+        player.sendMessage(ChatColor.YELLOW + "You have sent " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + gold + " to " + onlinePlayer.getPlayer().getDisplayName() + ChatColor.YELLOW + ".");
+        onlinePlayer.getPlayer().sendMessage(ChatColor.YELLOW + "You have gotten " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + gold + " from " + player.getDisplayName() + ChatColor.YELLOW + ".");
 
     }
 }
