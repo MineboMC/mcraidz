@@ -47,6 +47,10 @@ public class ProfileManager {
         Bukkit.getPluginManager().registerEvents(new ProfileListener(), MCRaidz.instance);
     }
 
+    public static List<Profile> getRegisteredProfiles() {
+        return profiles;
+    }
+
     public static void registerProfile(Profile profile) {
         Logger.log("Registered profile for: \"" + profile.uuid + "\"");
         profiles.add(profile);
