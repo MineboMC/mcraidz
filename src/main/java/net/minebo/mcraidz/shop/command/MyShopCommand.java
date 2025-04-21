@@ -33,24 +33,44 @@ public class MyShopCommand extends BaseCommand {
             return;
         }
 
-        int totalPages = (int) Math.ceil(myItems.size() / (double) ITEMS_PER_PAGE);
+        // Group by item name and price
+        Map<String, Integer> groupedItems = new LinkedHashMap<>();
+        Map<String, Double> priceLookup = new HashMap<>();
+
+        for (ShopItem item : myItems) {
+            String key = item.getName().toUpperCase() + "|" + item.getPrice(); // key by name + price
+            groupedItems.put(key, groupedItems.getOrDefault(key, 0) + 1);
+            priceLookup.put(key, item.getPrice());
+        }
+
+        List<String> groupedDisplay = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : groupedItems.entrySet()) {
+            String[] parts = entry.getKey().split("\\|");
+            String itemName = parts[0];
+            double price = priceLookup.get(entry.getKey());
+            int quantity = entry.getValue();
+
+            groupedDisplay.add(ChatColor.DARK_GRAY + "* " + ChatColor.YELLOW + quantity + "x " + itemName +
+                    ChatColor.GRAY + " | Price: " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + price);
+        }
+
+        int totalPages = (int) Math.ceil(groupedDisplay.size() / (double) ITEMS_PER_PAGE);
         int page = pageOptional != null ? Math.max(1, Math.min(pageOptional, totalPages)) : 1;
 
         int start = (page - 1) * ITEMS_PER_PAGE;
-        int end = Math.min(start + ITEMS_PER_PAGE, myItems.size());
+        int end = Math.min(start + ITEMS_PER_PAGE, groupedDisplay.size());
 
         player.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "------------------------");
         player.sendMessage(ChatColor.GOLD + "Your Shop Listings " + ChatColor.GRAY + "(Page " + page + "/" + totalPages + ")");
         player.sendMessage("");
 
         for (int i = start; i < end; i++) {
-            ShopItem item = myItems.get(i);
-            player.sendMessage(ChatColor.DARK_GRAY + "* " + ChatColor.YELLOW + item.getName().toUpperCase() +
-                    ChatColor.GRAY + " | Price: " + (BedrockUtil.isOnBedrock(player) ? "" : ChatColor.GOLD + "⛃") + ChatColor.YELLOW + item.getPrice());
+            player.sendMessage(groupedDisplay.get(i));
         }
 
         player.sendMessage("");
         player.sendMessage(ChatColor.GRAY + "Use " + ChatColor.YELLOW + "/myshop <page>" + ChatColor.GRAY + " to view other pages.");
         player.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "------------------------");
     }
+
 }
