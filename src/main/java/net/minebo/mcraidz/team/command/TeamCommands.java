@@ -25,6 +25,7 @@ public class TeamCommands extends BaseCommand {
 
     @Default
     @CatchUnknown
+    @HelpCommand
     public void onHelpCommand(CommandSender sender, CommandHelp help) {
         help.showHelp();
     }
@@ -108,7 +109,7 @@ public class TeamCommands extends BaseCommand {
         playerTeam.sendMessageToMembers(sender, message);
     }
 
-    @Subcommand("show|i|who")
+    @Subcommand("show|i|who|info")
     @Syntax("<team>")
     @CommandCompletion("@teams")
     public void onShowCommand(Player sender, @Optional String team){
@@ -281,7 +282,7 @@ public class TeamCommands extends BaseCommand {
         playerTeam.sendMessageToMembers(sender.getDisplayName() + ChatColor.YELLOW + " has set the Rally location to " + ChatColor.GOLD + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ChatColor.YELLOW + ".");
     }
 
-    @Subcommand("hq")
+    @Subcommand("hq|home")
     @CommandAlias("hq")
     public void gotoHQCommand(Player sender){
 

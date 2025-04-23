@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class GoldCommands extends BaseCommand {
 
-    @CommandAlias("gold")
+    @CommandAlias("gold|bal|eco|balance")
     @Syntax("<player>")
     @CommandCompletion("@players")
     public void onGoldCommand(Player sender, @Optional OnlinePlayer player) {

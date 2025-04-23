@@ -19,26 +19,35 @@ public class SoupListener implements Listener {
             double maxHealth = 20.0;
             double healAmount = 7.0;
 
-            double maxHunger = 20.0;
-            double foodAmount = 7.0;
+            int maxHunger = 20;
+            int foodAmount = 7;
 
-            double newHunger = 0.0;
-            double newHealth = 0.0;
+            int oldFoodLevel = player.getFoodLevel();
+            int newFoodLevel = Math.min(oldFoodLevel + foodAmount, maxHunger);
+            float saturationGain = (newFoodLevel - oldFoodLevel) * 0.6f; // Example multiplier
 
-            if(player.getFoodLevel() < maxHunger) {
-                newHunger = Math.min(player.getFoodLevel() + foodAmount, maxHunger);
-                player.setFoodLevel((int) newHunger);
+            boolean consumed = false;
+
+            // Restore hunger
+            if (oldFoodLevel < maxHunger) {
+                player.setFoodLevel(newFoodLevel);
+                // Adjust saturation (capped at current food level)
+                float newSaturation = Math.min(player.getSaturation() + saturationGain, newFoodLevel);
+                player.setSaturation(newSaturation);
+                consumed = true;
             }
-            // Only heal if player's health is below 20
+
+            // Heal if necessary
             if (player.getHealth() < maxHealth) {
-                newHealth = Math.min(player.getHealth() + healAmount, maxHealth);
+                double newHealth = Math.min(player.getHealth() + healAmount, maxHealth);
                 player.setHealth(newHealth);
+                consumed = true;
             }
-            if(newHunger != 0.0 || newHealth != 0.0) {
-                // Consume the soup and replace it with an empty bowl
+
+            // Replace soup with bowl
+            if (consumed) {
                 player.getInventory().setItemInMainHand(new ItemStack(Material.BOWL));
             }
         }
     }
-
 }
