@@ -7,6 +7,7 @@ import net.minebo.cobalt.gson.Gson;
 import net.minebo.cobalt.scoreboard.ScoreboardHandler;
 import net.minebo.mcraidz.cobalt.ScoreboardImpl;
 import net.minebo.mcraidz.cobalt.completion.TeamCompletionHandler;
+import net.minebo.mcraidz.cobalt.completion.WarpCompletionHandler;
 import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
 import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
@@ -44,6 +45,7 @@ public final class MCRaidz extends JavaPlugin {
 
         ACFCommandController.registerAll(this);
         ACFCommandController.registerCompletion("teams", new TeamCompletionHandler());
+        ACFCommandController.registerCompletion("warps", new WarpCompletionHandler());
 
         Gson.init();
 

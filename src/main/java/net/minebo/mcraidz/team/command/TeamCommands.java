@@ -91,7 +91,6 @@ public class TeamCommands extends BaseCommand {
     }
 
     @Subcommand("chat|c")
-    @CommandAlias("tc")
     @Syntax("<msg>")
     public void onChatCommand(Player sender, String message){
         Team playerTeam = TeamManager.getTeamByPlayer(sender);
@@ -240,7 +239,6 @@ public class TeamCommands extends BaseCommand {
     }
 
     @Subcommand("sethq")
-    @CommandAlias("sethq")
     public void setHQCommand(Player sender){
 
         Team playerTeam = TeamManager.getTeamByPlayer(sender);
@@ -265,7 +263,6 @@ public class TeamCommands extends BaseCommand {
     }
 
     @Subcommand("setrally")
-    @CommandAlias("setrally")
     public void setRallyCommand(Player sender){
 
         Team playerTeam = TeamManager.getTeamByPlayer(sender);
@@ -283,7 +280,6 @@ public class TeamCommands extends BaseCommand {
     }
 
     @Subcommand("hq|home")
-    @CommandAlias("hq")
     public void gotoHQCommand(Player sender){
 
         Team playerTeam = TeamManager.getTeamByPlayer(sender);

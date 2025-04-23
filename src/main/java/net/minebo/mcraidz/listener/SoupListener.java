@@ -22,17 +22,15 @@ public class SoupListener implements Listener {
             int maxHunger = 20;
             int foodAmount = 7;
 
-            int oldFoodLevel = player.getFoodLevel();
-            int newFoodLevel = Math.min(oldFoodLevel + foodAmount, maxHunger);
-            float saturationGain = (newFoodLevel - oldFoodLevel) * 0.6f; // Example multiplier
-
             boolean consumed = false;
 
             // Restore hunger
-            if (oldFoodLevel < maxHunger) {
+            if (player.getFoodLevel() < maxHunger) {
+                int newFoodLevel = Math.min(player.getFoodLevel() + foodAmount, maxHunger);
                 player.setFoodLevel(newFoodLevel);
-                // Adjust saturation (capped at current food level)
-                float newSaturation = Math.min(player.getSaturation() + saturationGain, newFoodLevel);
+
+                // Set fixed saturation of 3.5, capped at the current food level
+                float newSaturation = Math.min(player.getSaturation() + 7, newFoodLevel);
                 player.setSaturation(newSaturation);
                 consumed = true;
             }
@@ -51,3 +49,4 @@ public class SoupListener implements Listener {
         }
     }
 }
+

@@ -85,4 +85,19 @@ public class Profile {
         ProfileManager.saveProfile(this);
     }
 
+    public Boolean addWarp(String warpName, Location location) {
+        if (warps.containsKey(warpName)) return false;
+        warps.put(warpName, location); return true;
+    }
+
+    public Location getWarp(String warpName) {
+        if(warps.containsKey(warpName)) return warps.get(warpName);
+        return null;
+    }
+
+    public Boolean removeWarp(String warpName) {
+        if (!warps.containsKey(warpName)) return false;
+        warps.remove(warpName); return true;
+    }
+
 }
