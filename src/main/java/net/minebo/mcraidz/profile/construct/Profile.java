@@ -86,18 +86,36 @@ public class Profile {
     }
 
     public Boolean addWarp(String warpName, Location location) {
-        if (warps.containsKey(warpName)) return false;
-        warps.put(warpName, location); return true;
+        // Check if any existing warp name matches case-insensitively
+        for (String key : warps.keySet()) {
+            if (key.equalsIgnoreCase(warpName)) {
+                return false;  // Warp already exists, case-insensitive check
+            }
+        }
+        warps.put(warpName, location);
+        return true;
     }
 
     public Location getWarp(String warpName) {
-        if(warps.containsKey(warpName)) return warps.get(warpName);
+        // Iterate through the warp keys and return the matching one (case-insensitive)
+        for (String key : warps.keySet()) {
+            if (key.equalsIgnoreCase(warpName)) {
+                return warps.get(key);
+            }
+        }
         return null;
     }
 
     public Boolean removeWarp(String warpName) {
-        if (!warps.containsKey(warpName)) return false;
-        warps.remove(warpName); return true;
+        // Check if the warp exists with case-insensitive comparison and remove it
+        for (String key : warps.keySet()) {
+            if (key.equalsIgnoreCase(warpName)) {
+                warps.remove(key);
+                return true;  // Removed the matching warp
+            }
+        }
+        return false;  // No matching warp found
     }
+
 
 }

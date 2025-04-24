@@ -3,11 +3,16 @@ package net.minebo.mcraidz.team;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import net.minebo.cobalt.gson.Gson;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.mongo.MongoManager;
 import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.team.construct.TeamRole;
 import net.minebo.mcraidz.util.Logger;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -46,7 +51,7 @@ public class TeamManager {
             System.out.println("Directory already exists: " + teamsFolder);
         }
 
-        scanAndLoadTeamData(); // Big Function
+        loadTeamsFromMongo(); // Big Function
     }
 
     public static void registerTeam(Team team){
@@ -58,7 +63,7 @@ public class TeamManager {
     public static void unRegisterTeam(Team team){
         Logger.log("Unregistered team: \"" + team.name + "\"");
         teams.remove(team);
-        deleteTeam(team);
+        deleteTeamFromMongo(team);
     }
 
     public static Team getTeamByUUID(UUID uuid){
@@ -91,100 +96,89 @@ public class TeamManager {
         return null;
     }
 
-    public static void scanAndLoadTeamData() {
-        // Get all files in the profiles folder
-        File[] files = teamsFolder.listFiles((dir, name) -> name.endsWith(".json"));
+    public static void loadTeamsFromMongo() {
+        FindIterable<Document> documents = MongoManager.teamCollection.find();
 
-        if (files != null) {
-            // Loop through each JSON file and load the profile
-            for (File file : files) {
-                // Load each profile by its file name (UUID)
-                loadTeam(file);
+        for (Document doc : documents) {
+            try {
+                loadTeam(doc);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Bukkit.getLogger().severe("Failed to load team from MongoDB: " + e.getMessage());
             }
         }
     }
 
-    public static void deleteTeam(Team team) {
-        // Get all files in the profiles folder
-        File[] files = teamsFolder.listFiles((dir, name) -> name.endsWith(".json"));
-
-        assert files != null;
-        for (File file : files) {
-            if (file.getName().equals(team.uuid + ".json")) {  // Use .equals() for string comparison
-                file.delete();
-            }
-        }
+    public static void deleteTeamFromMongo(Team team) {
+        MongoManager.teamCollection.deleteOne(Filters.eq("uuid", team.uuid.toString()));
     }
 
     public static void saveTeam(Team team) {
-        JsonObject json = new JsonObject();
-        json.addProperty("uuid", team.uuid.toString());
-        json.addProperty("name", team.name);
-        json.addProperty("announcement", team.announcement);
-        json.addProperty("password", team.password);
-        json.addProperty("creationTime", team.creationTime.toString());
+        Document doc = new Document()
+                .append("uuid", team.uuid.toString())
+                .append("name", team.name)
+                .append("announcement", team.announcement)
+                .append("password", team.password)
+                .append("creationTime", team.creationTime.toString());
 
         if (team.headquarters != null) {
-            json.add("headquarters", Gson.GSON.toJsonTree(team.headquarters));
+            doc.append("headquarters", Gson.GSON.toJson(team.headquarters));
         }
+
         if (team.rally != null) {
-            json.add("rally", Gson.GSON.toJsonTree(team.rally));
+            doc.append("rally", Gson.GSON.toJson(team.rally));
         }
 
-        JsonArray invitedArray = new JsonArray();
-        for (UUID invitedUuid : team.invited) {
-            invitedArray.add(invitedUuid.toString());
-        }
-        json.add("invited", invitedArray);
+        List<String> invited = team.invited.stream().map(UUID::toString).toList();
+        doc.append("invited", invited);
 
-        JsonObject membersJson = new JsonObject();
+        Document members = new Document();
         for (Map.Entry<UUID, TeamRole> entry : team.members.entrySet()) {
-            membersJson.addProperty(entry.getKey().toString(), entry.getValue().name());
+            members.append(entry.getKey().toString(), entry.getValue().name());
         }
-        json.add("members", membersJson);
+        doc.append("members", members);
 
-        File teamFile = new File(teamsFolder, team.uuid.toString() + ".json");
-        try (FileWriter writer = new FileWriter(teamFile)) {
-            Gson.GSON.toJson(json, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MongoManager.teamCollection.replaceOne(
+                Filters.eq("uuid", team.uuid.toString()),
+                doc,
+                new ReplaceOptions().upsert(true)
+        );
     }
 
-    public static void loadTeam(File teamFile) {
-        try (FileReader reader = new FileReader(teamFile)) {
-            JsonObject json = Gson.GSON.fromJson(reader, JsonObject.class);
+    public static void loadTeam(Document doc) {
+        UUID uuid = UUID.fromString(doc.getString("uuid"));
+        String name = doc.getString("name");
+        String announcement = doc.getString("announcement");
+        String password = doc.getString("password");
+        Instant creationTime = Instant.parse(doc.getString("creationTime"));
 
-            UUID teamUuid = UUID.fromString(json.get("uuid").getAsString());
-            String name = json.get("name").getAsString();
-            String announcement = json.has("announcement") ? json.get("announcement").getAsString() : "";
-            String password = json.has("password") ? json.get("password").getAsString() : "";
-            Instant creationTime = Instant.parse(json.get("creationTime").getAsString());
-
-            Location headquarters = json.has("headquarters") ? Gson.GSON.fromJson(json.get("headquarters"), Location.class) : null;
-            Location rally = json.has("rally") ? Gson.GSON.fromJson(json.get("rally"), Location.class) : null;
-
-            List<UUID> invited = new ArrayList<>();
-            JsonArray invitedArray = json.getAsJsonArray("invited");
-            for (JsonElement element : invitedArray) {
-                invited.add(UUID.fromString(element.getAsString()));
-            }
-
-            HashMap<UUID, TeamRole> members = new HashMap<>();
-            JsonObject membersJson = json.getAsJsonObject("members");
-            for (String memberUuid : membersJson.keySet()) {
-                members.put(UUID.fromString(memberUuid), TeamRole.valueOf(membersJson.get(memberUuid).getAsString()));
-            }
-
-            Team team = new Team(name, announcement, password, creationTime, teamUuid, headquarters, rally, invited, members);
-
-            teams.add(team);
-            System.out.println("Loaded team: " + teamUuid);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Bukkit.getLogger().severe("Failed to load team from file: " + teamFile.getName());
+        Location headquarters = null;
+        if (doc.containsKey("headquarters")) {
+            headquarters = Gson.GSON.fromJson(doc.getString("headquarters"), Location.class);
         }
+
+        Location rally = null;
+        if (doc.containsKey("rally")) {
+            rally = Gson.GSON.fromJson(doc.getString("rally"), Location.class);
+        }
+
+        List<UUID> invited = new ArrayList<>();
+        List<String> invitedList = doc.getList("invited", String.class, new ArrayList<>());
+        for (String uuidStr : invitedList) {
+            invited.add(UUID.fromString(uuidStr));
+        }
+
+        HashMap<UUID, TeamRole> members = new HashMap<>();
+        Document membersDoc = doc.get("members", Document.class);
+        if (membersDoc != null) {
+            for (Map.Entry<String, Object> entry : membersDoc.entrySet()) {
+                members.put(UUID.fromString(entry.getKey()), TeamRole.valueOf((String) entry.getValue()));
+            }
+        }
+
+        Team team = new Team(name, announcement, password, creationTime, uuid, headquarters, rally, invited, members);
+        teams.add(team);
+        System.out.println("Loaded team: " + uuid);
     }
 
 }

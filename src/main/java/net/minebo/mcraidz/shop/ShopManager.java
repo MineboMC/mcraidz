@@ -1,8 +1,12 @@
 package net.minebo.mcraidz.shop;
 
 import com.google.gson.JsonObject;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import net.minebo.cobalt.gson.Gson;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.mongo.MongoManager;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.shop.construct.ShopItem;
@@ -10,6 +14,7 @@ import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.util.BedrockUtil;
 import net.minebo.mcraidz.util.ItemStackUtil;
 import net.minebo.mcraidz.util.ItemUtil;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,7 +37,7 @@ public class ShopManager {
     public static void init(){
         shopItems = new ArrayList<ShopItem>(); // Update later
         itemCache = new HashMap<String, ShopItem>();
-        scanAndLoadShopItems();
+        loadShopItemsFromMongo();
     }
 
     public static ShopItem getItemByUUID(UUID uuid){
@@ -72,65 +77,57 @@ public class ShopManager {
         }
     }
 
-    public static void scanAndLoadShopItems() {
-        File[] files = shopItemsFolder.listFiles((dir, name) -> name.endsWith(".json"));
+    public static void loadShopItemsFromMongo() {
+        FindIterable<Document> documents = MongoManager.shopCollection.find();
 
-        if (files != null) {
-            for (File file : files) {
-                loadShopItem(file);
+        for (Document doc : documents) {
+            try {
+                ShopItem shopItem = loadShopItem(doc);
+                if (shopItem != null) {
+                    addShopItem(shopItem);
+                    System.out.println("Loaded shop item: " + shopItem.id);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Bukkit.getLogger().severe("Failed to load shop item from MongoDB: " + e.getMessage());
             }
         }
     }
 
-    private static void loadShopItem(File file) {
-        try (FileReader reader = new FileReader(file)) {
-            JsonObject json = Gson.GSON.fromJson(reader, JsonObject.class);
+    private static ShopItem loadShopItem(Document doc) {
+        String name = doc.getString("name");
+        double price = doc.getDouble("price");
+        UUID owner = UUID.fromString(doc.getString("owner"));
+        UUID id = UUID.fromString(doc.getString("id"));
+        String itemBase64 = doc.getString("item");
 
-            String name = json.get("name").getAsString();
-            double price = json.get("price").getAsDouble();
-            UUID owner = UUID.fromString(json.get("owner").getAsString());
-            UUID id = UUID.fromString(json.get("id").getAsString());
+        ItemStack item = ItemStackUtil.itemStackFromBase64(itemBase64);
 
-            // Deserialize ItemStack
-            ItemStack item = ItemStackUtil.itemStackFromBase64(json.get("item").getAsString());
+        ShopItem shopItem = new ShopItem(name, owner, price, id, item);
+        shopItem.name = name;
+        shopItem.id = id;
 
-            ShopItem shopItem = new ShopItem(name, owner, price, id, item);
-            shopItem.id = id;
-            shopItem.name = name;
-
-            // Store it however you manage items, e.g., a map:
-            // itemsById.put(id, shopItem);
-            addShopItem(shopItem);
-
-            System.out.println("Loaded shop item: " + id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Bukkit.getLogger().severe("Failed to load shop item from: " + file.getName());
-        }
+        return shopItem;
     }
 
-
     public static void saveShopItem(ShopItem item) {
-
         if (item.item == null) {
             Bukkit.getLogger().severe("ShopItem " + item.name + " has a null ItemStack.");
-            return; // Prevent saving this item
+            return;
         }
 
-        JsonObject json = new JsonObject();
-        json.addProperty("name", item.name);
-        json.addProperty("price", item.price);
-        json.addProperty("owner", item.owner.toString());
-        json.addProperty("id", item.id.toString());
-        json.addProperty("item", ItemStackUtil.itemStackToBase64(item.item)); // ItemStack -> Map -> JSON
+        Document doc = new Document()
+                .append("name", item.name)
+                .append("price", item.price)
+                .append("owner", item.owner.toString())
+                .append("id", item.id.toString())
+                .append("item", ItemStackUtil.itemStackToBase64(item.item));
 
-        File file = new File(shopItemsFolder, item.id.toString() + ".json");
-
-        try (FileWriter writer = new FileWriter(file)) {
-            Gson.GSON.toJson(json, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MongoManager.shopCollection.replaceOne(
+                Filters.eq("id", item.id.toString()),
+                doc,
+                new ReplaceOptions().upsert(true)
+        );
     }
 
     public static boolean buyItemByName(Player sender, String name, int amount) {

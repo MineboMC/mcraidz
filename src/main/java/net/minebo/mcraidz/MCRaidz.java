@@ -12,6 +12,7 @@ import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
 import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
 import net.minebo.mcraidz.listener.*;
+import net.minebo.mcraidz.mongo.MongoManager;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.recipe.RecipeManager;
 import net.minebo.mcraidz.server.ServerHandler;
@@ -77,6 +78,7 @@ public final class MCRaidz extends JavaPlugin {
     }
 
     public void registerManagers(){
+        MongoManager.init(getConfig().getString("mongo.uri"), getConfig().getString("mongo.database"));
         TeamManager.init();
         ProfileManager.init();
         ServerHandler.init();
