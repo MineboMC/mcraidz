@@ -66,15 +66,7 @@ public class ShopManager {
     }
 
     public static void deleteShopItem(ShopItem item) {
-        // Get all files in the profiles folder
-        File[] files = shopItemsFolder.listFiles((dir, name) -> name.endsWith(".json"));
-
-        assert files != null;
-        for (File file : files) {
-            if (file.getName().equals(item.id + ".json")) {  // Use .equals() for string comparison
-                file.delete();
-            }
-        }
+        MongoManager.shopCollection.deleteOne(Filters.eq("id", item.getId().toString()));
     }
 
     public static void loadShopItemsFromMongo() {
