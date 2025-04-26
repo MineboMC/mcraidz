@@ -90,6 +90,18 @@ public class TeamCommands extends BaseCommand {
 
     }
 
+    @Subcommand("disband")
+    @Syntax("<team>")
+    @CommandCompletion("@teams")
+    @CommandPermission("basic.admin")
+    public void disbandOtherTeamCommand(Player sender, Team team){
+        sender.sendMessage(ChatColor.GREEN + "You have disbanded the team " + ChatColor.WHITE + team.name + ChatColor.GREEN + ".");
+
+        team.sendMessageToMembers(ChatColor.RED + "Your team was disbanded by an admin.");
+
+        TeamManager.unRegisterTeam(team);
+    }
+
     @Subcommand("chat|c")
     @Syntax("<msg>")
     public void onChatCommand(Player sender, String message){
@@ -111,13 +123,13 @@ public class TeamCommands extends BaseCommand {
     @Subcommand("show|i|who|info")
     @Syntax("<team>")
     @CommandCompletion("@teams")
-    public void onShowCommand(Player sender, @Optional String team){
+    public void onShowCommand(Player sender, @Optional String query){
 
-        if(team != null && Bukkit.getPlayer(team) != null) {
-            Team playerTeam = TeamManager.getTeamByPlayer(Bukkit.getPlayer(team));
+        if(query != null && Bukkit.getPlayer(query) != null) {
+            Team playerTeam = TeamManager.getTeamByPlayer(Bukkit.getPlayer(query));
 
             if(playerTeam == null) {
-                sender.sendMessage(ChatColor.RED + Bukkit.getPlayer(team).getName() + " is not in a team.");
+                sender.sendMessage(ChatColor.RED + Bukkit.getPlayer(query).getName() + " is not in a team.");
                 return;
             }
 
@@ -126,7 +138,7 @@ public class TeamCommands extends BaseCommand {
             return;
         }
 
-        if(team == null) {
+        if(query == null) {
             Team playerTeam = TeamManager.getTeamByPlayer(sender);
 
             if(playerTeam == null) {
@@ -136,10 +148,10 @@ public class TeamCommands extends BaseCommand {
 
             sender.sendMessage(playerTeam.generateInfoMessage(sender));
         } else {
-            Team queriedTeam = TeamManager.getTeamByName(team);
+            Team queriedTeam = TeamManager.getTeamByName(query);
 
             if(queriedTeam == null) {
-                sender.sendMessage(ChatColor.RED + team + " is not a team.");
+                sender.sendMessage(ChatColor.RED + query + " is not a team.");
                 return;
             }
 
@@ -217,24 +229,17 @@ public class TeamCommands extends BaseCommand {
     @Subcommand("join")
     @Syntax("<team>")
     @CommandCompletion("@teams")
-    public void onJoinCommand(Player sender, String team){
+    public void onJoinCommand(Player sender, Team team){
 
-        Team queriedTeam = TeamManager.getTeamByName(team);
-
-        if(queriedTeam == null) {
-            sender.sendMessage(ChatColor.RED + team + " is not a team.");
-            return;
-        }
-
-        if(!queriedTeam.invited.contains(sender.getUniqueId())) {
+        if(!team.invited.contains(sender.getUniqueId())) {
             sender.sendMessage(ChatColor.RED + "You haven't been invited to this team.");
             return;
         }
 
-        queriedTeam.invited.remove(sender.getUniqueId());
-        queriedTeam.members.put(sender.getUniqueId(), TeamRole.MEMBER);
+        team.invited.remove(sender.getUniqueId());
+        team.members.put(sender.getUniqueId(), TeamRole.MEMBER);
 
-        queriedTeam.sendMessageToMembers(ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + " has joined the team.");
+        team.sendMessageToMembers(ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + " has joined the team.");
 
     }
 
@@ -294,7 +299,7 @@ public class TeamCommands extends BaseCommand {
     }
 
     @Subcommand("rally")
-    public void gotoRallyommand(Player sender){
+    public void gotoRallyCommand(Player sender){
 
         Team playerTeam = TeamManager.getTeamByPlayer(sender);
 

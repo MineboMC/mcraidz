@@ -14,6 +14,7 @@ import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.util.BedrockUtil;
 import net.minebo.mcraidz.util.ItemStackUtil;
 import net.minebo.mcraidz.util.ItemUtil;
+import net.minebo.mcraidz.util.Logger;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,12 +33,15 @@ public class ShopManager {
     public static List<ShopItem> shopItems;
     public static Map<String, ShopItem> itemCache;
 
-    private static final File shopItemsFolder = new File(MCRaidz.instance.getDataFolder(),"internal/shopItems");
-
     public static void init(){
         shopItems = new ArrayList<ShopItem>(); // Update later
         itemCache = new HashMap<String, ShopItem>();
+
+        Logger.log("Loading shop...");
+
         loadShopItemsFromMongo();
+
+        Logger.log("Loaded " + shopItems.size() + " teams from mongo.");
     }
 
     public static ShopItem getItemByUUID(UUID uuid){
@@ -77,7 +81,6 @@ public class ShopManager {
                 ShopItem shopItem = loadShopItem(doc);
                 if (shopItem != null) {
                     addShopItem(shopItem);
-                    System.out.println("Loaded shop item: " + shopItem.id);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

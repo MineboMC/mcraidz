@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandAlias("author")
+@CommandAlias("mcraidz|author")
 public class AuthorCommand extends BaseCommand {
 
     // Might make this longer later...

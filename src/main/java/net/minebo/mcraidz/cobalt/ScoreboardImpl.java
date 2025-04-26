@@ -44,20 +44,20 @@ public class ScoreboardImpl extends ScoreboardProvider {
         }
 
         if(getSpawnTeleportScore(player) != null) {
-            lines.add(ChatColor.BLUE + ChatColor.BOLD.toString() + "Spawn: " + ChatColor.WHITE + getSpawnTeleportScore(player) + "s");
+            lines.add(ChatColor.BLUE + ChatColor.BOLD.toString() + "Spawn: " + ChatColor.WHITE + getSpawnTeleportScore(player));
         }
 
         if(MCRaidz.cooldownHandler.getCooldown("enderpearl") != null) {
             Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
             if (pearlCooldown.onCooldown(player)) {
-                lines.add(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Enderpearl" + ChatColor.DARK_AQUA + ": " + ChatColor.WHITE + pearlCooldown.getRemaining(player) + "s");
+                lines.add(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Enderpearl" + ChatColor.DARK_AQUA + ": " + ChatColor.WHITE + pearlCooldown.getRemaining(player));
             }
         }
 
         if(MCRaidz.cooldownHandler.getCooldown("pvptag") != null) {
             Cooldown pvpTagCooldown = MCRaidz.cooldownHandler.getCooldown("pvptag");
             if (pvpTagCooldown.onCooldown(player)) {
-                lines.add(ChatColor.RED + ChatColor.BOLD.toString() + "PvP Tag" + ChatColor.RED + ": " + ChatColor.WHITE + pvpTagCooldown.getRemaining(player) + "s");
+                lines.add(ChatColor.RED + ChatColor.BOLD.toString() + "PvP Tag" + ChatColor.RED + ": " + ChatColor.WHITE + pvpTagCooldown.getRemaining(player));
             }
         }
 
@@ -78,7 +78,7 @@ public class ScoreboardImpl extends ScoreboardProvider {
             long diffMillis = spawnTask.getSpawnTime() - System.currentTimeMillis();
 
             if (diffMillis >= 0) {
-                return TimeFormatting.getRemaining(diffMillis); // Pass ms
+                return TimeFormatting.getRemaining(diffMillis) + "s"; // Pass ms
             }
         }
 

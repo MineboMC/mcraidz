@@ -29,39 +29,27 @@ public class TeamManager {
 
     public static List<Team> teams;
 
-    public static File teamsFolder = new File(MCRaidz.instance.getDataFolder(), "internal/teams");
-
     public static void init() {
 
         // Initiate
         teams = new ArrayList<Team>();
 
-        // Load team data here!
-        // Check if the directory exists
-        if (!teamsFolder.exists()) {
-            // If the directory doesn't exist, create it
-            boolean created = teamsFolder.mkdirs();
-
-            if (created) {
-                System.out.println("Directory created successfully: " + teamsFolder);
-            } else {
-                System.out.println("Failed to create the directory.");
-            }
-        } else {
-            System.out.println("Directory already exists: " + teamsFolder);
-        }
+        Logger.log("Loading teams...");
 
         loadTeamsFromMongo(); // Big Function
+
+        Logger.log("Loaded " + teams.size() + " teams from mongo.");
+
     }
 
     public static void registerTeam(Team team){
-        Logger.log("Registered new team: \"" + team.name + "\"");
+        //Logger.log("Registered new team: \"" + team.name + "\"");
         teams.add(team);
         saveTeam(team);
     }
 
     public static void unRegisterTeam(Team team){
-        Logger.log("Unregistered team: \"" + team.name + "\"");
+        //Logger.log("Unregistered team: \"" + team.name + "\"");
         teams.remove(team);
         deleteTeamFromMongo(team);
     }

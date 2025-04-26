@@ -33,21 +33,25 @@ public class ProfileManager {
     public static void init() {
         profiles = new ArrayList<>();
 
-        // Check if the directory exists
-        if (!profilesFolder.exists()) {
-            // If the directory doesn't exist, create it
-            boolean created = profilesFolder.mkdirs();
+        Logger.log("Loading teams...");
 
-            if (created) {
-                System.out.println("Directory created successfully: " + profilesFolder);
-            } else {
-                System.out.println("Failed to create the directory.");
-            }
-        } else {
-            System.out.println("Directory already exists: " + profilesFolder);
-        }
+//        // Check if the directory exists
+//        if (!profilesFolder.exists()) {
+//            // If the directory doesn't exist, create it
+//            boolean created = profilesFolder.mkdirs();
+//
+//            if (created) {
+//                System.out.println("Directory created successfully: " + profilesFolder);
+//            } else {
+//                System.out.println("Failed to create the directory.");
+//            }
+//        } else {
+//            System.out.println("Directory already exists: " + profilesFolder);
+//        }
 
         loadProfilesFromMongo(); // Big Function
+
+        Logger.log("Loaded " + profiles.size() + " profiles from mongo.");
 
         Bukkit.getPluginManager().registerEvents(new ProfileListener(), MCRaidz.instance);
     }

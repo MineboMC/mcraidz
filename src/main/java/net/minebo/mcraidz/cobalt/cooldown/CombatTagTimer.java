@@ -22,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class CombatTagTimer extends Cooldown {
 
@@ -37,8 +38,8 @@ public class CombatTagTimer extends Cooldown {
 
         if(ProfileManager.getProfileByPlayer(victim).hasSpawnProtection() || ProfileManager.getProfileByPlayer(attacker).hasSpawnProtection()) return;
 
-        applyCooldown(victim, 30L, MCRaidz.instance);
-        applyCooldown(attacker, 30L, MCRaidz.instance);
+        applyCooldown(victim, 30, TimeUnit.SECONDS, MCRaidz.instance);
+        applyCooldown(attacker, 30, TimeUnit.SECONDS, MCRaidz.instance);
     }
 
     @EventHandler

@@ -8,6 +8,7 @@ import net.minebo.cobalt.scoreboard.ScoreboardHandler;
 import net.minebo.mcraidz.cobalt.ScoreboardImpl;
 import net.minebo.mcraidz.cobalt.completion.TeamCompletionHandler;
 import net.minebo.mcraidz.cobalt.completion.WarpCompletionHandler;
+import net.minebo.mcraidz.cobalt.context.TeamContextResolver;
 import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
 import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
@@ -18,6 +19,7 @@ import net.minebo.mcraidz.recipe.RecipeManager;
 import net.minebo.mcraidz.server.ServerHandler;
 import net.minebo.mcraidz.shop.ShopManager;
 import net.minebo.mcraidz.team.TeamManager;
+import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.thread.DataSyncThread;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,9 +46,10 @@ public final class MCRaidz extends JavaPlugin {
 
         acfManager = new ACFManager(this);
 
-        ACFCommandController.registerAll(this);
         ACFCommandController.registerCompletion("teams", new TeamCompletionHandler());
         ACFCommandController.registerCompletion("warps", new WarpCompletionHandler());
+        ACFCommandController.registerContext(Team.class, new TeamContextResolver());
+        ACFCommandController.registerAll(this);
 
         Gson.init();
 
