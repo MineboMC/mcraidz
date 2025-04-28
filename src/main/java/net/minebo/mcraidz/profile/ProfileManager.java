@@ -107,6 +107,7 @@ public class ProfileManager {
                 .append("uuid", profile.uuid.toString())
                 .append("gold", profile.gold)
                 .append("kills", profile.kills)
+                .append("killStreak", profile.killStreak)
                 .append("deaths", profile.deaths)
                 .append("dieOnLogin", profile.dieOnLogin);
 
@@ -135,6 +136,7 @@ public class ProfileManager {
 
         double gold = doc.getDouble("gold");
         int kills = doc.getInteger("kills", 0);
+        int killStreak = doc.getInteger("killStreak", 0);
         int deaths = doc.getInteger("deaths", 0);
         boolean dieOnLogin = doc.getBoolean("dieOnLogin", false);
 
@@ -152,6 +154,7 @@ public class ProfileManager {
         Profile profile = new Profile(uuid);
         profile.setBalance(gold);
         profile.kills = kills;
+        profile.killStreak = killStreak;
         profile.deaths = deaths;
         profile.warps = warps;
         profile.dieOnLogin = dieOnLogin;

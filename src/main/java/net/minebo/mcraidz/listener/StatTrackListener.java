@@ -40,6 +40,8 @@ public class StatTrackListener implements Listener {
         if (killer == null || slain == null) return;
 
         killer.addKill();
+        killer.addKillStreak();
+        slain.resetKillstreak();
         slain.addDeath();
     }
 
