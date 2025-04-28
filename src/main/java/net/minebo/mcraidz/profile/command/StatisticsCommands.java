@@ -62,7 +62,7 @@ public class StatisticsCommands extends BaseCommand {
 
     @CommandAlias("statstop")
     @Syntax("<kills|deaths> [page]")
-    @CommandCompletion("kills|deaths|gold @nothing")
+    @CommandCompletion("kills|deaths|gold|killstreak @nothing")
     public void onStatsTopCommand(Player player, @Optional String type, @Optional String pageStr) {
         if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths") && !type.equalsIgnoreCase("gold")) && !type.equalsIgnoreCase("killstreak")) type = "kills";
 
