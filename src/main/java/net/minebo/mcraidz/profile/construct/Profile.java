@@ -23,6 +23,7 @@ public class Profile {
     public Double gold;
 
     public Integer kills = 0;
+    public Integer killStreak = 0;
     public Integer deaths = 0;
 
     public HashMap<String, Location> warps;
@@ -82,6 +83,16 @@ public class Profile {
 
     public void addDeath() {
         deaths++;
+        ProfileManager.saveProfile(this);
+    }
+
+    public void addKillStreak() {
+        killStreak++;
+        ProfileManager.saveProfile(this);
+    }
+
+    public void resetKillstreak() {
+        killStreak = 0;
         ProfileManager.saveProfile(this);
     }
 
