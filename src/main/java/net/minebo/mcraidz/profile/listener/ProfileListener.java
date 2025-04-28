@@ -21,7 +21,9 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         if(ProfileManager.getProfileByPlayer(event.getPlayer()) != null) {
-            ProfileManager.saveProfile(ProfileManager.getProfileByPlayer(event.getPlayer()));
+            Profile profile = ProfileManager.getProfileByPlayer(event.getPlayer());
+
+            ProfileManager.saveProfile(profile);
         }
     }
 

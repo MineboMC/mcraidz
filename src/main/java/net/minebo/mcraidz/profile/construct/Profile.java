@@ -26,6 +26,8 @@ public class Profile {
     public Integer killStreak = 0;
     public Integer deaths = 0;
 
+    public long playtime = 0; // Total playtime
+
     public HashMap<String, Location> warps;
 
     public Boolean dieOnLogin = false;
@@ -128,5 +130,13 @@ public class Profile {
         return false;  // No matching warp found
     }
 
+    public String getFormattedPlaytime() {
+        long seconds = playtime; // NO division by 1000
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        minutes %= 60;
+        seconds %= 60;
+        return (hours != 0 ? hours + "h " : "") + (minutes != 0 ? minutes + "m " : "") + seconds + "s";
+    }
 
 }

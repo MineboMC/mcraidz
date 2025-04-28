@@ -30,6 +30,8 @@ public class StatisticsCommands extends BaseCommand {
                         ChatColor.YELLOW + "Kills: " + ChatColor.RESET + profile.kills,
                         ChatColor.YELLOW + "Deaths: " + ChatColor.RESET + profile.deaths,
                         ChatColor.YELLOW + "KillStreak: " + ChatColor.RESET + profile.killStreak,
+                        "",
+                        ChatColor.YELLOW + "Playtime: " + ChatColor.RESET + profile.getFormattedPlaytime(),
                         ""
                 );
 
@@ -51,6 +53,8 @@ public class StatisticsCommands extends BaseCommand {
                     ChatColor.YELLOW + "Kills: " + ChatColor.RESET + profile.kills,
                     ChatColor.YELLOW + "Deaths: " + ChatColor.RESET + profile.deaths,
                     ChatColor.YELLOW + "KillStreak: " + ChatColor.RESET + profile.killStreak,
+                    "",
+                    ChatColor.YELLOW + "Playtime: " + ChatColor.RESET + profile.getFormattedPlaytime(),
                     ""
             );
 
@@ -62,9 +66,9 @@ public class StatisticsCommands extends BaseCommand {
 
     @CommandAlias("statstop")
     @Syntax("<kills|deaths> [page]")
-    @CommandCompletion("kills|deaths|gold|killstreak @nothing")
+    @CommandCompletion("kills|deaths|gold|killstreak|playtime @nothing")
     public void onStatsTopCommand(Player player, @Optional String type, @Optional String pageStr) {
-        if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths") && !type.equalsIgnoreCase("gold")) && !type.equalsIgnoreCase("killstreak")) type = "kills";
+        if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths") && !type.equalsIgnoreCase("gold")) && !type.equalsIgnoreCase("killstreak") && !type.equalsIgnoreCase("playtime")) type = "kills";
 
         int page = 1;
         try {
@@ -90,6 +94,8 @@ public class StatisticsCommands extends BaseCommand {
                 return Double.compare(b.gold, a.gold);
             } else if (finalType.equalsIgnoreCase("killstreak")) {
                 return Integer.compare(b.killStreak, a.killStreak);
+            } else if (finalType.equalsIgnoreCase("playtime")) {
+                return Long.compare(b.playtime, a.playtime);
             }
             return 0;
         });
@@ -107,13 +113,19 @@ public class StatisticsCommands extends BaseCommand {
             String name = Bukkit.getOfflinePlayer(p.uuid).getName(); // You may need to cache or store player names in the Profile class
             int stat = finalType.equalsIgnoreCase("kills") ? p.kills : finalType.equalsIgnoreCase("killstreak") ? p.killStreak : p.deaths;
             double statGold = -1;
+            String statPt = "";
 
             if(finalType.equalsIgnoreCase("gold")) {
                 statGold = p.gold;
             }
 
-            if(statGold == -1) player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + stat);
-            else player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + statGold);
+            if(finalType.equalsIgnoreCase("playtime")) {
+                statPt = p.getFormattedPlaytime();
+            }
+
+            if(statPt != "") { player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + statPt); }
+            else if(statGold != -1) { player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + statGold); }
+            else player.sendMessage(ChatColor.GREEN + "#" + (i + 1) + " " + ChatColor.RESET + name + ChatColor.GRAY + ": " + ChatColor.YELLOW + stat);
         }
 
         player.sendMessage(ChatColor.YELLOW + "Use /statstop " + finalType + " [page] to view more.");

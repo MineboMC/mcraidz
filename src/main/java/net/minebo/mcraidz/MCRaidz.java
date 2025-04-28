@@ -21,6 +21,7 @@ import net.minebo.mcraidz.shop.ShopManager;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.thread.DataSyncThread;
+import net.minebo.mcraidz.thread.PlaytimeThread;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,7 +60,7 @@ public final class MCRaidz extends JavaPlugin {
 
         new ScoreboardHandler(new ScoreboardImpl(), this);
 
-//        new TabThread().runTaskTimer(this, 20L, 20L);
+        new PlaytimeThread().runTaskTimer(this, 20L, 20L);
         new DataSyncThread().runTaskTimer(this, 20L,  10L * 60L * 20L);
 
     }

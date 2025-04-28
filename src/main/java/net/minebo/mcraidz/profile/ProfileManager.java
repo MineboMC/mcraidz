@@ -35,20 +35,6 @@ public class ProfileManager {
 
         Logger.log("Loading teams...");
 
-//        // Check if the directory exists
-//        if (!profilesFolder.exists()) {
-//            // If the directory doesn't exist, create it
-//            boolean created = profilesFolder.mkdirs();
-//
-//            if (created) {
-//                System.out.println("Directory created successfully: " + profilesFolder);
-//            } else {
-//                System.out.println("Failed to create the directory.");
-//            }
-//        } else {
-//            System.out.println("Directory already exists: " + profilesFolder);
-//        }
-
         loadProfilesFromMongo(); // Big Function
 
         Logger.log("Loaded " + profiles.size() + " profiles from mongo.");
@@ -107,6 +93,7 @@ public class ProfileManager {
                 .append("kills", profile.kills)
                 .append("killStreak", profile.killStreak)
                 .append("deaths", profile.deaths)
+                .append("playtime", profile.playtime)
                 .append("dieOnLogin", profile.dieOnLogin);
 
         // Serialize warps
@@ -136,6 +123,8 @@ public class ProfileManager {
         int kills = doc.getInteger("kills", 0);
         int killStreak = doc.getInteger("killStreak", 0);
         int deaths = doc.getInteger("deaths", 0);
+        Number playtimeNumber = (Number) doc.getOrDefault("playtime", 0);
+        long playtime = playtimeNumber.longValue();
         boolean dieOnLogin = doc.getBoolean("dieOnLogin", false);
 
         // Deserialize warps
@@ -154,6 +143,7 @@ public class ProfileManager {
         profile.kills = kills;
         profile.killStreak = killStreak;
         profile.deaths = deaths;
+        profile.playtime = playtime;
         profile.warps = warps;
         profile.dieOnLogin = dieOnLogin;
 
