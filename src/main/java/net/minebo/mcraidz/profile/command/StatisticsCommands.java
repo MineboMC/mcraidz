@@ -29,6 +29,7 @@ public class StatisticsCommands extends BaseCommand {
                         "",
                         ChatColor.YELLOW + "Kills: " + ChatColor.RESET + profile.kills,
                         ChatColor.YELLOW + "Deaths: " + ChatColor.RESET + profile.deaths,
+                        ChatColor.YELLOW + "KillStreak: " + ChatColor.RESET + profile.killStreak,
                         ""
                 );
 
@@ -49,6 +50,7 @@ public class StatisticsCommands extends BaseCommand {
                     "",
                     ChatColor.YELLOW + "Kills: " + ChatColor.RESET + profile.kills,
                     ChatColor.YELLOW + "Deaths: " + ChatColor.RESET + profile.deaths,
+                    ChatColor.YELLOW + "KillStreak: " + ChatColor.RESET + profile.killStreak,
                     ""
             );
 
@@ -62,7 +64,7 @@ public class StatisticsCommands extends BaseCommand {
     @Syntax("<kills|deaths> [page]")
     @CommandCompletion("kills|deaths|gold @nothing")
     public void onStatsTopCommand(Player player, @Optional String type, @Optional String pageStr) {
-        if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths") && !type.equalsIgnoreCase("gold"))) type = "kills";
+        if (type == null || (!type.equalsIgnoreCase("kills") && !type.equalsIgnoreCase("deaths") && !type.equalsIgnoreCase("gold")) && !type.equalsIgnoreCase("killstreak")) type = "kills";
 
         int page = 1;
         try {
@@ -86,6 +88,8 @@ public class StatisticsCommands extends BaseCommand {
                 return Integer.compare(b.deaths, a.deaths);
             } else if (finalType.equalsIgnoreCase("gold")) {
                 return Double.compare(b.gold, a.gold);
+            } else if (finalType.equalsIgnoreCase("killstreak")) {
+                return Integer.compare(b.killStreak, a.killStreak);
             }
             return 0;
         });
@@ -101,7 +105,7 @@ public class StatisticsCommands extends BaseCommand {
         for (int i = start; i < end; i++) {
             Profile p = profiles.get(i);
             String name = Bukkit.getOfflinePlayer(p.uuid).getName(); // You may need to cache or store player names in the Profile class
-            int stat = finalType.equalsIgnoreCase("kills") ? p.kills : p.deaths;
+            int stat = finalType.equalsIgnoreCase("kills") ? p.kills : finalType.equalsIgnoreCase("killstreak") ? p.killStreak : p.deaths;
             double statGold = -1;
 
             if(finalType.equalsIgnoreCase("gold")) {

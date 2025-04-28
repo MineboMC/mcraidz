@@ -72,12 +72,10 @@ public class ProfileManager {
     }
 
     public static Profile getProfileByUUID(UUID uuid) {
-        for (Profile profile : profiles) {
-            if (profile.uuid.equals(uuid)) {
-                return profile;
-            }
-        }
-        return null;
+        return profiles.stream()
+                .filter(profile -> profile.uuid.equals(uuid))
+                .findFirst()
+                .orElse(null);
     }
 
     public static Profile getProfileByPlayer(Player player){

@@ -45,12 +45,10 @@ public class ShopManager {
     }
 
     public static ShopItem getItemByUUID(UUID uuid){
-        for(ShopItem item : shopItems){
-            if(item.id == uuid){
-                return item;
-            }
-        }
-        return null;
+        return shopItems.stream()
+                .filter(item -> item.id.equals(uuid))
+                .findFirst()
+                .orElse(null);
     }
 
     public static void addShopItem(ShopItem item) {
