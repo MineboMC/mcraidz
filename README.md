@@ -6,7 +6,6 @@ To setup MCRaidz usage with maven, put the following in your pom.xml
 
 ```xml
 <dependencies>
-    <!-- Depend on Teams -->
     <dependency>
         <groupId>net.minebo</groupId>
         <artifactId>mcraidz</artifactId>
