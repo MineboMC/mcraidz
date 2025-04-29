@@ -19,7 +19,7 @@ To setup MCRaidz usage with maven, put the following in your pom.xml
 
 # Compilation
 Compilation requires the following to be fulfilled:
-* [Java 21](http://www.oracle.com/technetwork/java/javase/downloads/index.html "Java 21 Link")
+* [Java 21](https://www.oracle.com/java/technologies/downloads/?er=221886#java21)
 * [Maven 3](http://maven.apache.org/download.html "Maven 3 Link")
 
 # Updates
