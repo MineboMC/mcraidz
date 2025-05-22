@@ -2,6 +2,7 @@ package net.minebo.mcraidz.cobalt;
 
 import net.minebo.cobalt.cooldown.construct.Cooldown;
 import net.minebo.cobalt.scoreboard.provider.ScoreboardProvider;
+import net.minebo.cobalt.util.ServerUtil;
 import net.minebo.cobalt.util.format.TimeFormatting;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
@@ -59,6 +60,14 @@ public class ScoreboardImpl extends ScoreboardProvider {
             if (pvpTagCooldown.onCooldown(player)) {
                 lines.add(ChatColor.RED + ChatColor.BOLD.toString() + "PvP Tag" + ChatColor.RED + ": " + ChatColor.WHITE + pvpTagCooldown.getRemaining(player));
             }
+        }
+
+        if(player.hasMetadata("modmode")){
+            lines.add("");
+            lines.add(ChatColor.AQUA + "Staff Info:");
+            lines.add("TPS: " + ServerUtil.getColoredTPS());
+            lines.add("Vanish: " + (player.hasMetadata("vanish") ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"));
+            lines.add("Chat: " + (player.hasMetadata("toggleSC") ? ChatColor.GREEN + "Staff" : ChatColor.BLUE + "Public"));
         }
 
         lines.add("");
