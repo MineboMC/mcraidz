@@ -65,9 +65,9 @@ public class ScoreboardImpl extends ScoreboardProvider {
         if(player.hasMetadata("modmode")){
             lines.add("");
             lines.add(ChatColor.AQUA + "Staff Info:");
-            lines.add("TPS: " + ServerUtil.getColoredTPS());
-            lines.add("Vanish: " + (player.hasMetadata("vanish") ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"));
-            lines.add("Chat: " + (player.hasMetadata("toggleSC") ? ChatColor.GREEN + "Staff" : ChatColor.BLUE + "Public"));
+            lines.add(ChatColor.GRAY + " * " + "TPS: " + ServerUtil.getColoredTPS());
+            lines.add(ChatColor.GRAY + " * " + "Vanish: " + (player.hasMetadata("vanish") ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"));
+            lines.add(ChatColor.GRAY + " * " + "Chat: " + (player.hasMetadata("toggleSC") ? ChatColor.GOLD + "Staff" : ChatColor.YELLOW + "Public"));
         }
 
         lines.add("");
