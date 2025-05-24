@@ -78,15 +78,15 @@ public class GeneralListener implements Listener {
 
         }
 
-        if(MCRaidz.cooldownHandler.getCooldown("enderpearl") != null) {
-            Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("enderpearl");
+        if(MCRaidz.cooldownHandler.getCooldown("Enderpearl") != null) {
+            Cooldown pearlCooldown = MCRaidz.cooldownHandler.getCooldown("Enderpearl");
             if (pearlCooldown.onCooldown(e.getPlayer())) {
                 pearlCooldown.removeCooldown(e.getPlayer());
             }
         }
 
-        if(MCRaidz.cooldownHandler.getCooldown("pvptag") != null) {
-            Cooldown pvpTagCooldown = MCRaidz.cooldownHandler.getCooldown("pvptag");
+        if(MCRaidz.cooldownHandler.getCooldown("Combat Tag") != null) {
+            Cooldown pvpTagCooldown = MCRaidz.cooldownHandler.getCooldown("Combat Tag");
             if (pvpTagCooldown.onCooldown(e.getPlayer())) {
                 pvpTagCooldown.removeCooldown(e.getPlayer());
             }

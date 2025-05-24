@@ -31,6 +31,8 @@ public class CombatTagTimer extends Cooldown {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
+        if(e.isCancelled()) return;
+
         if (!(e.getEntity() instanceof Player) || !(e.getDamager() instanceof Player)) return;
 
         Player victim = (Player) e.getEntity();

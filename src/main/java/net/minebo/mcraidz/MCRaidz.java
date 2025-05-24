@@ -3,8 +3,11 @@ package net.minebo.mcraidz;
 import net.minebo.cobalt.acf.ACFCommandController;
 import net.minebo.cobalt.acf.ACFManager;
 import net.minebo.cobalt.cooldown.CooldownHandler;
+import net.minebo.cobalt.cooldown.construct.Cooldown;
 import net.minebo.cobalt.gson.Gson;
 import net.minebo.cobalt.scoreboard.ScoreboardHandler;
+import net.minebo.mcraidz.classes.ClassManager;
+import net.minebo.mcraidz.classes.listeners.ClassListener;
 import net.minebo.mcraidz.cobalt.ScoreboardImpl;
 import net.minebo.mcraidz.cobalt.completion.TeamCompletionHandler;
 import net.minebo.mcraidz.cobalt.completion.WarpCompletionHandler;
@@ -42,8 +45,14 @@ public final class MCRaidz extends JavaPlugin {
         }
 
         cooldownHandler = new CooldownHandler(this);
-        cooldownHandler.registerCooldown("enderpearl", new EnderPearlCooldown());
-        cooldownHandler.registerCooldown("pvptag", new CombatTagTimer());
+        cooldownHandler.registerCooldown("Enderpearl", new EnderPearlCooldown());
+        cooldownHandler.registerCooldown("Combat Tag", new CombatTagTimer());
+
+        cooldownHandler.registerCooldown("Archer Tag", new Cooldown());
+        cooldownHandler.registerCooldown("Archer Sugar", new Cooldown());
+        cooldownHandler.registerCooldown("Archer Feather", new Cooldown());
+
+        cooldownHandler.registerCooldown("Bard Effect", new Cooldown());
 
         acfManager = new ACFManager(this);
 
@@ -79,6 +88,7 @@ public final class MCRaidz extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new StatTrackListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnProtListener(), this);
         Bukkit.getPluginManager().registerEvents(new TeamProtListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ClassListener(), this);
     }
 
     public void registerManagers(){
@@ -88,6 +98,7 @@ public final class MCRaidz extends JavaPlugin {
         ServerHandler.init();
         ShopManager.init();
         RecipeManager.init();
+        ClassManager.init();
     }
 
 }

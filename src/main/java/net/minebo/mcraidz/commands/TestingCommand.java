@@ -45,8 +45,6 @@ public class TestingCommand extends BaseCommand {
         player.getInventory().setLeggings(getLeggings());
         player.getInventory().setBoots(getBoots());
 
-        player.getInventory().setItemInOffHand(new ItemStack(Material.SHIELD));
-
         player.getInventory().setItem(1, getPearl());
 
         player.getInventory().setItem(7, getPotionItem(PotionType.STRENGTH));

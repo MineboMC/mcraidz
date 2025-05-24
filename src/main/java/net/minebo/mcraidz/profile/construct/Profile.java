@@ -26,6 +26,8 @@ public class Profile {
     public Integer killStreak = 0;
     public Integer deaths = 0;
 
+    public Integer diamonds = 0;
+
     public long playtime = 0; // Total playtime
 
     public HashMap<String, Location> warps;
@@ -38,6 +40,10 @@ public class Profile {
         this.uuid = uuid;
         this.gold = 0.00;
         this.warps = new HashMap<>();
+    }
+
+    public void addDiamonds(Integer diamonds) {
+        this.diamonds += diamonds;
     }
 
     public void addBalance(double amount) {

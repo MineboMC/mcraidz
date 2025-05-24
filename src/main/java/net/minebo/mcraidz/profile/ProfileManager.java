@@ -93,6 +93,7 @@ public class ProfileManager {
                 .append("kills", profile.kills)
                 .append("killStreak", profile.killStreak)
                 .append("deaths", profile.deaths)
+                .append("diamonds", profile.diamonds)
                 .append("playtime", profile.playtime)
                 .append("dieOnLogin", profile.dieOnLogin);
 
@@ -123,6 +124,7 @@ public class ProfileManager {
         int kills = doc.getInteger("kills", 0);
         int killStreak = doc.getInteger("killStreak", 0);
         int deaths = doc.getInteger("deaths", 0);
+        int diamonds = doc.getInteger("diamonds", 0);
         Number playtimeNumber = (Number) doc.getOrDefault("playtime", 0);
         long playtime = playtimeNumber.longValue();
         boolean dieOnLogin = doc.getBoolean("dieOnLogin", false);
@@ -143,6 +145,7 @@ public class ProfileManager {
         profile.kills = kills;
         profile.killStreak = killStreak;
         profile.deaths = deaths;
+        profile.diamonds = diamonds;
         profile.playtime = playtime;
         profile.warps = warps;
         profile.dieOnLogin = dieOnLogin;

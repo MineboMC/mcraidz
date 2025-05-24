@@ -1,7 +1,7 @@
 name: MCRaidz
 version: '1.0-DEV'
 description: "The main plugin for MCRaidz, a pvp based gamemode on Minebo."
-authors: ["Ian Rich"]
+authors: ["Ian Rich", "Revity Studios"]
 main: net.minebo.mcraidz.MCRaidz
 soft-depend: ["PlaceholderAPI", "kRegions"]
 api-version: '1.20'
