@@ -16,7 +16,7 @@ public class SoupListener implements Listener {
 
         // Check if player is holding mushroom soup
         if (item != null && item.getType() == Material.MUSHROOM_STEW) {
-            double maxHealth = 20.0;
+            double maxHealth = player.getMaxHealth();
             double healAmount = 7.0;
 
             int maxHunger = 20;

@@ -6,6 +6,7 @@ import net.minebo.cobalt.util.ServerUtil;
 import net.minebo.cobalt.util.format.TimeFormatting;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.classes.ClassManager;
+import net.minebo.mcraidz.classes.listeners.ClassListener;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.server.ServerHandler;
@@ -132,6 +133,29 @@ public class ScoreboardImpl extends ScoreboardProvider {
 
                 if(archerFeatherCooldown.onCooldown(player)) {
                     lines.add(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Jump Effect" + ChatColor.LIGHT_PURPLE + ": " + ChatColor.WHITE + archerFeatherCooldown.getRemaining(player));
+                }
+            }
+
+            case ROGUE -> {
+                lines.add("Class Energy: " + ChatColor.AQUA + ClassManager.rogueEnergy.get(player.getUniqueId()).getEnergy());
+
+                Cooldown rogueSugarCooldown = MCRaidz.cooldownHandler.getCooldown("Rogue Sugar");
+                Cooldown rogueFeatherCooldown = MCRaidz.cooldownHandler.getCooldown("Rogue Feather");
+
+                if(ClassListener.backstabCooldown.containsKey(player.getUniqueId())) {
+                    long diff = ClassListener.backstabCooldown.get(player.getUniqueId()) - System.currentTimeMillis();
+                    if (diff < 0) diff = 0;
+                    double seconds = diff / 1000.0;
+                    String formatted = String.format("%.1fs", diff / 1000.0);
+                    if(seconds != 0.0) lines.add(ChatColor.YELLOW + ChatColor.BOLD.toString() + "Backstab" + ChatColor.YELLOW + ": " + ChatColor.WHITE + formatted);
+                }
+
+                if(rogueSugarCooldown.onCooldown(player)) {
+                    lines.add(ChatColor.AQUA + ChatColor.BOLD.toString() + "Speed Effect" + ChatColor.AQUA + ": " + ChatColor.WHITE + rogueSugarCooldown.getRemaining(player));
+                }
+
+                if(rogueFeatherCooldown.onCooldown(player)) {
+                    lines.add(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Jump Effect" + ChatColor.LIGHT_PURPLE + ": " + ChatColor.WHITE + rogueFeatherCooldown.getRemaining(player));
                 }
             }
 

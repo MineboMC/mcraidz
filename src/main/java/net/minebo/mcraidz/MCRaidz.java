@@ -52,6 +52,9 @@ public final class MCRaidz extends JavaPlugin {
         cooldownHandler.registerCooldown("Archer Sugar", new Cooldown());
         cooldownHandler.registerCooldown("Archer Feather", new Cooldown());
 
+        cooldownHandler.registerCooldown("Rogue Sugar", new Cooldown());
+        cooldownHandler.registerCooldown("Rogue Feather", new Cooldown());
+
         cooldownHandler.registerCooldown("Bard Effect", new Cooldown());
 
         acfManager = new ACFManager(this);

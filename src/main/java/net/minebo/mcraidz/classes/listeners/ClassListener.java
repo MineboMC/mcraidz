@@ -11,14 +11,13 @@ import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -31,9 +30,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class ClassListener implements Listener {
@@ -43,8 +42,9 @@ public class ClassListener implements Listener {
         if (event.getBlock().getType() == Material.DIAMOND_ORE) {
             Player player = event.getPlayer();
             Block block = event.getBlock();
+            Profile profile = ProfileManager.getProfileByUUID(player.getUniqueId());
+            profile.addDiamonds(1);
             if (!ClassManager.placed.remove(block.getLocation().toString())) {
-                Profile profile = ProfileManager.getProfileByUUID(player.getUniqueId());
                 int diamondsMined = profile.diamonds;
                 int count = 1;
                 ClassManager.placed.add(block.getLocation().toString());
@@ -53,7 +53,7 @@ public class ClassListener implements Listener {
                     for(int y = -5; y < 5; ++y) {
                         for(int z = -5; z < 5; ++z) {
                             Block otherBlock = block.getLocation().clone().add(x, y, z).getBlock();
-                            if (!otherBlock.equals(block) && otherBlock.getType() == Material.DIAMOND_ORE && !ClassManager.placed.contains(otherBlock.getLocation().toString())) {
+                            if (!otherBlock.equals(block) && (otherBlock.getType() == Material.DIAMOND_ORE || otherBlock.getType() == Material.DEEPSLATE_DIAMOND_ORE) && !ClassManager.placed.contains(otherBlock.getLocation().toString())) {
                                 ++count;
                                 ClassManager.placed.add(otherBlock.getLocation().toString());
                             }
@@ -61,22 +61,18 @@ public class ClassListener implements Listener {
                     }
                 }
 
-                Bukkit.broadcastMessage("[FD]" + player.getDisplayName() + " just found " + ChatColor.AQUA + count + ChatColor.WHITE + " diamond" + (count == 1 ? "" : "s") + ".");
+                Bukkit.broadcastMessage("[FD] " + player.getDisplayName() + ChatColor.WHITE + " just found " + ChatColor.AQUA + count + ChatColor.WHITE + " diamond" + (count == 1 ? "" : "s") + ".");
                 if (ClassManager.activeClass.get(player.getUniqueId()) == ClassType.MINER) {
                     MinerUpgrade upgrade = MinerUpgrade.getLevelBasedOnDiamonds(diamondsMined);
                     if (upgrade.getDiamondsNeeded() <= 0 || ClassManager.minerUpgrades.getOrDefault(player.getUniqueId(), MinerUpgrade.NONE) == upgrade) {
                         return;
                     }
 
-                    Bukkit.broadcastMessage(ChatColor.AQUA + "[MINING]" + player.getDisplayName() + ChatColor.GRAY + " has upgraded to " + ChatColor.AQUA + ChatColor.UNDERLINE + "Miner Upgrade " + StringUtils.capitalize(upgrade.name().toLowerCase()) + ChatColor.GRAY + "!");
-                    String var10001 = String.valueOf(ChatColor.GREEN);
-                    player.sendMessage(var10001 + "You have upgraded to Miner Upgrade " + StringUtils.capitalize(upgrade.name().toLowerCase()) + "!");
+                    player.sendMessage(ChatColor.GREEN + "You have upgraded to Miner Upgrade " + StringUtils.capitalize(upgrade.name().toLowerCase()) + "!");
                     ClassManager.deactiveClass(player, false);
                     ClassManager.minerUpgrades.put(player.getUniqueId(), upgrade);
                     Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> ClassManager.activateClass(player, ClassType.MINER), 5L);
                 }
-
-                profile.addDiamonds(1);
             }
         }
     }
@@ -154,12 +150,14 @@ public class ClassListener implements Listener {
                 player.removeMetadata("ability_used", MCRaidz.instance);
             }, 1L); // remove metadata in next tick becuz spigot be whiny
 
-            event.setCancelled(true);
-
             switch (ClassManager.activeClass.get(player.getUniqueId())){
 
                 case ARCHER -> {
                     handleArcherAbility(player);
+                }
+
+                case ROGUE -> {
+                    handleRogueAbility(player);
                 }
 
                 case BARD -> {
@@ -208,6 +206,58 @@ public class ClassListener implements Listener {
                     ClassManager.archerEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
                     player.removePotionEffect(PotionEffectType.JUMP_BOOST);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 160, 4));
+                    player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.LIGHT_PURPLE + "Jump Boost V" + ChatColor.YELLOW + " for 8 seconds!");
+                } else {
+                    player.sendMessage(ChatColor.RED + "You need " + (25 - energy.getEnergy()) + " more energy to use this.");
+                }
+            }
+            default -> {
+                // Do nothing
+            }
+        }
+    }
+
+    private void handleRogueAbility(Player player) { // Same as Archer
+        Energy energy = ClassManager.rogueEnergy.get(player.getUniqueId());
+        if (energy == null) return; // Safety check
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
+        Material type = mainHand.getType();
+        switch (type) {
+            case SUGAR -> {
+                Cooldown archerSugar = MCRaidz.cooldownHandler.getCooldown("Rogue Sugar");
+                if (archerSugar.onCooldown(player)) {
+                    player.sendMessage(ChatColor.RED + "You cannot use this for another " + archerSugar.getRemaining(player) + '.');
+                    return;
+                }
+                if (energy.getEnergy() >= 25) {
+                    archerSugar.applyCooldown(player, 25, TimeUnit.SECONDS, MCRaidz.instance);
+                    removeItemOrSetEmpty(player, mainHand);
+                    ClassManager.rogueEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
+                    player.removePotionEffect(PotionEffectType.SPEED);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 4));
+                    Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, -1, 2));
+                    }, 165L);
+                    player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.AQUA + "Speed V" + ChatColor.YELLOW + " for 8 seconds!");
+                } else {
+                    player.sendMessage(ChatColor.RED + "You need " + (25 - energy.getEnergy()) + " more energy to use this.");
+                }
+            }
+            case FEATHER -> {
+                Cooldown archerFeather = MCRaidz.cooldownHandler.getCooldown("Rogue Feather");
+                if (archerFeather.onCooldown(player)) {
+                    player.sendMessage(ChatColor.RED + "You cannot use this for another " + archerFeather.getRemaining(player) + '.');
+                    return;
+                }
+                if (energy.getEnergy() >= 25) {
+                    archerFeather.applyCooldown(player, 25L, TimeUnit.SECONDS, MCRaidz.instance);
+                    removeItemOrSetEmpty(player, mainHand);
+                    ClassManager.rogueEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
+                    player.removePotionEffect(PotionEffectType.JUMP_BOOST);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 160, 4));
+                    Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, -1, 1));
+                    }, 165L);
                     player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.LIGHT_PURPLE + "Jump Boost V" + ChatColor.YELLOW + " for 8 seconds!");
                 } else {
                     player.sendMessage(ChatColor.RED + "You need " + (25 - energy.getEnergy()) + " more energy to use this.");
@@ -434,5 +484,63 @@ public class ClassListener implements Listener {
         }
         // If the effect type was not found, add it
         player.addPotionEffect(toGive);
+    }
+
+    public static Map<UUID, Long> backstabCooldown = new HashMap<>();
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBackstab(EntityDamageByEntityEvent event) {
+        if (event.isCancelled()) return;
+
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
+            Player damager = (Player) event.getDamager();
+            Player victim = (Player) event.getEntity();
+
+            if (ClassManager.activeClass.get(damager.getUniqueId()) != null) {
+                if (damager.getItemInHand() != null
+                        && damager.getItemInHand().getType() == Material.GOLDEN_SWORD
+                        && ClassManager.activeClass.get(damager.getUniqueId()) == ClassType.ROGUE) {
+
+                    UUID uuid = damager.getUniqueId();
+                    if (backstabCooldown.containsKey(uuid) && backstabCooldown.get(uuid) > System.currentTimeMillis()) {
+                        long diff = backstabCooldown.get(damager.getUniqueId()) - System.currentTimeMillis();
+                        if (diff < 0) diff = 0;
+                        String formatted = String.format("%.1fs", diff / 1000.0);
+
+                        damager.sendMessage(ChatColor.RED + "You can't backstab for " + ChatColor.BOLD + formatted + ChatColor.RED + "!");
+                        return;
+                    }
+
+                    backstabCooldown.put(uuid, System.currentTimeMillis() + 15000L);
+
+                    Vector playerVector = damager.getLocation().getDirection();
+                    Vector entityVector = victim.getLocation().getDirection();
+
+                    playerVector.setY(0F);
+                    entityVector.setY(0F);
+
+                    double degrees = playerVector.angle(entityVector);
+
+                    if (Math.abs(degrees) < 1.4) {
+                        damager.setItemInHand(new ItemStack(Material.AIR));
+
+                        damager.playSound(damager.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                        damager.getWorld().playEffect(victim.getEyeLocation(), Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+
+                        if (victim.getHealth() - 7D <= 0) {
+                            event.setCancelled(true);
+                        } else {
+                            event.setDamage(0D);
+                        }
+
+                        victim.setHealth(Math.max(0D, victim.getHealth() - 7D));
+
+                        damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 2 * 20, 2));
+                    } else {
+                        damager.sendMessage(ChatColor.RED + "Backstab failed!");
+                    }
+                }
+            }
+        }
     }
 }

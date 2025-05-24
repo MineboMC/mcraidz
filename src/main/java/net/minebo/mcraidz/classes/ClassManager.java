@@ -40,7 +40,7 @@ public class ClassManager {
     private static final Map<String, RestoreBardEffectsTask> restoreBardHoldEffects = new HashMap<>();
     public static final Map<UUID, Energy> bardEnergy = new HashMap<>();
     public static final Map<UUID, Energy> archerEnergy = new HashMap<>();
-    private static final Map<UUID, Energy> mageEnergy = new HashMap<>();
+    public static final Map<UUID, Energy> rogueEnergy = new HashMap<>();
     public static final Map<UUID, MinerUpgrade> minerUpgrades = new HashMap<>();
 
     public static final List<String> placed = new ArrayList<>();
@@ -52,7 +52,7 @@ public class ClassManager {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 updateArcherEnergy(player);
                 updateBardEnergy(player);
-                updateMageEnergy(player);
+                updateRogueEnergy(player);
             }
         }, 0L, 20L);
     }
@@ -69,6 +69,9 @@ public class ClassManager {
                     }
                     else if (player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType() == Material.GOLDEN_HELMET && player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.GOLDEN_CHESTPLATE && player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() == Material.GOLDEN_LEGGINGS && player.getInventory().getBoots() != null && player.getInventory().getBoots().getType() == Material.GOLDEN_BOOTS) {
                         activateClass(player, ClassType.BARD);
+                    }
+                    else if (player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType() == Material.CHAINMAIL_HELMET && player.getInventory().getChestplate() != null && player.getInventory().getChestplate().getType() == Material.CHAINMAIL_CHESTPLATE && player.getInventory().getLeggings() != null && player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS && player.getInventory().getBoots() != null && player.getInventory().getBoots().getType() == Material.CHAINMAIL_BOOTS) {
+                        activateClass(player, ClassType.ROGUE);
                     }
                 }
             }
@@ -126,18 +129,18 @@ public class ClassManager {
         }
     }
 
-    public static void updateMageEnergy(Player player) {
-        if (!mageEnergy.containsKey(player.getUniqueId())) return;
-        int energy = mageEnergy.get(player.getUniqueId()).getEnergy();
+    public static void updateRogueEnergy(Player player) {
+        if (!rogueEnergy.containsKey(player.getUniqueId())) return;
+        int energy = rogueEnergy.get(player.getUniqueId()).getEnergy();
         if (energy <= 119) {
-            mageEnergy.get(player.getUniqueId()).setEnergy(energy + 1);
+            rogueEnergy.get(player.getUniqueId()).setEnergy(energy + 1);
             energy += 1;
             if (energy == 120) {
-                player.sendMessage(ChatColor.YELLOW + "You are at " + ChatColor.WHITE + "maximum" + ChatColor.YELLOW + " mage energy.");
+                player.sendMessage(ChatColor.YELLOW + "You are at " + ChatColor.WHITE + "maximum" + ChatColor.YELLOW + " rogue energy.");
             }
         }
         if (energy % 10 == 0 && energy != 120) {
-            player.sendMessage(ChatColor.YELLOW + "You are at " + ChatColor.WHITE + energy + ChatColor.YELLOW + " nage energy.");
+            player.sendMessage(ChatColor.YELLOW + "You are at " + ChatColor.WHITE + energy + ChatColor.YELLOW + " rogue energy.");
         }
     }
 
@@ -349,7 +352,7 @@ public class ClassManager {
                 ++amount;
             }
         }
-        else {
+        else if (type == ClassType.ROGUE) {
             if (player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType() == Material.CHAINMAIL_HELMET) {
                 ++amount;
             }
@@ -375,7 +378,7 @@ public class ClassManager {
     }
 
     public Energy getEnergy(Player player) {
-        return bardEnergy.getOrDefault(player.getUniqueId(), archerEnergy.getOrDefault(player.getUniqueId(), mageEnergy.getOrDefault(player.getUniqueId(), new Energy(player))));
+        return bardEnergy.getOrDefault(player.getUniqueId(), archerEnergy.getOrDefault(player.getUniqueId(), rogueEnergy.getOrDefault(player.getUniqueId(), new Energy(player))));
     }
 
     public static void activateClass(Player player, ClassType type) {
@@ -402,18 +405,9 @@ public class ClassManager {
                 minerUpgrade.getPotionEffects().forEach(player::addPotionEffect);
                 minerUpgrades.put(player.getUniqueId(), minerUpgrade);
                 break;
-            case ILLUSIONIST:
-                helmetColor = Color.AQUA;
-                break;
             case ROGUE:
-                helmetColor = Color.RED;
-                break;
-            case MAGE:
-                mageEnergy.put(player.getUniqueId(), new Energy(player));
-                helmetColor = Color.YELLOW;
-                break;
-            case FISHERMAN:
-                helmetColor = Color.GREEN;
+                rogueEnergy.put(player.getUniqueId(), new Energy(player));
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
                 break;
         }
         checkEffects(player, true);
@@ -438,7 +432,7 @@ public class ClassManager {
         activeClass.remove(player.getUniqueId());
         bardEnergy.remove(player.getUniqueId());
         archerEnergy.remove(player.getUniqueId());
-        mageEnergy.remove(player.getUniqueId());
+        rogueEnergy.remove(player.getUniqueId());
         restoreBardHoldEffects.remove(player.getUniqueId());
         minerUpgrades.remove(player.getUniqueId());
         player.setMaxHealth(20);
