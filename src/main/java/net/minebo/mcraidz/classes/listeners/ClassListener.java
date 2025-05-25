@@ -34,6 +34,7 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class ClassListener implements Listener {
 
@@ -131,6 +132,10 @@ public class ClassListener implements Listener {
         }
 
     }
+
+    public Material[] bardEffects = { Material.SUGAR, Material.BLAZE_POWDER, Material.FEATHER, Material.MAGMA_CREAM, Material.IRON_INGOT, Material.GHAST_TEAR };
+    public Material[] archerEffects = { Material.SUGAR, Material.FEATHER };
+    public Material[] rogueEffects = { Material.SUGAR, Material.FEATHER };
 
     @EventHandler()
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -270,6 +275,9 @@ public class ClassListener implements Listener {
     }
 
     private void handleBardAbility(Player player) {
+        if(Arrays.stream(bardEffects).noneMatch(m -> m == player.getInventory().getItemInMainHand().getType())) {
+            return;
+        }
         if (ProfileManager.getProfileByPlayer(player).hasSpawnProtection()) {
             player.sendMessage(ChatColor.RED + "You cannot use bard effects while spawn protected.");
             return;
