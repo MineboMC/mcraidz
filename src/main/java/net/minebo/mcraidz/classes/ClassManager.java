@@ -201,7 +201,7 @@ public class ClassManager {
             case SUGAR:
                 return "SPEED-1:false";
             case BLAZE_POWDER:
-                return "INCREASE_DAMAGE-1:true";
+                return "INCREASE_DAMAGE-0:true";
             case IRON_INGOT:
                 return "DAMAGE_RESISTANCE-0:false";
             case FEATHER:

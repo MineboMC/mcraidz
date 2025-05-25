@@ -306,13 +306,13 @@ public class ClassListener implements Listener {
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
                         gaveTo += 1;
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.SPEED, 240, 1));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.SPEED, 240, 2));
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
                         player.sendMessage(ChatColor.RED + "Nobody else got your bard effects!");
                         return;
                     }
-                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo != 1 ? "s" : "") + " have " + ChatColor.AQUA + "Speed II" + ChatColor.YELLOW + " for 12 seconds!");
+                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo != 1 ? "s" : "") + " have " + ChatColor.AQUA + "Speed III" + ChatColor.YELLOW + " for 12 seconds!");
                 } else {
                     player.sendMessage(ChatColor.RED + "You need " + (cost - energy.getEnergy()) + " more energy to use this.");
                 }
