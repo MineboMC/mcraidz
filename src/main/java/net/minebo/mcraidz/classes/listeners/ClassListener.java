@@ -306,13 +306,13 @@ public class ClassListener implements Listener {
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
                         gaveTo += 1;
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.SPEED, 240, 2));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.SPEED, 240, 1));
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
                         player.sendMessage(ChatColor.RED + "Nobody else got your bard effects!");
                         return;
                     }
-                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo != 1 ? "s" : "") + " have " + ChatColor.AQUA + "Speed III" + ChatColor.YELLOW + " for 12 seconds!");
+                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo != 1 ? "s" : "") + " have " + ChatColor.AQUA + "Speed II" + ChatColor.YELLOW + " for 12 seconds!");
                 } else {
                     player.sendMessage(ChatColor.RED + "You need " + (cost - energy.getEnergy()) + " more energy to use this.");
                 }
@@ -326,14 +326,14 @@ public class ClassListener implements Listener {
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
                         if (nearbyMember == player) continue;
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.STRENGTH, 240, 3));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.STRENGTH, 240, 1));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
                         player.sendMessage(ChatColor.RED + "Nobody else got your bard effects!");
                         return;
                     }
-                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo > 1 ? "s" : "") + " have " + ChatColor.RED + "Strength III" + ChatColor.YELLOW + " for 12 seconds!");
+                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo > 1 ? "s" : "") + " have " + ChatColor.RED + "Strength II" + ChatColor.YELLOW + " for 12 seconds!");
                 } else {
                     player.sendMessage(ChatColor.RED + "You need " + (cost - energy.getEnergy()) + " more energy to use this.");
                 }
@@ -406,14 +406,14 @@ public class ClassListener implements Listener {
                     ClassManager.bardEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - cost);
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.REGENERATION, 240, 4));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.REGENERATION, 240, 1));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
                         player.sendMessage(ChatColor.RED + "Nobody else got your bard effects!");
                         return;
                     }
-                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo > 1 ? "s" : "") + " have " + ChatColor.LIGHT_PURPLE + "Regeneration V" + ChatColor.YELLOW + " for 12 seconds!");
+                    player.sendMessage(ChatColor.WHITE.toString() + (gaveTo - 1) + ChatColor.YELLOW + " nearby teammate" + (gaveTo > 1 ? "s" : "") + " have " + ChatColor.LIGHT_PURPLE + "Regeneration II" + ChatColor.YELLOW + " for 12 seconds!");
                 } else {
                     player.sendMessage(ChatColor.RED + "You need " + (cost - energy.getEnergy()) + " more energy to use this.");
                 }
@@ -467,6 +467,7 @@ public class ClassListener implements Listener {
     private void addBardClickablePotionEffect(Player player, PotionEffect toGive) {
         if (!player.hasPotionEffect(toGive.getType())) {
             player.addPotionEffect(toGive);
+            Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> ClassManager.checkEffects(player, true), toGive.getDuration()+5);
             return;
         }
         for (PotionEffect potionEffect : player.getActivePotionEffects()) {
@@ -479,6 +480,7 @@ public class ClassListener implements Listener {
                 }
                 player.removePotionEffect(toGive.getType());
                 player.addPotionEffect(toGive);
+                Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> ClassManager.checkEffects(player, true), toGive.getDuration()+5);
                 return;
             }
         }

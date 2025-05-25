@@ -148,7 +148,7 @@ public class ClassManager {
         checkEffects(player, false);
     }
 
-    private static void checkEffects(Player player, boolean force) {
+    public static void checkEffects(Player player, boolean force) {
         ClassType type = activeClass.get(player.getUniqueId());
         if (type == null || type == ClassType.MINER) return;
         List<PotionEffect> effects = null;
@@ -396,7 +396,7 @@ public class ClassManager {
                 archerEnergy.put(player.getUniqueId(), new Energy(player));
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
                 break;
-         case MINER:
+            case MINER:
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, -1, 1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, -1, 0));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, -1, 0));
