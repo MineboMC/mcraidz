@@ -4,8 +4,11 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
+import net.minebo.mcraidz.server.ServerHandler;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
+import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements Relational {
@@ -29,6 +32,25 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         if (query.equalsIgnoreCase("nametag")) {
             return getFactionTag(player, player); // use player as both sender and viewer
         }
+        if(query.contains("statstop")){
+            if(query.split("_").length == 3) {
+                 String[] parts = query.split("_");
+                 Integer place = Integer.valueOf(parts[2]);
+                 Pair<String, String> statPair = ServerHandler.getLeaderboardPlacementByStat(parts[1], place);
+
+                 return ChatColor.GREEN + "#" + place + " " + ChatColor.WHITE + statPair.getKey() + " " + ChatColor.YELLOW + statPair.getValue();
+            }
+        }
+
+        if(query.contains("topname")){
+            if(query.split("_").length == 2) {
+                String[] parts = query.split("_");
+                Pair<String, String> statPair = ServerHandler.getLeaderboardPlacementByStat(parts[1], 1);
+
+                return statPair.getKey();
+            }
+        }
+
         return "";
     }
 

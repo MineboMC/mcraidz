@@ -91,7 +91,7 @@ public class TestingCommand extends BaseCommand {
     }
 
     public ItemStack getHelmet(){
-        ItemStack item = new ItemStack(Material.IRON_HELMET);
+        ItemStack item = new ItemStack(Material.DIAMOND_HELMET);
 
         ItemMeta meta = item.getItemMeta();
 
@@ -103,7 +103,7 @@ public class TestingCommand extends BaseCommand {
     }
 
     public ItemStack getChestplate(){
-        ItemStack item = new ItemStack(Material.IRON_CHESTPLATE);
+        ItemStack item = new ItemStack(Material.DIAMOND_CHESTPLATE);
 
         ItemMeta meta = item.getItemMeta();
 
@@ -115,7 +115,7 @@ public class TestingCommand extends BaseCommand {
     }
 
     public ItemStack getLeggings() {
-        ItemStack item = new ItemStack(Material.IRON_LEGGINGS);
+        ItemStack item = new ItemStack(Material.DIAMOND_LEGGINGS);
 
         ItemMeta meta = item.getItemMeta();
 
@@ -127,7 +127,7 @@ public class TestingCommand extends BaseCommand {
     }
 
     public ItemStack getBoots(){
-        ItemStack item = new ItemStack(Material.IRON_BOOTS);
+        ItemStack item = new ItemStack(Material.DIAMOND_BOOTS);
 
         ItemMeta meta = item.getItemMeta();
 
