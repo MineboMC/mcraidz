@@ -32,22 +32,33 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         if (query.equalsIgnoreCase("nametag")) {
             return getFactionTag(player, player); // use player as both sender and viewer
         }
-        if(query.contains("statstop")){
-            if(query.split("_").length == 3) {
-                 String[] parts = query.split("_");
-                 Integer place = Integer.valueOf(parts[2]);
-                 Pair<String, String> statPair = ServerHandler.getLeaderboardPlacementByStat(parts[1], place);
 
-                 return ChatColor.GREEN + "#" + place + " " + ChatColor.WHITE + statPair.getKey() + " " + ChatColor.YELLOW + statPair.getValue();
+        if (query.contains("statstop")) {
+            String[] parts = query.split("_");
+            if (parts.length == 3) {
+                try {
+                    int place = Integer.parseInt(parts[2]);
+                    Pair<String, String> statPair = ServerHandler.getLeaderboardPlacementByStat(parts[1], place);
+                    if (statPair != null) {
+                        return ChatColor.GREEN + "#" + place + " " + ChatColor.WHITE + statPair.getKey() + " " + ChatColor.YELLOW + statPair.getValue();
+                    } else {
+                        return "";
+                    }
+                } catch (NumberFormatException e) {
+                    return ChatColor.RED + "Invalid number";
+                }
             }
         }
 
-        if(query.contains("topname")){
-            if(query.split("_").length == 2) {
-                String[] parts = query.split("_");
+        if (query.contains("topname")) {
+            String[] parts = query.split("_");
+            if (parts.length == 2) {
                 Pair<String, String> statPair = ServerHandler.getLeaderboardPlacementByStat(parts[1], 1);
-
-                return statPair.getKey();
+                if (statPair != null) {
+                    return statPair.getKey();
+                } else {
+                    return "Unknown";
+                }
             }
         }
 
@@ -56,11 +67,9 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
 
     @Override
     public String onPlaceholderRequest(Player viewer, Player target, String query) {
-
-        if(query.equalsIgnoreCase("nametag")){
+        if (query.equalsIgnoreCase("nametag")) {
             return getFactionTag(viewer, target);
         }
-
         return "";
     }
 
@@ -68,20 +77,7 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         Team viewerFaction = TeamManager.getTeamByPlayer(viewer);
         Team targetFaction = TeamManager.getTeamByPlayer(target);
 
-        if (targetFaction == null) {
-
-            if(ProfileManager.getProfileByPlayer(target) != null) {
-                Profile profile = ProfileManager.getProfileByPlayer(target);
-
-                if(profile.hasSpawnProtection()){
-                    return "&e";
-                }
-            }
-
-            return "&c";
-        }
-
-        if (viewerFaction == null) {
+        if (targetFaction == null || viewerFaction == null) {
             return "&c";
         }
 
@@ -90,7 +86,6 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
         }
 
         return "&c";
-
     }
 
 }

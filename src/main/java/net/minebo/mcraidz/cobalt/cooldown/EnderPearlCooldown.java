@@ -20,7 +20,7 @@ public class EnderPearlCooldown extends Cooldown {
             }
 
             if (event.getItem().getType() == Material.ENDER_PEARL) {
-                event.getPlayer().setCooldown(Material.ENDER_PEARL, 0);
+                event.getPlayer().setCooldown(Material.ENDER_PEARL, 16);
 
                 if (this.onCooldown(event.getPlayer())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You are currently on ender pearl cooldown for " + ChatColor.BOLD + getRemaining(event.getPlayer()) + ChatColor.RED + "!");

@@ -2,6 +2,7 @@ package net.minebo.mcraidz.shop.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Syntax;
 import net.minebo.mcraidz.shop.ShopManager;
@@ -18,6 +19,7 @@ public class PriceCommand extends BaseCommand {
 
     @Default
     @Syntax("<item>")
+    @CommandCompletion("@materials")
     public void onPriceCommand(Player player, String id) {
         String itemId = id.toLowerCase();
         List<ShopItem> allShopItems = ShopManager.shopItems;
