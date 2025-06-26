@@ -80,7 +80,7 @@ public final class MCRaidz extends JavaPlugin {
     @Override
     public void onDisable() {
         TeamManager.teams.forEach(TeamManager::saveTeam);
-        ProfileManager.profiles.forEach(ProfileManager::saveProfile);
+        ProfileManager.profiles.values().forEach(ProfileManager::saveProfile);
     }
 
     public void registerListeners(){

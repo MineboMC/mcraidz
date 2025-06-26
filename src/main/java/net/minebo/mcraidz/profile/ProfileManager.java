@@ -21,18 +21,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class ProfileManager {
 
-    public static List<Profile> profiles;
+    public static Map<UUID, Profile> profiles = new ConcurrentHashMap<>();;
 
     public static File profilesFolder = new File(MCRaidz.instance.getDataFolder(), "internal/profiles");
 
     public static void init() {
-        profiles = new ArrayList<>();
-
         Logger.log("Loading teams...");
 
         loadProfilesFromMongo(); // Big Function
@@ -43,25 +43,22 @@ public class ProfileManager {
     }
 
     public static List<Profile> getRegisteredProfiles() {
-        return profiles;
+        return new ArrayList<>(profiles.values());
     }
 
     public static void registerProfile(Profile profile) {
         Logger.log("Registered profile for: \"" + profile.uuid + "\"");
-        profiles.add(profile);
+        profiles.put(profile.uuid, profile);
     }
 
     public static void unRegisterProfile(Profile profile){
         Logger.log("Unregistered profile for: \"" + profile.uuid + "\"");
-        profiles.remove(profile);
+        profiles.remove(profile.uuid);
         deleteProfileFromMongo(profile);
     }
 
     public static Profile getProfileByUUID(UUID uuid) {
-        return profiles.stream()
-                .filter(profile -> profile.uuid.equals(uuid))
-                .findFirst()
-                .orElse(null);
+        return profiles.get(uuid);
     }
 
     public static Profile getProfileByPlayer(Player player){
@@ -151,7 +148,7 @@ public class ProfileManager {
         profile.dieOnLogin = dieOnLogin;
 
         // Store in memory (if needed)
-        profiles.add(profile); // or ProfileManager.profiles.put(uuid, profile)
+        profiles.put(profile.uuid, profile); // or ProfileManager.profiles.put(uuid, profile)
 
         Bukkit.getLogger().info("Loaded profile from MongoDB: " + uuid);
         return profile;
