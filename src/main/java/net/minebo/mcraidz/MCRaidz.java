@@ -5,6 +5,7 @@ import net.minebo.cobalt.acf.ACFManager;
 import net.minebo.cobalt.cooldown.CooldownHandler;
 import net.minebo.cobalt.cooldown.construct.Cooldown;
 import net.minebo.cobalt.gson.Gson;
+import net.minebo.cobalt.menu.MenuHandler;
 import net.minebo.cobalt.scoreboard.ScoreboardHandler;
 import net.minebo.mcraidz.classes.ClassManager;
 import net.minebo.mcraidz.classes.listeners.ClassListener;
@@ -71,6 +72,8 @@ public final class MCRaidz extends JavaPlugin {
         registerListeners();
 
         new ScoreboardHandler(new ScoreboardImpl(), this);
+
+        MenuHandler.init(this);
 
         new PlaytimeThread().runTaskTimer(this, 20L, 20L);
         new DataSyncThread().runTaskTimer(this, 20L,  10L * 60L * 20L);

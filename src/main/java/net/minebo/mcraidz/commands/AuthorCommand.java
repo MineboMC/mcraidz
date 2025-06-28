@@ -3,8 +3,10 @@ package net.minebo.mcraidz.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
+import net.minebo.cobalt.menu.impl.TestingMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +22,7 @@ public class AuthorCommand extends BaseCommand {
         lines.add(ChatColor.YELLOW + "This server is running " + ChatColor.LIGHT_PURPLE + "MCRaidz" + ChatColor.YELLOW + " by " + ChatColor.AQUA + "Ian Rich" + ChatColor.YELLOW + "!");
 
         lines.forEach(sender::sendMessage);
+
+        if(sender instanceof Player) new TestingMenu().openMenu((Player) sender);
     }
 }
