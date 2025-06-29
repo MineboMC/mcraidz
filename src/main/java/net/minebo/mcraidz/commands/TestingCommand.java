@@ -6,18 +6,26 @@ import co.aikar.commands.annotation.CatchUnknown;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
+import net.minebo.cobalt.menu.construct.Button;
+import net.minebo.cobalt.menu.construct.Menu;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.util.KitUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
+
+import java.util.Arrays;
 
 @CommandAlias("testing")
 public class TestingCommand extends BaseCommand {
@@ -34,107 +42,46 @@ public class TestingCommand extends BaseCommand {
             return;
         }
 
-        for (int i = 0; i <= 35; i++) {
-            player.getInventory().setItem(i, new ItemStack(Material.MUSHROOM_STEW));
-        }
+        new Menu().setTitle("Kits")
+                .setSize(9)
+                .setAutoUpdate(false)
+                .setButton(0, new Button()
+                        .setName("&aArcher Kit")
+                        .setMaterial(Material.LEATHER_HELMET)
+                        .setLines(() -> Arrays.asList("&7Left click to use this kit."))
+                        .addClickAction(ClickType.LEFT, p -> KitUtil.giveArcher(player))
+                        .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
+                )
+                .setButton(2, new Button()
+                        .setName("&eBard Kit")
+                        .setMaterial(Material.GOLDEN_HELMET)
+                        .setLines(() -> Arrays.asList("&7Left click to use this kit."))
+                        .addClickAction(ClickType.LEFT, p -> KitUtil.giveBard(player))
+                        .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
+                )
+                .setButton(4, new Button()
+                        .setName("&bDiamond Kit")
+                        .setMaterial(Material.DIAMOND_HELMET)
+                        .setLines(() -> Arrays.asList("&7Left click to use this kit."))
+                        .addClickAction(ClickType.LEFT, p -> KitUtil.giveDiamond(player))
+                        .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
+                )
+                .setButton(6, new Button()
+                        .setName("&7Rogue Kit")
+                        .setMaterial(Material.CHAINMAIL_HELMET)
+                        .setLines(() -> Arrays.asList("&7Left click to use this kit."))
+                        .addClickAction(ClickType.LEFT, p -> KitUtil.giveRogue(player))
+                        .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
+                )
+                .setButton(8, new Button()
+                        .setName("&dFill Inventory with Soup")
+                        .setLines(() -> Arrays.asList("&7Left click to use this kit."))
+                        .setMaterial(Material.MUSHROOM_STEW)
+                        .addClickAction(ClickType.LEFT, p -> KitUtil.fillWithSoup(player.getInventory()))
+                        .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
+                )
+                .fillEmpty(Material.GRAY_STAINED_GLASS_PANE)
+                .openMenu(player);
 
-        player.getInventory().setItem(0, getSword());
-
-        player.getInventory().setHelmet(getHelmet());
-        player.getInventory().setChestplate(getChestplate());
-        player.getInventory().setLeggings(getLeggings());
-        player.getInventory().setBoots(getBoots());
-
-        player.getInventory().setItem(1, getPearl());
-
-        player.getInventory().setItem(7, getPotionItem(PotionType.STRENGTH));
-        player.getInventory().setItem(16, getPotionItem(PotionType.STRENGTH));
-        player.getInventory().setItem(25, getPotionItem(PotionType.STRENGTH));
-        player.getInventory().setItem(34, getPotionItem(PotionType.STRENGTH));
-
-        player.getInventory().setItem(8, getPotionItem(PotionType.STRONG_SWIFTNESS));
-        player.getInventory().setItem(17, getPotionItem(PotionType.STRONG_SWIFTNESS));
-        player.getInventory().setItem(26, getPotionItem(PotionType.STRONG_SWIFTNESS));
-        player.getInventory().setItem(35, getPotionItem(PotionType.STRONG_SWIFTNESS));
-
-        sender.sendMessage(ChatColor.GREEN + "You find yourself mysteriously flush with items.");
-    }
-
-    public ItemStack getPotionItem(PotionType effect) {
-        ItemStack potion = new ItemStack(Material.POTION);
-
-        PotionMeta meta = (PotionMeta) potion.getItemMeta();
-
-        meta.setBasePotionType(effect);
-        potion.setItemMeta(meta);
-
-        return potion;
-    }
-
-    public ItemStack getPearl(){
-        ItemStack item = new ItemStack(Material.ENDER_PEARL);
-        item.setAmount(16);
-
-        return item;
-    }
-
-    public ItemStack getSword(){
-        ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.addEnchant(Enchantment.SHARPNESS, 2, true);
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public ItemStack getHelmet(){
-        ItemStack item = new ItemStack(Material.DIAMOND_HELMET);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.addEnchant(Enchantment.PROTECTION, 2, true);
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public ItemStack getChestplate(){
-        ItemStack item = new ItemStack(Material.DIAMOND_CHESTPLATE);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.addEnchant(Enchantment.PROTECTION, 2, true);
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public ItemStack getLeggings() {
-        ItemStack item = new ItemStack(Material.DIAMOND_LEGGINGS);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.addEnchant(Enchantment.PROTECTION, 2, true);
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public ItemStack getBoots(){
-        ItemStack item = new ItemStack(Material.DIAMOND_BOOTS);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.addEnchant(Enchantment.PROTECTION, 2, true);
-
-        item.setItemMeta(meta);
-
-        return item;
     }
 }

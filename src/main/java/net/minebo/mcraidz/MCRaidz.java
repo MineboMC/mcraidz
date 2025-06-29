@@ -45,6 +45,8 @@ public final class MCRaidz extends JavaPlugin {
             new MCRaidzPlaceholderExpansion().register(); // We will find a solution when the time comes... - Ian
         }
 
+        MenuHandler.init(this);
+
         cooldownHandler = new CooldownHandler(this);
         cooldownHandler.registerCooldown("Enderpearl", new EnderPearlCooldown());
         cooldownHandler.registerCooldown("Combat Tag", new CombatTagTimer());
@@ -72,8 +74,6 @@ public final class MCRaidz extends JavaPlugin {
         registerListeners();
 
         new ScoreboardHandler(new ScoreboardImpl(), this);
-
-        MenuHandler.init(this);
 
         new PlaytimeThread().runTaskTimer(this, 20L, 20L);
         new DataSyncThread().runTaskTimer(this, 20L,  10L * 60L * 20L);
