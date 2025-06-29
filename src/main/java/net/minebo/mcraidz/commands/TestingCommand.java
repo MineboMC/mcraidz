@@ -37,8 +37,8 @@ public class TestingCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
-        if(!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Testing"))) {
-            player.sendMessage(ChatColor.RED + "You can only use this kit on our testing server.");
+        if(!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Beta"))) {
+            player.sendMessage(ChatColor.RED + "You can only use this command during beta.");
             return;
         }
 
