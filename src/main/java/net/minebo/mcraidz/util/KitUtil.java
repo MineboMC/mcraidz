@@ -16,13 +16,14 @@ public class KitUtil {
 
     public static void giveArcher(Player player) {
 
-        Inventory inv = player.getInventory();
-        ItemStack[] armor = player.getInventory().getArmorContents();
+        player.getInventory().clear();
 
-        armor[0] = new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[1] = new ItemBuilder(Material.LEATHER_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[2] = new ItemBuilder(Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[3] = new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
+        Inventory inv = player.getInventory();
+
+        player.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setChestplate(new ItemBuilder(Material.LEATHER_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setLeggings(new ItemBuilder(Material.LEATHER_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
 
         inv.setItem(0, sword);
         inv.setItem(1, pearls);
@@ -38,13 +39,14 @@ public class KitUtil {
 
     public static void giveBard(Player player) {
 
-        Inventory inv = player.getInventory();
-        ItemStack[] armor = player.getInventory().getArmorContents();
+        player.getInventory().clear();
 
-        armor[0] = new ItemBuilder(Material.GOLDEN_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[1] = new ItemBuilder(Material.GOLDEN_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[2] = new ItemBuilder(Material.GOLDEN_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[3] = new ItemBuilder(Material.GOLDEN_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
+        Inventory inv = player.getInventory();
+
+        player.getInventory().setHelmet(new ItemBuilder(Material.GOLDEN_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setChestplate(new ItemBuilder(Material.GOLDEN_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setLeggings(new ItemBuilder(Material.GOLDEN_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setBoots(new ItemBuilder(Material.GOLDEN_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
 
         inv.setItem(0, sword);
         inv.setItem(1, pearls);
@@ -63,13 +65,14 @@ public class KitUtil {
 
     public static void giveDiamond(Player player) {
 
-        Inventory inv = player.getInventory();
-        ItemStack[] armor = player.getInventory().getArmorContents();
+        player.getInventory().clear();
 
-        armor[0] = new ItemBuilder(Material.DIAMOND_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[1] = new ItemBuilder(Material.DIAMOND_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[2] = new ItemBuilder(Material.DIAMOND_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[3] = new ItemBuilder(Material.DIAMOND_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
+        Inventory inv = player.getInventory();
+
+        player.getInventory().setHelmet(new ItemBuilder(Material.DIAMOND_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setLeggings(new ItemBuilder(Material.DIAMOND_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setBoots(new ItemBuilder(Material.DIAMOND_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
 
         inv.setItem(0, sword);
         inv.setItem(1, pearls);
@@ -90,13 +93,14 @@ public class KitUtil {
 
     public static void giveRogue(Player player) {
 
-        Inventory inv = player.getInventory();
-        ItemStack[] armor = player.getInventory().getArmorContents();
+        player.getInventory().clear();
 
-        armor[0] = new ItemBuilder(Material.CHAINMAIL_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[1] = new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[2] = new ItemBuilder(Material.CHAINMAIL_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
-        armor[3] = new ItemBuilder(Material.CHAINMAIL_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build();
+        Inventory inv = player.getInventory();
+
+        player.getInventory().setHelmet(new ItemBuilder(Material.CHAINMAIL_HELMET).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setChestplate(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
+        player.getInventory().setBoots(new ItemBuilder(Material.CHAINMAIL_BOOTS).addEnchantment(Enchantment.PROTECTION, 2).addEnchantment(Enchantment.UNBREAKING, 2).build());
 
         inv.setItem(0, sword);
         inv.setItem(1, pearls);
