@@ -91,7 +91,7 @@ public class TestingCommand extends BaseCommand {
                         .addClickAction(ClickType.LEFT, p -> p.sendMessage(ChatColor.GRAY + "Your inventory has been filled with soup."))
                         .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
                 )
-                .fillEmpty(Material.GRAY_STAINED_GLASS_PANE)
+                .fillEmpty(Material.GRAY_STAINED_GLASS_PANE, true)
                 .openMenu(player);
 
     }
