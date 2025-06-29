@@ -3,6 +3,7 @@ package net.minebo.mcraidz.listener;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,19 @@ public class TeamProtListener implements Listener {
 
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent e) {
+        if(e.getEntity() instanceof Player && e.getDamager() instanceof Arrow) {
+            if(e.getDamager().getType() == EntityType.ARROW) {
+                Arrow arrow = (Arrow)e.getDamager();
+                Player p = (Player)e.getEntity();
+
+                if(arrow.getShooter() instanceof Player) {
+                    if(((Player) arrow.getShooter()).getUniqueId().equals(p.getUniqueId())) {
+                        e.setCancelled(true);
+                    }
+                }
+            }
+        }
+
         if(e.getDamager().getType() == EntityType.PLAYER) {
             Player attacker = (Player) e.getDamager();
 

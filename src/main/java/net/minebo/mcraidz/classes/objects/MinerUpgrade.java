@@ -13,13 +13,13 @@ public enum MinerUpgrade {
 
     NONE(0, Collections.emptyList()),
     HANDY(250, Collections.singletonList(new PotionEffect(PotionEffectType.SPEED, -1, 0))),
-    APPRENTICE(500, Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 0), new PotionEffect(PotionEffectType.HASTE, -1, 2))),
-    MASTER(750, Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 0), new PotionEffect(PotionEffectType.HASTE, -1, 2),
+    APPRENTICE(500, Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 0), new PotionEffect(PotionEffectType.HASTE, -1, 3))),
+    MASTER(750, Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 0), new PotionEffect(PotionEffectType.HASTE, -1, 3),
             new PotionEffect(PotionEffectType.SATURATION, -1, 0), new PotionEffect(PotionEffectType.RESISTANCE, -1, 0))),
     EXTREME(1500, Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 1), new PotionEffect(PotionEffectType.HASTE, -1, 3),
-            new PotionEffect(PotionEffectType.SATURATION, -1, 2), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1))),
+            new PotionEffect(PotionEffectType.SATURATION, -1, 3), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1))),
     ULTIMATE(2500, Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 1), new PotionEffect(PotionEffectType.HASTE, -1, 3),
-            new PotionEffect(PotionEffectType.SATURATION, -1, 2), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1), new PotionEffect(PotionEffectType.REGENERATION, -1, 0)));
+            new PotionEffect(PotionEffectType.SATURATION, -1, 3), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1), new PotionEffect(PotionEffectType.REGENERATION, -1, 0)));
 
 
     private final int diamondsNeeded;

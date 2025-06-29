@@ -47,14 +47,14 @@ public class ClassManager {
     private static final List<Material> bardMaterials = Arrays.asList(Material.SUGAR, Material.BLAZE_POWDER, Material.IRON_INGOT, Material.FEATHER, Material.SPIDER_EYE, Material.MAGMA_CREAM, Material.GHAST_TEAR);
 
     public static void init() {
-        Bukkit.getScheduler().runTaskTimer(MCRaidz.instance, ClassManager::runCheck, 0L, 2L);
+        Bukkit.getScheduler().runTaskTimer(MCRaidz.instance, ClassManager::runCheck, 0L, 3L);
         Bukkit.getScheduler().runTaskTimer(MCRaidz.instance, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 updateArcherEnergy(player);
                 updateBardEnergy(player);
                 updateRogueEnergy(player);
             }
-        }, 0L, 20L);
+        }, 0L, 30L);
     }
 
     public static void runCheck() {
@@ -83,7 +83,7 @@ public class ClassManager {
                 ClassType type = activeClass.get(player.getUniqueId());
                 if (type == ClassType.MINER) {
                     if (player.getLocation().getBlockY() <= 25 && !player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                        addPotionEffect(player, PotionEffectType.INVISIBILITY, -1, 2);
+                        addPotionEffect(player, PotionEffectType.INVISIBILITY, -1, 3);
                     } else if (player.hasPotionEffect(PotionEffectType.INVISIBILITY) && player.getActivePotionEffects().stream().anyMatch(effect ->
                             effect.getType() == PotionEffectType.INVISIBILITY
                                     && effect.getAmplifier() >= 2
@@ -159,10 +159,10 @@ public class ClassManager {
                 break;
             case ARCHER:
             case ILLUSIONIST:
-                effects = Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 2), new PotionEffect(PotionEffectType.RESISTANCE, -1,2));
+                effects = Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 3), new PotionEffect(PotionEffectType.RESISTANCE, -1,2));
                 break;
             case ROGUE:
-                effects = Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 2), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1), new PotionEffect(PotionEffectType.JUMP_BOOST, -1, 1));
+                effects = Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 3), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1), new PotionEffect(PotionEffectType.JUMP_BOOST, -1, 1));
                 break;
             case FISHERMAN:
                 effects = Arrays.asList(new PotionEffect(PotionEffectType.SPEED, -1, 1), new PotionEffect(PotionEffectType.RESISTANCE, -1, 1), new PotionEffect(PotionEffectType.REGENERATION, -1, 0), new PotionEffect(PotionEffectType.JUMP_BOOST, -1, 1));;

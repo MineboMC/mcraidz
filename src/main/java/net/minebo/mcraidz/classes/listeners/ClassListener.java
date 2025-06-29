@@ -186,13 +186,13 @@ public class ClassListener implements Listener {
                     return;
                 }
                 if (energy.getEnergy() >= 25) {
-                    archerSugar.applyCooldown(player, 25, TimeUnit.SECONDS, MCRaidz.instance);
+                    archerSugar.applyCooldown(player, 35, TimeUnit.SECONDS, MCRaidz.instance);
                     removeItemOrSetEmpty(player, mainHand);
                     ClassManager.archerEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
                     player.removePotionEffect(PotionEffectType.SPEED);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 4));
                     Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, -1, 2));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, -1, 3));
                     }, 165L);
                     player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.AQUA + "Speed V" + ChatColor.YELLOW + " for 8 seconds!");
                 } else {
@@ -206,7 +206,7 @@ public class ClassListener implements Listener {
                     return;
                 }
                 if (energy.getEnergy() >= 25) {
-                    archerFeather.applyCooldown(player, 25L, TimeUnit.SECONDS, MCRaidz.instance);
+                    archerFeather.applyCooldown(player, 35L, TimeUnit.SECONDS, MCRaidz.instance);
                     removeItemOrSetEmpty(player, mainHand);
                     ClassManager.archerEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
                     player.removePotionEffect(PotionEffectType.JUMP_BOOST);
@@ -235,13 +235,13 @@ public class ClassListener implements Listener {
                     return;
                 }
                 if (energy.getEnergy() >= 25) {
-                    archerSugar.applyCooldown(player, 25, TimeUnit.SECONDS, MCRaidz.instance);
+                    archerSugar.applyCooldown(player, 35, TimeUnit.SECONDS, MCRaidz.instance);
                     removeItemOrSetEmpty(player, mainHand);
                     ClassManager.rogueEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
                     player.removePotionEffect(PotionEffectType.SPEED);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 4));
                     Bukkit.getScheduler().runTaskLater(MCRaidz.instance, () -> {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, -1, 2));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, -1, 3));
                     }, 165L);
                     player.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.AQUA + "Speed V" + ChatColor.YELLOW + " for 8 seconds!");
                 } else {
@@ -255,7 +255,7 @@ public class ClassListener implements Listener {
                     return;
                 }
                 if (energy.getEnergy() >= 25) {
-                    archerFeather.applyCooldown(player, 25L, TimeUnit.SECONDS, MCRaidz.instance);
+                    archerFeather.applyCooldown(player, 35L, TimeUnit.SECONDS, MCRaidz.instance);
                     removeItemOrSetEmpty(player, mainHand);
                     ClassManager.rogueEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - 25);
                     player.removePotionEffect(PotionEffectType.JUMP_BOOST);
@@ -314,7 +314,7 @@ public class ClassListener implements Listener {
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
                         gaveTo += 1;
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.SPEED, 240, 2));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.SPEED, 340, 3));
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
                         player.sendMessage(ChatColor.RED + "Nobody else got your bard effects!");
@@ -334,7 +334,7 @@ public class ClassListener implements Listener {
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
                         if (nearbyMember == player) continue;
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.STRENGTH, 240, 1));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.STRENGTH, 340, 1));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
@@ -354,7 +354,7 @@ public class ClassListener implements Listener {
                     ClassManager.bardEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - cost);
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.RESISTANCE, 240, 2));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.RESISTANCE, 340, 3));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
@@ -374,7 +374,7 @@ public class ClassListener implements Listener {
                     ClassManager.bardEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - cost);
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.JUMP_BOOST, 240, 4));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.JUMP_BOOST, 340, 4));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
@@ -394,7 +394,7 @@ public class ClassListener implements Listener {
                     ClassManager.bardEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - cost);
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 60, 0));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 30 * 60, 0));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
@@ -414,7 +414,7 @@ public class ClassListener implements Listener {
                     ClassManager.bardEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - cost);
                     int gaveTo = 0;
                     for (Player nearbyMember : nearbyMembers) {
-                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.REGENERATION, 240, 1));
+                        addBardClickablePotionEffect(nearbyMember, new PotionEffect(PotionEffectType.REGENERATION, 340, 1));
                         gaveTo += 1;
                     }
                     if ((gaveTo == 0 || gaveTo == 1) && (team != null && team.getOnlineMembers().size() > 1)) {
@@ -433,14 +433,14 @@ public class ClassListener implements Listener {
                     removeItemOrSetEmpty(player, mainHand);
                     ClassManager.bardEnergy.get(player.getUniqueId()).setEnergy(energy.getEnergy() - cost);
                     int gaveTo = 0;
-                    for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
+                    for (Entity entity : player.getNearbyEntities(20, 30, 30)) {
                         if (!(entity instanceof Player targetPlayer)) continue;
                         // Don't hit spawn-protected or teammates
                         if (ProfileManager.getProfileByPlayer(targetPlayer).hasSpawnProtection())
                             continue;
                         if (team != null && team.getOnlineMembers().contains(targetPlayer))
                             continue;
-                        targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 240, 1));
+                        targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 340, 1));
                         gaveTo += 1;
                     }
                     if (gaveTo == 0) {
@@ -545,7 +545,7 @@ public class ClassListener implements Listener {
 
                         victim.setHealth(Math.max(0D, victim.getHealth() - 7D));
 
-                        damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 2 * 20, 2));
+                        damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 3 * 20, 3));
                     } else {
                         damager.sendMessage(ChatColor.RED + "Backstab failed!");
                     }

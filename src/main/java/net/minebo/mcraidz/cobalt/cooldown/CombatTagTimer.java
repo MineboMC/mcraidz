@@ -77,7 +77,7 @@ public class CombatTagTimer extends Cooldown {
                 chickenLoggers.remove(p.getUniqueId());
                 // Player keeps items, they survived
             }
-        }, 200L); // 10 seconds
+        }, 300L); // 10 seconds
     }
 
     @EventHandler

@@ -67,7 +67,7 @@ public class ServerHandler {
                 }
 
             }
-        }.runTaskTimer(MCRaidz.instance, 20L, 20L);
+        }.runTaskTimer(MCRaidz.instance, 30L, 30L);
 
         spawnTasks.put(player.getName(), new SpawnTask(taskid.getTaskId(), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10)));
     }

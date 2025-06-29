@@ -15,6 +15,7 @@ import net.minebo.mcraidz.cobalt.completion.WarpCompletionHandler;
 import net.minebo.mcraidz.cobalt.context.TeamContextResolver;
 import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.cobalt.cooldown.EnderPearlCooldown;
+import net.minebo.mcraidz.deathmessage.DeathMessageHandler;
 import net.minebo.mcraidz.hook.MCRaidzPlaceholderExpansion;
 import net.minebo.mcraidz.listener.*;
 import net.minebo.mcraidz.mongo.MongoManager;
@@ -75,8 +76,8 @@ public final class MCRaidz extends JavaPlugin {
 
         new ScoreboardHandler(new ScoreboardImpl(), this);
 
-        new PlaytimeThread().runTaskTimer(this, 20L, 20L);
-        new DataSyncThread().runTaskTimer(this, 20L,  10L * 60L * 20L);
+        new PlaytimeThread().runTaskTimer(this, 30L, 30L);
+        new DataSyncThread().runTaskTimer(this, 30L,  10L * 60L * 20L);
 
     }
 
@@ -99,6 +100,7 @@ public final class MCRaidz extends JavaPlugin {
 
     public void registerManagers(){
         MongoManager.init(getConfig().getString("mongo.uri"), getConfig().getString("mongo.database"));
+        DeathMessageHandler.init();
         TeamManager.init();
         ProfileManager.init();
         ServerHandler.init();

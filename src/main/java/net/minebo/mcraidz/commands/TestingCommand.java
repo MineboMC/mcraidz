@@ -9,6 +9,7 @@ import co.aikar.commands.annotation.Subcommand;
 import net.minebo.cobalt.menu.construct.Button;
 import net.minebo.cobalt.menu.construct.Menu;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.util.KitUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,6 +40,11 @@ public class TestingCommand extends BaseCommand {
 
         if(!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Beta"))) {
             player.sendMessage(ChatColor.RED + "You can only use this command during beta.");
+            return;
+        }
+
+        if(!ProfileManager.getProfileByPlayer(player).hasSpawnProtection()) {
+            player.sendMessage(ChatColor.RED + "You can only use kits when you are protected by spawn.");
             return;
         }
 
@@ -79,7 +85,7 @@ public class TestingCommand extends BaseCommand {
                 )
                 .setButton(8, new Button()
                         .setName("&dFill Inventory with Soup")
-                        .setLines(() -> Arrays.asList("&7Left click to use this kit."))
+                        .setLines(() -> Arrays.asList("&7Left click to refill."))
                         .setMaterial(Material.MUSHROOM_STEW)
                         .addClickAction(ClickType.LEFT, p -> KitUtil.fillWithSoup(player.getInventory()))
                         .addClickAction(ClickType.RIGHT, p -> p.sendMessage(ChatColor.GRAY + "Your inventory has been filled with soup."))
