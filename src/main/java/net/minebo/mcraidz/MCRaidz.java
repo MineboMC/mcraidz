@@ -28,6 +28,7 @@ import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.thread.DataSyncThread;
 import net.minebo.mcraidz.thread.PlaytimeThread;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Creeper;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MCRaidz extends JavaPlugin {
@@ -89,6 +90,7 @@ public final class MCRaidz extends JavaPlugin {
 
     public void registerListeners(){
         Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CaptureListener(), this);
         Bukkit.getPluginManager().registerEvents(new SoupListener(), this);
         Bukkit.getPluginManager().registerEvents(new OldRegenListener(), this);
         Bukkit.getPluginManager().registerEvents(new ChatFormatListener(), this);
