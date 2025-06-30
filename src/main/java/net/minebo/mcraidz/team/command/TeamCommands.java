@@ -6,7 +6,9 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minebo.mcraidz.server.ServerHandler;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.team.construct.TeamRole;
@@ -305,6 +307,7 @@ public class TeamCommands extends BaseCommand {
 
         sender.teleport(playerTeam.headquarters);
         sender.sendMessage(ChatColor.YELLOW + "You have been sent to " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + "'s headquarters.");
+        ServerHandler.startNoAttackTask(sender);
     }
 
     @Subcommand("rally")
@@ -319,6 +322,7 @@ public class TeamCommands extends BaseCommand {
 
         sender.teleport(playerTeam.rally);
         sender.sendMessage(ChatColor.YELLOW + "You have been sent to " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + "'s rally location.");
+        ServerHandler.startNoAttackTask(sender);
     }
 
     @Subcommand("promote")
@@ -503,17 +507,19 @@ public class TeamCommands extends BaseCommand {
 
         Component header = Component.text("*** ", NamedTextColor.GRAY)
                 .append(Component.text("Team List", NamedTextColor.DARK_AQUA))
-                .append(Component.text(" ***", NamedTextColor.GRAY));
+                .append(Component.text(" ***", NamedTextColor.GRAY))
+                .append(Component.newline());
 
         Component teamList = Component.empty();
         for (int i = start; i < end; i++) {
             String team = teams.get(i);
-            Component clickableTeam = Component.text(team, NamedTextColor.AQUA)
+            Component clickableTeam = Component.text(team + ChatColor.GRAY + " - (" + ChatColor.WHITE + TeamManager.getTeamByName(team).getOnlineMembers().size() + ChatColor.GRAY + "/" + ChatColor.WHITE + TeamManager.getTeamByName(team).members.size() + ChatColor.GRAY + ")", NamedTextColor.AQUA)
+                    .hoverEvent(HoverEvent.showText(Component.text(ChatColor.AQUA + "Click to view " + ChatColor.RESET + team + ChatColor.AQUA + "'s info.")))
                     .clickEvent(ClickEvent.runCommand("/team i " + team));
-            teamList = teamList.append(clickableTeam).append(Component.newline());
+            teamList = teamList.append(clickableTeam).append(Component.newline()).append(Component.newline());
         }
 
-        Component pageInfo = Component.text("Page " + page + " / " + totalPages, NamedTextColor.GRAY);
+        Component pageInfo = Component.text("Page " + page + "/" + totalPages, NamedTextColor.GRAY);
 
         return Component.empty()
                 .append(header).append(Component.newline())

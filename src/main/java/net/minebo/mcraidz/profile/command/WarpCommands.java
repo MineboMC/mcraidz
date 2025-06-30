@@ -9,6 +9,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
+import net.minebo.mcraidz.server.ServerHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -40,6 +41,7 @@ public class WarpCommands extends BaseCommand {
 
         player.teleport(warp);
         player.sendMessage(ChatColor.GREEN + "Teleported to warp " + ChatColor.GOLD + name + ChatColor.GREEN + ".");
+        ServerHandler.startNoAttackTask(player);
     }
 
     @Subcommand("list")

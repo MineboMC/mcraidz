@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SpawnTask {
+public class Task {
 
     private final int taskId;
-    private final long spawnTime;
+    private final long time;
 }

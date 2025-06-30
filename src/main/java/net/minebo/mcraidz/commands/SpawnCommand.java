@@ -52,7 +52,7 @@ public class SpawnCommand extends BaseCommand {
                 return;
             }
 
-            if (ServerHandler.getSpawnTasks().containsKey(sender.getName())) {
+            if (ServerHandler.spawnTasks.containsKey(sender.getName())) {
                 sender.sendMessage(ChatColor.RED + "You are already teleporting to spawn.");
                 return; // dont potato and let them spam spawn
             }

@@ -4,8 +4,9 @@ import lombok.Getter;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
+import net.minebo.mcraidz.server.listener.NoAttackListener;
 import net.minebo.mcraidz.server.listener.SpawnListener;
-import net.minebo.mcraidz.server.task.SpawnTask;
+import net.minebo.mcraidz.server.task.Task;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,13 +20,49 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ServerHandler {
-    @Getter
-    private static Map<String, SpawnTask> spawnTasks;
+
+    public static Map<String, Task> spawnTasks;
+    public static Map<String, Task> noAttackTasks;
 
     public static void init(){
         spawnTasks = new HashMap<>();
+        noAttackTasks = new HashMap<>();
 
         Bukkit.getPluginManager().registerEvents(new SpawnListener(), MCRaidz.instance);
+        Bukkit.getPluginManager().registerEvents(new NoAttackListener(), MCRaidz.instance);
+    }
+
+    public static void startNoAttackTask(final Player player) {
+        Profile profile = ProfileManager.getProfileByPlayer(player);
+
+        if(noAttackTasks.containsKey(player.getName())) {
+            Bukkit.getScheduler().cancelTask(noAttackTasks.get(player.getName()).getTaskId());
+        }
+
+        player.sendMessage(ChatColor.GRAY.toString() + "You cannot attack for 10 seconds.");
+
+        BukkitTask taskid = new BukkitRunnable() {
+
+            int seconds = 10;
+
+            @Override
+            public void run() {
+
+                seconds--;
+
+                if (seconds == 0) {
+                    if (noAttackTasks.containsKey(player.getName())) {
+                        noAttackTasks.remove(player.getName());
+
+                        player.sendMessage(ChatColor.GRAY + "You can now attack other players.");
+                        cancel();
+                    }
+                }
+
+            }
+        }.runTaskTimer(MCRaidz.instance, 30L, 30L);
+
+        noAttackTasks.put(player.getName(), new Task(taskid.getTaskId(), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10)));
     }
 
     public static void startSpawnCommandTask(final Player player) {
@@ -69,7 +106,7 @@ public class ServerHandler {
             }
         }.runTaskTimer(MCRaidz.instance, 30L, 30L);
 
-        spawnTasks.put(player.getName(), new SpawnTask(taskid.getTaskId(), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10)));
+        spawnTasks.put(player.getName(), new Task(taskid.getTaskId(), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(10)));
     }
 
     public static Pair<String, String> getLeaderboardPlacementByStat(String stat, int placement) {

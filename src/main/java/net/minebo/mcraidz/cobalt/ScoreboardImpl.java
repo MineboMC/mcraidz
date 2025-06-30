@@ -10,7 +10,7 @@ import net.minebo.mcraidz.classes.listeners.ClassListener;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.server.ServerHandler;
-import net.minebo.mcraidz.server.task.SpawnTask;
+import net.minebo.mcraidz.server.task.Task;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.util.BedrockUtil;
@@ -87,10 +87,10 @@ public class ScoreboardImpl extends ScoreboardProvider {
     }
 
     public String getSpawnTeleportScore(Player player) {
-        SpawnTask spawnTask = ServerHandler.getSpawnTasks().get(player.getName());
+        Task task = ServerHandler.spawnTasks.get(player.getName());
 
-        if (spawnTask != null) {
-            long diffMillis = spawnTask.getSpawnTime() - System.currentTimeMillis();
+        if (task != null) {
+            long diffMillis = task.getTime() - System.currentTimeMillis();
 
             if (diffMillis >= 0) {
                 return TimeFormatting.getRemaining(diffMillis) + "s"; // Pass ms
