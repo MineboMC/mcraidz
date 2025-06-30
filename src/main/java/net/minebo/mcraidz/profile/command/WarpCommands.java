@@ -50,7 +50,7 @@ public class WarpCommands extends BaseCommand {
             return;
         }
 
-        player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "***" + ChatColor.GOLD + " Warp List " + ChatColor.GRAY + "(" + ChatColor.YELLOW + profile.warps.size() + ChatColor.GRAY + "/" + ChatColor.YELLOW + getWarpLimit(player) + ChatColor.GRAY + ") " + ChatColor.STRIKETHROUGH + "***");
+        player.sendMessage(ChatColor.GRAY + "***" + ChatColor.GOLD + " Warp List " + ChatColor.GRAY + "(" + ChatColor.YELLOW + profile.warps.size() + ChatColor.GRAY + "/" + ChatColor.YELLOW + getWarpLimit(player) + ChatColor.GRAY + ") " + "***");
 
         Component component = Component.text().append(Component.text("[", NamedTextColor.GRAY)).build();
 
@@ -60,12 +60,14 @@ public class WarpCommands extends BaseCommand {
                 component = component.append(Component.text(", ", NamedTextColor.GRAY));
             }
             component = component.append(Component.text(entry.getKey(), NamedTextColor.YELLOW)
-                    .hoverEvent(HoverEvent.showText(Component.text(ChatColor.GREEN + "Click to warp to " + ChatColor.WHITE + entry.getValue() + ChatColor.GREEN + ".")))
+                    .hoverEvent(HoverEvent.showText(Component.text(ChatColor.GREEN + "Click to warp to " + ChatColor.WHITE + entry.getKey() + ChatColor.GREEN + ".")))
                     .clickEvent(ClickEvent.runCommand("/warp " + entry.getKey())));
             first = false;
         }
 
         component = component.append(Component.text("]", NamedTextColor.GRAY));
+
+        player.sendMessage(component);
     }
 
     @Subcommand("set")
