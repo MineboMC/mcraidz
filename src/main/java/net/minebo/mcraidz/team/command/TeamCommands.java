@@ -236,6 +236,11 @@ public class TeamCommands extends BaseCommand {
             return;
         }
 
+        if(team.members.size() >= 20){
+            sender.sendMessage(ChatColor.RED + "This team is full.");
+            return;
+        }
+
         team.invited.remove(sender.getUniqueId());
         team.members.put(sender.getUniqueId(), TeamRole.MEMBER);
 

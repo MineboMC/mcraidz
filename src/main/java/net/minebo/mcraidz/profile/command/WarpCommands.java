@@ -3,6 +3,10 @@ package net.minebo.mcraidz.profile.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import org.bukkit.ChatColor;
@@ -46,14 +50,22 @@ public class WarpCommands extends BaseCommand {
             return;
         }
 
-        player.sendMessage(ChatColor.GREEN + "Your Warps:");
+        player.sendMessage(ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + "***" + ChatColor.GOLD + " Warp List " + ChatColor.GRAY + "(" + ChatColor.YELLOW + profile.warps.size() + ChatColor.GRAY + "/" + ChatColor.YELLOW + getWarpLimit(player) + ChatColor.GRAY + ") " + ChatColor.STRIKETHROUGH + "***");
+
+        Component component = Component.text().append(Component.text("[", NamedTextColor.GRAY)).build();
+
+        boolean first = true;
         for (Map.Entry<String, Location> entry : profile.warps.entrySet()) {
-            Location loc = entry.getValue();
-            player.sendMessage(ChatColor.GRAY + "- " + ChatColor.GOLD + entry.getKey() + ChatColor.DARK_GRAY + " (" + ChatColor.WHITE +
-                    loc.getBlockX() + ", " +
-                    loc.getBlockY() + ", " +
-                    loc.getBlockZ() + ChatColor.DARK_GRAY + ")");
+            if (!first) {
+                component = component.append(Component.text(", ", NamedTextColor.GRAY));
+            }
+            component = component.append(Component.text(entry.getKey(), NamedTextColor.YELLOW)
+                    .hoverEvent(HoverEvent.showText(Component.text(ChatColor.GREEN + "Click to warp to " + ChatColor.WHITE + entry.getValue() + ChatColor.GREEN + ".")))
+                    .clickEvent(ClickEvent.runCommand("/warp " + entry.getKey())));
+            first = false;
         }
+
+        component = component.append(Component.text("]", NamedTextColor.GRAY));
     }
 
     @Subcommand("set")
@@ -97,7 +109,7 @@ public class WarpCommands extends BaseCommand {
     }
 
     private int getWarpLimit(Player player) {
-        return 5; // change later
+        return 30; // change later
     }
 
 }
