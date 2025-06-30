@@ -305,6 +305,11 @@ public class TeamCommands extends BaseCommand {
             return;
         }
 
+        if(playerTeam.headquarters == null) {
+            sender.sendMessage(ChatColor.RED + "Your team does not have a hq set.");
+            return;
+        }
+
         sender.teleport(playerTeam.headquarters);
         sender.sendMessage(ChatColor.YELLOW + "You have been sent to " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + "'s headquarters.");
         ServerHandler.startNoAttackTask(sender);
@@ -317,6 +322,11 @@ public class TeamCommands extends BaseCommand {
 
         if(playerTeam == null) {
             sender.sendMessage(ChatColor.RED + "You are not in a team.");
+            return;
+        }
+
+        if(playerTeam.headquarters == null) {
+            sender.sendMessage(ChatColor.RED + "Your team does not have a rally set.");
             return;
         }
 
