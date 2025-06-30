@@ -1,6 +1,7 @@
 package net.minebo.mcraidz.team.construct;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.minebo.mcraidz.profile.ProfileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
+@Getter
 public class Team {
 
     // General Info

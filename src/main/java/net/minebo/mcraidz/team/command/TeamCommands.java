@@ -4,6 +4,9 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import net.minebo.mcraidz.team.construct.TeamRole;
@@ -19,6 +22,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CommandAlias("team|t")
 public class TeamCommands extends BaseCommand {
@@ -481,6 +485,40 @@ public class TeamCommands extends BaseCommand {
 
         playerTeam.members.put(sender.getUniqueId(), TeamRole.MEMBER);
         playerTeam.members.put(player.getUniqueId(), TeamRole.LEADER);
+    }
+
+    @Subcommand("list")
+    @Syntax("[page]")
+    public void onListCommand(Player sender, @Optional Integer page){
+        sender.sendMessage(paginatedTeamList(TeamManager.teams.stream().map(Team::getName).collect(Collectors.toList()), (page == null) ? 1 : page));
+    }
+
+    public static Component paginatedTeamList(List<String> teams, int page) {
+        final int TEAMS_PER_PAGE = 10;
+        int totalPages = (int) Math.ceil((double) teams.size() / TEAMS_PER_PAGE);
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+        int start = (page - 1) * TEAMS_PER_PAGE;
+        int end = Math.min(start + TEAMS_PER_PAGE, teams.size());
+
+        Component header = Component.text("*** ", NamedTextColor.GRAY)
+                .append(Component.text("Team List", NamedTextColor.DARK_AQUA))
+                .append(Component.text(" ***", NamedTextColor.GRAY));
+
+        Component teamList = Component.empty();
+        for (int i = start; i < end; i++) {
+            String team = teams.get(i);
+            Component clickableTeam = Component.text(team, NamedTextColor.AQUA)
+                    .clickEvent(ClickEvent.runCommand("/team i " + team));
+            teamList = teamList.append(clickableTeam).append(Component.newline());
+        }
+
+        Component pageInfo = Component.text("Page " + page + " / " + totalPages, NamedTextColor.GRAY);
+
+        return Component.empty()
+                .append(header).append(Component.newline())
+                .append(teamList)
+                .append(pageInfo);
     }
 
 }
