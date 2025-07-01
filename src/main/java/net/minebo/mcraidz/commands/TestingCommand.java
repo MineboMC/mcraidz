@@ -28,7 +28,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.Arrays;
 
-@CommandAlias("testing")
+@CommandAlias("testing|kits")
 public class TestingCommand extends BaseCommand {
 
     @Default
@@ -38,14 +38,18 @@ public class TestingCommand extends BaseCommand {
 
         Player player = (Player) sender;
 
-        if(!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Beta"))) {
-            player.sendMessage(ChatColor.RED + "You can only use this command during beta.");
-            return;
-        }
+        if(player.hasPermission("basic.admin")) {
+            player.sendMessage(ChatColor.GREEN + "You are bypassing the testing requirement for kits.");
+        } else {
+            if (!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Testing"))) {
+                player.sendMessage(ChatColor.RED + "You can only use this command during testing.");
+                return;
+            }
 
-        if(!ProfileManager.getProfileByPlayer(player).hasSpawnProtection()) {
-            player.sendMessage(ChatColor.RED + "You can only use kits when you are protected by spawn.");
-            return;
+            if (!ProfileManager.getProfileByPlayer(player).hasSpawnProtection()) {
+                player.sendMessage(ChatColor.RED + "You can only use kits when you are protected by spawn.");
+                return;
+            }
         }
 
         new Menu().setTitle("Kits")
