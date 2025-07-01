@@ -78,7 +78,7 @@ public class PermTracker implements Tracker {
                   }
                }
 
-               FancyMessage message = (new FancyMessage(direction + ChatColor.DARK_AQUA.toString() + " (" + ChatColor.AQUA + length + ChatColor.DARK_AQUA + "): ")).color(ChatColor.AQUA);
+               FancyMessage message = (new FancyMessage(direction + ChatColor.DARK_AQUA.toString() + " (" + ChatColor.WHITE + length + ChatColor.DARK_AQUA + "): ")).color(ChatColor.AQUA);
                int i = 0;
 
                for(String str : players) {
