@@ -7,3 +7,5 @@ scoreboard:
 mongo:
   uri: "mongodb://localhost:27017"
   database: "MCRaidz"
+
+kits-enabled: true

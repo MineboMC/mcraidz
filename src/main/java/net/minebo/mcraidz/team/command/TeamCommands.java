@@ -509,6 +509,15 @@ public class TeamCommands extends BaseCommand {
 
     public static Component paginatedTeamList(List<String> teams, int page) {
         final int TEAMS_PER_PAGE = 10;
+
+        // Sort teams by online players DESCENDING
+        teams.sort((a, b) -> {
+            int onlineA = TeamManager.getTeamByName(a).getOnlineMembers().size();
+            int onlineB = TeamManager.getTeamByName(b).getOnlineMembers().size();
+            // Descending order: more online players first
+            return Integer.compare(onlineB, onlineA);
+        });
+
         int totalPages = (int) Math.ceil((double) teams.size() / TEAMS_PER_PAGE);
         if (page < 1) page = 1;
         if (page > totalPages) page = totalPages;
@@ -517,24 +526,24 @@ public class TeamCommands extends BaseCommand {
 
         Component header = Component.text("*** ", NamedTextColor.GRAY)
                 .append(Component.text("Team List", NamedTextColor.DARK_AQUA))
-                .append(Component.text(" ***", NamedTextColor.GRAY))
-                .append(Component.newline());
+                .append(Component.text(" (Page " + ChatColor.AQUA + page + ChatColor.GRAY + "/" + ChatColor.AQUA + totalPages + ChatColor.GRAY + ")", NamedTextColor.GRAY))
+                .append(Component.text(" ***", NamedTextColor.GRAY));
 
         Component teamList = Component.empty();
         for (int i = start; i < end; i++) {
             String team = teams.get(i);
-            Component clickableTeam = Component.text(team + ChatColor.GRAY + " - (" + ChatColor.WHITE + TeamManager.getTeamByName(team).getOnlineMembers().size() + ChatColor.GRAY + "/" + ChatColor.WHITE + TeamManager.getTeamByName(team).members.size() + ChatColor.GRAY + ")", NamedTextColor.AQUA)
+            Team t = TeamManager.getTeamByName(team);
+            int online = t.getOnlineMembers().size();
+            int total = t.members.size();
+            Component clickableTeam = Component.text(team + ChatColor.GRAY + " - (" + ChatColor.WHITE + online + ChatColor.GRAY + "/" + ChatColor.WHITE + total + ChatColor.GRAY + ")", NamedTextColor.AQUA)
                     .hoverEvent(HoverEvent.showText(Component.text(ChatColor.AQUA + "Click to view " + ChatColor.RESET + team + ChatColor.AQUA + "'s info.")))
                     .clickEvent(ClickEvent.runCommand("/team i " + team));
-            teamList = teamList.append(clickableTeam).append(Component.newline()).append(Component.newline());
+            teamList = teamList.append(clickableTeam).append(Component.newline());
         }
 
-        Component pageInfo = Component.text("Page " + page + "/" + totalPages, NamedTextColor.GRAY);
-
-        return Component.empty()
+        return Component.newline()
                 .append(header).append(Component.newline())
-                .append(teamList)
-                .append(pageInfo);
+                .append(teamList);
     }
 
 }

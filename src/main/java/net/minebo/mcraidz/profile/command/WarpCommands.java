@@ -52,6 +52,7 @@ public class WarpCommands extends BaseCommand {
             return;
         }
 
+        player.sendMessage("");
         player.sendMessage(ChatColor.GRAY + "***" + ChatColor.GOLD + " Warp List " + ChatColor.GRAY + "(" + ChatColor.YELLOW + profile.warps.size() + ChatColor.GRAY + "/" + ChatColor.YELLOW + getWarpLimit(player) + ChatColor.GRAY + ") " + "***");
 
         Component component = Component.text().append(Component.text("[", NamedTextColor.GRAY)).build();
@@ -70,6 +71,7 @@ public class WarpCommands extends BaseCommand {
         component = component.append(Component.text("]", NamedTextColor.GRAY));
 
         player.sendMessage(component);
+        player.sendMessage("");
     }
 
     @Subcommand("set")

@@ -2,10 +2,8 @@ package net.minebo.mcraidz.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
-import co.aikar.commands.annotation.CatchUnknown;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.minebo.cobalt.menu.construct.Button;
 import net.minebo.cobalt.menu.construct.Menu;
 import net.minebo.mcraidz.MCRaidz;
@@ -31,17 +29,21 @@ import java.util.Arrays;
 @CommandAlias("testing|kits")
 public class TestingCommand extends BaseCommand {
 
+    @CommandCompletion("@players")
     @Default
-    public void onTestCommand(CommandSender sender) {
+    public void onTestCommand(CommandSender sender, @Optional OnlinePlayer target) {
 
         if(!(sender instanceof Player)) return;
 
         Player player = (Player) sender;
 
-        if(player.hasPermission("basic.admin")) {
+        if(player.hasPermission("basic.admin") && !MCRaidz.instance.getConfig().getBoolean("kits-enabled")) {
             player.sendMessage(ChatColor.GREEN + "You are bypassing the testing requirement for kits.");
+            if(target != null) {
+                target.getPlayer().sendMessage(ChatColor.GREEN + "An admin has opened the kits gui for you.");
+            }
         } else {
-            if (!(MCRaidz.instance.getConfig().getString("scoreboard.title").contains("Testing"))) {
+            if (!(MCRaidz.instance.getConfig().getBoolean("kits-enabled"))) {
                 player.sendMessage(ChatColor.RED + "You can only use this command during testing.");
                 return;
             }
@@ -96,7 +98,7 @@ public class TestingCommand extends BaseCommand {
                         .addClickAction(ClickType.LEFT, HumanEntity::closeInventory)
                 )
                 .fillEmpty(Material.GRAY_STAINED_GLASS_PANE, true)
-                .openMenu(player);
+                .openMenu((target != null ? target.getPlayer() : player));
 
     }
 }
