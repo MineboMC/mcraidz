@@ -95,9 +95,9 @@ public class TempTracker implements Tracker {
 
             if (length > 0) {
                if (this.on(target, direction, length)) {
-                  this.player.sendMessage(ChatColor.GREEN + target.getName() + " is within " + length + " blocks " + direction + " of here.");
+                  this.player.sendMessage(target.getDisplayName() + ChatColor.GREEN + " is within " + length + " blocks " + direction + " of here.");
                } else {
-                  this.player.sendMessage(ChatColor.RED + target.getName() + " is NOT within " + length + " blocks " + direction + " of here.");
+                  this.player.sendMessage(target.getDisplayName() + ChatColor.RED + " isn't within " + length + " blocks " + direction + " of here.");
                }
             }
          }

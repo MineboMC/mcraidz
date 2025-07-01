@@ -47,9 +47,9 @@ public class PermTracker implements Tracker {
             int length = this.count(direction) * 25;
             if (length > 0) {
                if (this.on(target, direction)) {
-                  this.player.sendMessage(ChatColor.GREEN + target.getName() + " is within " + length + " blocks " + direction + " of here.");
+                  this.player.sendMessage(target.getDisplayName() + ChatColor.GREEN + " is within " + length + " blocks " + direction + " of here.");
                } else {
-                  this.player.sendMessage(ChatColor.RED + target.getName() + " is NOT within " + length + " blocks " + direction + " of here.");
+                  this.player.sendMessage(target.getDisplayName() + ChatColor.RED + " isn't within " + length + " blocks " + direction + " of here.");
                }
             }
          }
@@ -78,14 +78,14 @@ public class PermTracker implements Tracker {
                   }
                }
 
-               FancyMessage message = (new FancyMessage(direction + " (" + length + "): ")).color(ChatColor.DARK_AQUA);
+               FancyMessage message = (new FancyMessage(direction + " (" + ChatColor.AQUA + length + ChatColor.DARK_AQUA + "): ")).color(ChatColor.AQUA);
                int i = 0;
 
                for(String str : players) {
                   if (i == players.size() - 1) {
-                     message.then(str).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(ChatColor.stripColor(str)).getName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str));
+                     message.then(Bukkit.getPlayer(ChatColor.stripColor(str)).getDisplayName()).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(ChatColor.stripColor(str)).getDisplayName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str));
                   } else {
-                     message.then(str).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(ChatColor.stripColor(str)).getName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str)).then(", ");
+                     message.then(Bukkit.getPlayer(ChatColor.stripColor(str)).getDisplayName()).color(ChatColor.GRAY).tooltip(ChatColor.GREEN + "Click here to track " + ChatColor.RESET + Bukkit.getPlayer(ChatColor.stripColor(str)).getDisplayName() + ChatColor.GREEN + ".").command("/track player " + ChatColor.stripColor(str)).then(", ");
                   }
 
                   ++i;

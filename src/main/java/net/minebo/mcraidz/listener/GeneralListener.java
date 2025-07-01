@@ -37,7 +37,7 @@ public class GeneralListener implements Listener {
             Team team = TeamManager.getTeamByPlayer(player);
             TeamRole teamRole = team.getRole(player.getUniqueId());
 
-            team.sendMessageToMembers(ChatColor.GREEN + "Member Online: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getName());
+            team.sendMessageToMembers(ChatColor.GOLD + "Member Online: " + ChatColor.DARK_GREEN + teamRole.prefix + ChatColor.GREEN + player.getName());
         }
 
         if(ProfileManager.getProfileByPlayer(player) != null) {
@@ -62,7 +62,7 @@ public class GeneralListener implements Listener {
             Team team = TeamManager.getTeamByPlayer(player);
             TeamRole teamRole = team.getRole(player.getUniqueId());
 
-            team.sendMessageToMembers(ChatColor.RED + "Member Offline: " + ChatColor.GOLD + teamRole.prefix + ChatColor.YELLOW + player.getName());
+            team.sendMessageToMembers(ChatColor.GOLD + "Member Offline: " + ChatColor.DARK_GREEN + teamRole.prefix + ChatColor.GREEN + player.getName());
         }
 
     }
