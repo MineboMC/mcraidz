@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.server.ServerHandler;
@@ -36,6 +37,11 @@ public class WarpCommands extends BaseCommand {
         Location warp = profile.getWarp(name);
         if (warp == null) {
             player.sendMessage(ChatColor.RED + "Warp '" + name + "' not found.");
+            return;
+        }
+
+        if (MCRaidz.cooldownHandler.getCooldown("Combat Tag").onCooldown(player)) {
+            player.sendMessage(ChatColor.RED + "You can't teleport while you're combat tagged!");
             return;
         }
 

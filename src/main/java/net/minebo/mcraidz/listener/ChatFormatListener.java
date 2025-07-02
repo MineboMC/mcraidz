@@ -19,6 +19,13 @@ public class ChatFormatListener implements Listener {
         String prefix;
         String tag;
 
+        if(event.getMessage().startsWith("@") && TeamManager.getTeamByPlayer(player) != null) {
+            Team team = TeamManager.getTeamByPlayer(player);
+
+            team.sendMessageToMembers(player, event.getMessage().substring(1));
+            return;
+        }
+
         if(player.hasMetadata("rankPrefix")) prefix = player.getMetadata("rankPrefix").get(0).asString(); else prefix = "";
         if(player.hasMetadata("activeTag")) tag = player.getMetadata("activeTag").get(0).asString(); else tag = "";
 

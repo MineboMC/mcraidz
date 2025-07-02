@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.server.ServerHandler;
@@ -49,6 +50,11 @@ public class SpawnCommand extends BaseCommand {
 
             if (player.hasMetadata("frozen")) {
                 sender.sendMessage(ChatColor.RED + "You can't teleport while you're frozen!");
+                return;
+            }
+
+            if (MCRaidz.cooldownHandler.getCooldown("Combat Tag").onCooldown(player)) {
+                sender.sendMessage(ChatColor.RED + "You can't teleport while you're combat tagged!");
                 return;
             }
 

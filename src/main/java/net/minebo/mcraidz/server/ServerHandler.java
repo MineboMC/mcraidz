@@ -1,11 +1,9 @@
 package net.minebo.mcraidz.server;
 
-import lombok.Getter;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
-import net.minebo.mcraidz.server.listener.NoAttackListener;
-import net.minebo.mcraidz.server.listener.SpawnListener;
+import net.minebo.mcraidz.server.listener.*;
 import net.minebo.mcraidz.server.task.Task;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;

@@ -77,10 +77,10 @@ public class KitUtil {
         inv.setItem(0, sword);
         inv.setItem(1, pearls);
 
-        player.getInventory().setItem(7, getPotionItem(PotionType.STRENGTH));
-        player.getInventory().setItem(16, getPotionItem(PotionType.STRENGTH));
-        player.getInventory().setItem(25, getPotionItem(PotionType.STRENGTH));
-        player.getInventory().setItem(34, getPotionItem(PotionType.STRENGTH));
+        player.getInventory().setItem(7, getPotionItem(PotionType.STRONG_STRENGTH));
+        player.getInventory().setItem(16, getPotionItem(PotionType.STRONG_STRENGTH));
+        player.getInventory().setItem(25, getPotionItem(PotionType.STRONG_STRENGTH));
+        player.getInventory().setItem(34, getPotionItem(PotionType.STRONG_STRENGTH));
 
         player.getInventory().setItem(8, getPotionItem(PotionType.STRONG_SWIFTNESS));
         player.getInventory().setItem(17, getPotionItem(PotionType.STRONG_SWIFTNESS));
@@ -104,6 +104,9 @@ public class KitUtil {
 
         inv.setItem(0, sword);
         inv.setItem(1, pearls);
+
+        player.getInventory().setItem(6, new ItemBuilder(Material.SUGAR).setSize(64).build());
+        player.getInventory().setItem(7, new ItemBuilder(Material.FEATHER).setSize(64).build());
 
         player.getInventory().setItem(8, ItemStack.of(Material.GOLDEN_SWORD));
         player.getInventory().setItem(17, ItemStack.of(Material.GOLDEN_SWORD));
