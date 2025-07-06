@@ -58,7 +58,7 @@ public class SpawnCommand extends BaseCommand {
                 return;
             }
 
-            if (ServerHandler.spawnTasks.containsKey(sender.getName())) {
+            if (ServerHandler.spawnTasks.containsKey(player.getUniqueId())) {
                 sender.sendMessage(ChatColor.RED + "You are already teleporting to spawn.");
                 return; // dont potato and let them spam spawn
             }

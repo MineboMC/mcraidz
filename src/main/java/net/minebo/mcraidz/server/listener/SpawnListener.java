@@ -20,9 +20,9 @@ public class SpawnListener implements Listener {
             return;
         }
 
-        if (ServerHandler.spawnTasks.containsKey(event.getPlayer().getName())) {
-            MCRaidz.instance.getServer().getScheduler().cancelTask(ServerHandler.spawnTasks.get(event.getPlayer().getName()).getTaskId());
-            ServerHandler.spawnTasks.remove(event.getPlayer().getName());
+        if (ServerHandler.spawnTasks.containsKey(event.getPlayer().getUniqueId())) {
+            MCRaidz.instance.getServer().getScheduler().cancelTask(ServerHandler.spawnTasks.get(event.getPlayer().getUniqueId()).getTaskId());
+            ServerHandler.spawnTasks.remove(event.getPlayer().getUniqueId());
             player.sendMessage(ChatColor.YELLOW + "Your teleport to spawn has cancelled since you moved.");
         }
     }
@@ -32,9 +32,9 @@ public class SpawnListener implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
 
-            if (ServerHandler.spawnTasks.containsKey(player.getName())) {
-                MCRaidz.instance.getServer().getScheduler().cancelTask(ServerHandler.spawnTasks.get(player.getName()).getTaskId());
-                ServerHandler.spawnTasks.remove(player.getName());
+            if (ServerHandler.spawnTasks.containsKey(player.getUniqueId())) {
+                MCRaidz.instance.getServer().getScheduler().cancelTask(ServerHandler.spawnTasks.get(player.getUniqueId()).getTaskId());
+                ServerHandler.spawnTasks.remove(player.getUniqueId());
                 player.sendMessage(ChatColor.YELLOW + "Your teleport to spawn has cancelled since you took damage.");
             }
         }

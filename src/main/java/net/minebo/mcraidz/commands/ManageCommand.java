@@ -30,7 +30,7 @@ public class ManageCommand extends BaseCommand {
                         new Button()
                                 .setName((MCRaidz.instance.getConfig().getBoolean("kits-enabled") ? "&a&lKits" : "&c&lKits"))
                                 .setMaterial(Material.DIAMOND)
-                                .setLines(() -> Arrays.asList("&7Left Click to toggle kits."))
+                                .setLines("&7Left Click to toggle kits.")
                                 .addClickAction(ClickType.LEFT, p -> {
                                     MCRaidz.instance.getConfig().set("kits-enabled", !MCRaidz.instance.getConfig().getBoolean("kits-enabled"));
                                     MCRaidz.instance.saveConfig();

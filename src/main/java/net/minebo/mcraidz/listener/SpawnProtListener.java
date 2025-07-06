@@ -1,8 +1,11 @@
 package net.minebo.mcraidz.listener;
 
+import net.minebo.cobalt.cooldown.CooldownHandler;
 import net.minebo.kregions.manager.FlagManager;
 import net.minebo.kregions.manager.RegionManager;
 import net.minebo.kregions.model.Region;
+import net.minebo.mcraidz.MCRaidz;
+import net.minebo.mcraidz.cobalt.cooldown.CombatTagTimer;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import net.minebo.mcraidz.team.TeamManager;
@@ -21,6 +24,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+
+import java.util.concurrent.TimeUnit;
 
 public class SpawnProtListener implements Listener {
 
@@ -74,12 +79,6 @@ public class SpawnProtListener implements Listener {
             Player attacker = (Player) e.getDamager();
             Profile attackerProfile = ProfileManager.getProfileByPlayer(attacker);
 
-            if(attackerProfile.hasSpawnProtection() && e.getEntity().getType() == EntityType.PLAYER) {
-                e.setCancelled(true);
-                attacker.sendMessage(ChatColor.RED + "You can't attack while you have spawn protection!");
-                return;
-            }
-
             if(e.getEntity().getType() == EntityType.PLAYER) {
                 Player target = (Player) e.getEntity();
                 Profile targetProfile = ProfileManager.getProfileByPlayer(target);
@@ -87,6 +86,14 @@ public class SpawnProtListener implements Listener {
                 if(targetProfile.hasSpawnProtection()) {
                     e.setCancelled(true);
                     attacker.sendMessage(ChatColor.RED + "This player currently has spawn protection!");
+                } else if(!targetProfile.hasSpawnProtection() && attackerProfile.hasSpawnProtection()) {
+                    attackerProfile.spawnProtection = false;
+                    attacker.sendMessage(ChatColor.RED + "Your spawn protection has been broken!");
+
+                    if(MCRaidz.cooldownHandler.getCooldown("Combat Tag") != null) {
+                        MCRaidz.cooldownHandler.getCooldown("Combat Tag").applyCooldown(attacker, 30, TimeUnit.SECONDS, MCRaidz.instance);
+                        MCRaidz.cooldownHandler.getCooldown("Combat Tag").applyCooldown(target, 30, TimeUnit.SECONDS, MCRaidz.instance);
+                    }
                 }
             }
         }

@@ -15,16 +15,15 @@ public class TeamProtListener implements Listener {
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent e) {
         if(e.getEntity() instanceof Player && e.getDamager() instanceof Arrow) {
-            if(e.getDamager().getType() == EntityType.ARROW) {
-                Arrow arrow = (Arrow)e.getDamager();
-                Player p = (Player)e.getEntity();
+            Arrow arrow = (Arrow)e.getDamager();
+            Player p = (Player)e.getEntity();
 
-                if(arrow.getShooter() instanceof Player) {
-                    if(((Player) arrow.getShooter()).getUniqueId().equals(p.getUniqueId())) {
-                        e.setCancelled(true);
-                    }
+            if(arrow.getShooter() instanceof Player) {
+                if(((Player) arrow.getShooter()).getUniqueId().equals(p.getUniqueId())) {
+                    e.setCancelled(true);
                 }
             }
+
         }
 
         if(e.getDamager().getType() == EntityType.PLAYER) {

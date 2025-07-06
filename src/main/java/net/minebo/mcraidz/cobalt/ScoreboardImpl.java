@@ -87,7 +87,7 @@ public class ScoreboardImpl extends ScoreboardProvider {
     }
 
     public String getSpawnTeleportScore(Player player) {
-        Task task = ServerHandler.spawnTasks.get(player.getName());
+        Task task = ServerHandler.spawnTasks.get(player.getUniqueId());
 
         if (task != null) {
             long diffMillis = task.getTime() - System.currentTimeMillis();
