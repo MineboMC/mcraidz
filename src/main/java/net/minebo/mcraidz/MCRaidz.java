@@ -35,6 +35,8 @@ public final class MCRaidz extends JavaPlugin {
 
     public static MCRaidz instance;
 
+    public static Boolean debug;
+
     public static ACFManager acfManager;
     public static CooldownHandler cooldownHandler;
 
@@ -68,6 +70,8 @@ public final class MCRaidz extends JavaPlugin {
         ACFCommandController.registerCompletion("warps", new WarpCompletionHandler());
         ACFCommandController.registerContext(Team.class, new TeamContextResolver());
         ACFCommandController.registerAll(this);
+
+        debug = getConfig().getBoolean("debug", false);
 
         Gson.init();
 

@@ -33,7 +33,7 @@ public class ProfileManager {
     public static File profilesFolder = new File(MCRaidz.instance.getDataFolder(), "internal/profiles");
 
     public static void init() {
-        Logger.log("Loading teams...");
+        Logger.log("Loading profiles...");
 
         loadProfilesFromMongo(); // Big Function
 
@@ -47,12 +47,12 @@ public class ProfileManager {
     }
 
     public static void registerProfile(Profile profile) {
-        Logger.log("Registered profile for: \"" + profile.uuid + "\"");
+        if(MCRaidz.debug) Logger.log("Registered profile for: \"" + profile.uuid + "\"");
         profiles.put(profile.uuid, profile);
     }
 
     public static void unRegisterProfile(Profile profile){
-        Logger.log("Unregistered profile for: \"" + profile.uuid + "\"");
+        if(MCRaidz.debug) Logger.log("Unregistered profile for: \"" + profile.uuid + "\"");
         profiles.remove(profile.uuid);
         deleteProfileFromMongo(profile);
     }
@@ -150,7 +150,7 @@ public class ProfileManager {
         // Store in memory (if needed)
         profiles.put(profile.uuid, profile); // or ProfileManager.profiles.put(uuid, profile)
 
-        Bukkit.getLogger().info("Loaded profile from MongoDB: " + uuid);
+        if(MCRaidz.debug) Bukkit.getLogger().info("Loaded profile from MongoDB: " + uuid);
         return profile;
     }
 

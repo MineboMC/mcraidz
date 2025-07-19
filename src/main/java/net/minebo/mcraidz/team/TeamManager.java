@@ -43,13 +43,13 @@ public class TeamManager {
     }
 
     public static void registerTeam(Team team){
-        //Logger.log("Registered new team: \"" + team.name + "\"");
+        if(MCRaidz.debug) Logger.log("Registered new team: \"" + team.name + "\"");
         teams.add(team);
         saveTeam(team);
     }
 
     public static void unRegisterTeam(Team team){
-        //Logger.log("Unregistered team: \"" + team.name + "\"");
+        if(MCRaidz.debug) Logger.log("Unregistered team: \"" + team.name + "\"");
         teams.remove(team);
         deleteTeamFromMongo(team);
     }
@@ -166,7 +166,7 @@ public class TeamManager {
 
         Team team = new Team(name, announcement, password, creationTime, uuid, headquarters, rally, invited, members);
         teams.add(team);
-        System.out.println("Loaded team: " + uuid);
+        if(MCRaidz.debug) Logger.log("Loaded team: " + uuid);
     }
 
 }

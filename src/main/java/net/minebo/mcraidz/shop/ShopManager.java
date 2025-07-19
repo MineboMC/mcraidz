@@ -37,11 +37,11 @@ public class ShopManager {
         shopItems = new ArrayList<ShopItem>(); // Update later
         itemCache = new HashMap<String, ShopItem>();
 
-        Logger.log("Loading shop...");
+        Logger.log("Loading shop items...");
 
         loadShopItemsFromMongo();
 
-        Logger.log("Loaded " + shopItems.size() + " teams from mongo.");
+        Logger.log("Loaded " + shopItems.size() + " shop items from mongo.");
     }
 
     public static ShopItem getItemByUUID(UUID uuid){
