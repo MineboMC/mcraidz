@@ -88,6 +88,11 @@ public class WarpCommands extends BaseCommand {
 
         Location currentLocation = player.getLocation();
 
+        if(currentLocation.getWorld().getSpawnLocation().distance(currentLocation) < 512) {
+            player.sendMessage(ChatColor.RED + "You can't set a warp within 512 blocks of spawn.");
+            return;
+        }
+
         if (profile.getWarp(name) != null) {
             profile.warps.put(name, currentLocation); // overwrite directly
             player.sendMessage(ChatColor.YELLOW + "Warp " + ChatColor.GOLD + name + ChatColor.YELLOW + " has been overwritten.");
