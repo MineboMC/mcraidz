@@ -79,7 +79,13 @@ public class MCRaidzPlaceholderExpansion extends PlaceholderExpansion implements
 
         if(viewer.getUniqueId().equals(target.getUniqueId())) return "&2";
 
-        if (targetFaction == null || viewerFaction == null) return "&c";
+        if (targetFaction == null || viewerFaction == null) {
+            Profile targetProfile = ProfileManager.getProfileByPlayer(target);
+
+            if(targetProfile != null) {
+                return (targetProfile.hasSpawnProtection() ? "&e" : "&c");
+            }
+        }
 
         if (viewerFaction.name.equalsIgnoreCase(targetFaction.name)) return "&2";
 

@@ -6,10 +6,7 @@ import net.minebo.mcraidz.cobalt.data.LoggerData;
 import net.minebo.mcraidz.profile.ProfileManager;
 import net.minebo.mcraidz.profile.construct.Profile;
 import org.bukkit.*;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -31,17 +28,28 @@ public class CombatTagTimer extends Cooldown {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
-        if(e.isCancelled()) return;
+        if (e.isCancelled()) return;
 
-        if (!(e.getEntity() instanceof Player) || !(e.getDamager() instanceof Player)) return;
+        Player attacker = null;
 
-        Player victim = (Player) e.getEntity();
-        Player attacker = (Player) e.getDamager();
+        // Arrow (projectile) case
+        if (e.getDamager() instanceof Arrow arrow) {
+            if (arrow.getShooter() instanceof Player shooter) {
+                attacker = shooter;
+            }
+        }
+        // Melee case
+        else if (e.getDamager() instanceof Player playerDamager) {
+            attacker = playerDamager;
+        }
+
+        // Not player-vs-player
+        if (attacker == null || !(e.getEntity() instanceof Player victim)) return;
 
         Profile victimProfile = ProfileManager.getProfileByPlayer(victim);
         Profile attackerProfile = ProfileManager.getProfileByPlayer(attacker);
 
-        if(victimProfile.hasSpawnProtection() || attackerProfile.hasSpawnProtection()) return;
+        if (victimProfile.hasSpawnProtection() || attackerProfile.hasSpawnProtection()) return;
 
         applyCooldown(victim, 30, TimeUnit.SECONDS, MCRaidz.instance);
         applyCooldown(attacker, 30, TimeUnit.SECONDS, MCRaidz.instance);

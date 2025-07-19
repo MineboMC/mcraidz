@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,11 +76,11 @@ public class SpawnProtListener implements Listener {
 
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent e) {
-        if(e.getDamager().getType() == EntityType.PLAYER) {
+        if(e.getDamager() instanceof Player) {
             Player attacker = (Player) e.getDamager();
             Profile attackerProfile = ProfileManager.getProfileByPlayer(attacker);
 
-            if(e.getEntity().getType() == EntityType.PLAYER) {
+            if(e.getEntity() instanceof Player) {
                 Player target = (Player) e.getEntity();
                 Profile targetProfile = ProfileManager.getProfileByPlayer(target);
 
@@ -93,6 +94,34 @@ public class SpawnProtListener implements Listener {
                     if(MCRaidz.cooldownHandler.getCooldown("Combat Tag") != null) {
                         MCRaidz.cooldownHandler.getCooldown("Combat Tag").applyCooldown(attacker, 30, TimeUnit.SECONDS, MCRaidz.instance);
                         MCRaidz.cooldownHandler.getCooldown("Combat Tag").applyCooldown(target, 30, TimeUnit.SECONDS, MCRaidz.instance);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onAttackArrow(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Arrow) {
+            if(((Arrow) e.getDamager()).getShooter() instanceof Player) {
+                Player attacker = (Player) ((Arrow) e.getDamager()).getShooter();
+                Profile attackerProfile = ProfileManager.getProfileByPlayer(attacker);
+
+                if (e.getEntity() instanceof Player) {
+                    Player target = (Player) e.getEntity();
+                    Profile targetProfile = ProfileManager.getProfileByPlayer(target);
+
+                    if (targetProfile.hasSpawnProtection()) {
+                        e.setCancelled(true);
+                        attacker.sendMessage(ChatColor.RED + "This player currently has spawn protection!");
+                    } else if (!targetProfile.hasSpawnProtection() && attackerProfile.hasSpawnProtection()) {
+                        attackerProfile.spawnProtection = false;
+                        attacker.sendMessage(ChatColor.RED + "Your spawn protection has been broken!");
+
+                        if (MCRaidz.cooldownHandler.getCooldown("Combat Tag") != null) {
+                            MCRaidz.cooldownHandler.getCooldown("Combat Tag").applyCooldown(attacker, 30, TimeUnit.SECONDS, MCRaidz.instance);
+                            MCRaidz.cooldownHandler.getCooldown("Combat Tag").applyCooldown(target, 30, TimeUnit.SECONDS, MCRaidz.instance);
+                        }
                     }
                 }
             }

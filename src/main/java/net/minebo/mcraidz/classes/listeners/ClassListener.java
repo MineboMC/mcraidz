@@ -104,6 +104,14 @@ public class ClassListener implements Listener {
             if (var12 instanceof Player damager) {
                 Entity var13 = event.getEntity();
                 if (var13 instanceof Player player) {
+
+                    double velocity = arrow.getVelocity().length();
+                    double pullAmount = Math.max(0.0, Math.min(1.0, velocity / 3.0));
+                    if (pullAmount < 0.99) {
+                        // Not fully pulled, do not apply archer tag
+                        return;
+                    }
+
                     if (ProfileManager.getProfileByPlayer(player).hasSpawnProtection() || !ClassManager.activeClass.containsKey(damager.getUniqueId()) || ClassManager.activeClass.get(damager.getUniqueId()) != ClassType.ARCHER || ClassManager.activeClass.containsKey(player.getUniqueId()) && ClassManager.activeClass.get(player.getUniqueId()) == ClassType.ARCHER || player == damager) {
                         return;
                     }
