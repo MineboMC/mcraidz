@@ -32,16 +32,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class ClassManager {
 
-    public static final Map<UUID, ClassType> activeClass = new HashMap<>();
-    private static final Map<String, RestoreBardEffectsTask> restoreBardHoldEffects = new HashMap<>();
-    public static final Map<UUID, Energy> bardEnergy = new HashMap<>();
-    public static final Map<UUID, Energy> archerEnergy = new HashMap<>();
-    public static final Map<UUID, Energy> rogueEnergy = new HashMap<>();
-    public static final Map<UUID, MinerUpgrade> minerUpgrades = new HashMap<>();
+    public static final ConcurrentHashMap<UUID, ClassType> activeClass = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, RestoreBardEffectsTask> restoreBardHoldEffects = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<UUID, Energy> bardEnergy = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<UUID, Energy> archerEnergy = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<UUID, Energy> rogueEnergy = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<UUID, MinerUpgrade> minerUpgrades = new ConcurrentHashMap<>();
 
     public static final List<String> placed = new ArrayList<>();
     private static final List<Material> bardMaterials = Arrays.asList(Material.SUGAR, Material.BLAZE_POWDER, Material.IRON_INGOT, Material.FEATHER, Material.SPIDER_EYE, Material.MAGMA_CREAM, Material.GHAST_TEAR);

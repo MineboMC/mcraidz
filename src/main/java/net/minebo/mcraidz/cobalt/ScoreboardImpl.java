@@ -46,7 +46,7 @@ public class ScoreboardImpl extends ScoreboardProvider {
             if(profile.hasSpawnProtection()) lines.add("&aProtected by Spawn");
         }
 
-        if(ClassManager.activeClass.containsKey(player.getUniqueId())) {
+        if(ClassManager.activeClass.containsKey(player.getUniqueId()) && (ClassManager.archerEnergy.containsKey(player.getUniqueId()) || ClassManager.bardEnergy.containsKey(player.getUniqueId()) || ClassManager.rogueEnergy.containsKey(player.getUniqueId()))) {
             lines.addAll(generateClassLines(player));
         }
 

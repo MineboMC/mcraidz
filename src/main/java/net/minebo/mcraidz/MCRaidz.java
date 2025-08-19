@@ -102,6 +102,7 @@ public final class MCRaidz extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SpawnProtListener(), this);
         Bukkit.getPluginManager().registerEvents(new TeamProtListener(), this);
         Bukkit.getPluginManager().registerEvents(new ClassListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SalvageListener(), this);
     }
 
     public void registerManagers(){

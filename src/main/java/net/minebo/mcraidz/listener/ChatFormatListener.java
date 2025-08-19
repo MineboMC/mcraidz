@@ -1,5 +1,7 @@
 package net.minebo.mcraidz.listener;
 
+import lombok.SneakyThrows;
+import net.minebo.basalt.api.BasaltAPI;
 import net.minebo.mcraidz.team.TeamManager;
 import net.minebo.mcraidz.team.construct.Team;
 import org.bukkit.ChatColor;
@@ -10,6 +12,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatFormatListener implements Listener {
 
+    @SneakyThrows
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
@@ -17,7 +20,7 @@ public class ChatFormatListener implements Listener {
         Player player = event.getPlayer();
 
         String prefix;
-        String tag;
+        //String tag;
 
         if(event.getMessage().startsWith("@") && TeamManager.getTeamByPlayer(player) != null) {
             Team team = TeamManager.getTeamByPlayer(player);
@@ -26,13 +29,12 @@ public class ChatFormatListener implements Listener {
             return;
         }
 
-        if(player.hasMetadata("rankPrefix")) prefix = player.getMetadata("rankPrefix").get(0).asString(); else prefix = "";
-        if(player.hasMetadata("activeTag")) tag = player.getMetadata("activeTag").get(0).asString(); else tag = "";
+        prefix = BasaltAPI.INSTANCE.quickFindProfile(player.getUniqueId()).get().getHighestGlobalRank().getPrefix();
 
         event.getRecipients().forEach(viewer -> {
             String factionTag = getFactionTag(player, viewer);
             String formatted = ChatColor.translateAlternateColorCodes('&',
-                    factionTag + tag + prefix + player.getName() + "&7: &f" + event.getMessage());
+                    factionTag + " " + prefix + player.getName() + "&7: &f" + event.getMessage());
             viewer.sendMessage(formatted);
         });
 
