@@ -155,6 +155,6 @@ public class ServerHandler {
                 statValue = ChatColor.RED + "None";
         }
 
-        return Pair.of(Bukkit.getOfflinePlayer(p.uuid).getName(), statValue);
+        return Pair.of(p.lastKnownUsername, statValue);
     }
 }

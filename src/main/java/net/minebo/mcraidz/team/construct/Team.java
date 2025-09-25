@@ -134,7 +134,7 @@ public class Team {
             builder.append((dummy != null && dummy.isOnline()) ? ChatColor.GREEN : ChatColor.RED);
 
             // Append player name or "Unknown" if null
-            builder.append(dummy != null ? dummy.getName() : Bukkit.getOfflinePlayer(uuid).getName());
+            builder.append(dummy != null ? dummy.getName() : ProfileManager.getProfileByUUID(uuid).lastKnownUsername);
 
             // Add stats -- implement how they are tracked later...
             builder.append(ChatColor.GRAY + "[" + ChatColor.WHITE + ProfileManager.getProfileByUUID(uuid).kills + ChatColor.GRAY + "]");

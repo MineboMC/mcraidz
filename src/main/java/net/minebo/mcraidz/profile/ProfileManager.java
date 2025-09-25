@@ -61,6 +61,10 @@ public class ProfileManager {
         return profiles.get(uuid);
     }
 
+    public static Profile getProfileByName(String name) {
+        return profiles.values().stream().filter(p -> p.lastKnownUsername.equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
     public static Profile getProfileByPlayer(Player player){
         return getProfileByUUID(player.getUniqueId());
     }
@@ -86,6 +90,7 @@ public class ProfileManager {
     public static void saveProfile(Profile profile) {
         Document doc = new Document()
                 .append("uuid", profile.uuid.toString())
+                .append("lastKnownUsername", profile.lastKnownUsername)
                 .append("gold", profile.gold)
                 .append("kills", profile.kills)
                 .append("killStreak", profile.killStreak)
@@ -118,6 +123,7 @@ public class ProfileManager {
         }
 
         double gold = doc.getDouble("gold");
+        String lastKnownUsername = doc.getString("lastKnownUsername");
         int kills = doc.getInteger("kills", 0);
         int killStreak = doc.getInteger("killStreak", 0);
         int deaths = doc.getInteger("deaths", 0);
@@ -137,15 +143,7 @@ public class ProfileManager {
             }
         }
 
-        Profile profile = new Profile(uuid);
-        profile.setBalance(gold);
-        profile.kills = kills;
-        profile.killStreak = killStreak;
-        profile.deaths = deaths;
-        profile.diamonds = diamonds;
-        profile.playtime = playtime;
-        profile.warps = warps;
-        profile.dieOnLogin = dieOnLogin;
+        Profile profile = new Profile(uuid, lastKnownUsername, gold, kills, killStreak, deaths, diamonds, playtime, warps, dieOnLogin, false);
 
         // Store in memory (if needed)
         profiles.put(profile.uuid, profile); // or ProfileManager.profiles.put(uuid, profile)

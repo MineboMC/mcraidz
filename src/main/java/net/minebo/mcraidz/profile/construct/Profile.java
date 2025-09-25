@@ -6,6 +6,7 @@ import net.minebo.cobalt.gson.Gson;
 import net.minebo.mcraidz.MCRaidz;
 import net.minebo.mcraidz.profile.ProfileManager;
 import org.bson.json.JsonParseException;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -20,6 +21,8 @@ import java.util.UUID;
 public class Profile {
 
     public UUID uuid;
+    public String lastKnownUsername;
+
     public Double gold;
 
     public Integer kills = 0;
@@ -38,6 +41,7 @@ public class Profile {
 
     public Profile(UUID uuid) {
         this.uuid = uuid;
+        this.lastKnownUsername = Bukkit.getPlayer(uuid).getName();
         this.gold = 0.00;
         this.warps = new HashMap<>();
     }
