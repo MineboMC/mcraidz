@@ -14,7 +14,7 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onJoin(AsyncPlayerPreLoginEvent event) {
         if(ProfileManager.getProfileByUUID(event.getUniqueId()) == null) {
-            ProfileManager.registerProfile(new Profile(event.getUniqueId()));
+            ProfileManager.registerProfile(new Profile(event.getUniqueId(), event.getName()));
         }
     }
 

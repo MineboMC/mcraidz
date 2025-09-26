@@ -8,6 +8,7 @@ import net.minebo.mcraidz.profile.ProfileManager;
 import org.bson.json.JsonParseException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.FileReader;
@@ -41,7 +42,14 @@ public class Profile {
 
     public Profile(UUID uuid) {
         this.uuid = uuid;
-        this.lastKnownUsername = Bukkit.getPlayer(uuid).getName();
+        this.lastKnownUsername = "";
+        this.gold = 0.00;
+        this.warps = new HashMap<>();
+    }
+
+    public Profile(UUID uuid, String lastKnownUsername) {
+        this.uuid = uuid;
+        this.lastKnownUsername = lastKnownUsername;
         this.gold = 0.00;
         this.warps = new HashMap<>();
     }

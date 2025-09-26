@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,14 +21,19 @@ public class EnderPearlCooldown extends Cooldown {
             }
 
             if (event.getItem().getType() == Material.ENDER_PEARL) {
-                event.getPlayer().resetCooldown();
-
                 if (this.onCooldown(event.getPlayer())) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You are currently on ender pearl cooldown for " + ChatColor.BOLD + getRemaining(event.getPlayer()) + ChatColor.RED + "!");
                     event.setCancelled(true);
                 } else {
                     applyCooldown(event.getPlayer(), 16, TimeUnit.SECONDS, MCRaidz.instance);
                     event.getPlayer().sendMessage(ChatColor.YELLOW + "You are now on enderpearl cooldown for 16 seconds.");
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            event.getPlayer().setCooldown(Material.ENDER_PEARL, 16 * 20);
+                        }
+                    }.runTaskLater(MCRaidz.instance, 1L);
                 }
             }
         }

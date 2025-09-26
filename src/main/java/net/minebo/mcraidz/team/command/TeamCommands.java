@@ -70,7 +70,7 @@ public class TeamCommands extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "You have created a team!");
 
         Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendMessage(ChatColor.YELLOW + "Team " + ChatColor.GOLD + name + ChatColor.YELLOW + " has been created by " + ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + '.');
+            player.sendMessage(ChatColor.YELLOW + "Team " + ChatColor.GOLD + name + ChatColor.YELLOW + " has been created by " + ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', sender.getDisplayName()) + ChatColor.YELLOW + '.');
         });
     }
 
@@ -91,7 +91,7 @@ public class TeamCommands extends BaseCommand {
         TeamManager.unRegisterTeam(playerTeam);
 
         Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendMessage(ChatColor.YELLOW + "Team " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + " has been disbanded by " + ChatColor.RESET + sender.getDisplayName() + ChatColor.YELLOW + '.');
+            player.sendMessage(ChatColor.YELLOW + "Team " + ChatColor.GOLD + playerTeam.name + ChatColor.YELLOW + " has been disbanded by " + ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', sender.getDisplayName()) + ChatColor.YELLOW + '.');
         });
 
     }
@@ -223,11 +223,11 @@ public class TeamCommands extends BaseCommand {
         TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
 
         if(senderRole != TeamRole.LEADER && senderRole != TeamRole.CAPTAIN) {
-            sender.sendMessage(ChatColor.RED + "You do not have permission to uninvite players to your team.");
+            sender.sendMessage(ChatColor.RED + "You do not have permission to uninvite players from your team.");
             return;
         }
 
-        sender.sendMessage(ChatColor.YELLOW + "You have uninvited " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " to your team.");
+        sender.sendMessage(ChatColor.YELLOW + "You have uninvited " + ChatColor.GOLD + player.getName() + ChatColor.YELLOW + " from your team.");
 
         playerTeam.invited.remove(player.getUniqueId());
     }
@@ -267,11 +267,16 @@ public class TeamCommands extends BaseCommand {
         TeamRole senderRole = playerTeam.getRole(sender.getUniqueId());
 
         if(senderRole != TeamRole.LEADER && senderRole != TeamRole.CAPTAIN) {
-            sender.sendMessage(ChatColor.RED + "You do not have permission to uninvite players to your team.");
+            sender.sendMessage(ChatColor.RED + "You do not have permission to set headquarters.");
             return;
         }
 
         Location loc = sender.getLocation();
+
+        if(loc.getWorld().getSpawnLocation().distance(loc) < 512) {
+            sender.sendMessage(ChatColor.RED + "You can't set a warp within 512 blocks of spawn.");
+            return;
+        }
 
         playerTeam.headquarters = loc;
 
@@ -289,6 +294,11 @@ public class TeamCommands extends BaseCommand {
         }
 
         Location loc = sender.getLocation();
+
+        if(loc.getWorld().getSpawnLocation().distance(loc) < 512) {
+            sender.sendMessage(ChatColor.RED + "You can't set a warp within 512 blocks of spawn.");
+            return;
+        }
 
         playerTeam.rally = loc;
 
