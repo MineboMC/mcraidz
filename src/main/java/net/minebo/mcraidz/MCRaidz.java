@@ -31,6 +31,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Creeper;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public final class MCRaidz extends JavaPlugin {
 
     public static MCRaidz instance;
@@ -79,7 +81,7 @@ public final class MCRaidz extends JavaPlugin {
 
         registerListeners();
 
-        new ScoreboardHandler(new ScoreboardImpl(), this);
+        new ScoreboardHandler(List.of(new ScoreboardImpl()), this);
 
         new PlaytimeThread().runTaskTimer(this, 30L, 30L);
         new DataSyncThread().runTaskTimer(this, 30L,  10L * 60L * 20L);
